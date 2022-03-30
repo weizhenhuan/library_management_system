@@ -32,7 +32,6 @@
 import path from 'path'
 import { reactive } from '@vue/reactivity'
 import Item from './Item'
-//import AppLink from './Link'
 
 export default {
   name: 'SidebarItem',

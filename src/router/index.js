@@ -29,7 +29,7 @@ const routes = [
         name:'dashboard',
         path:'dashboard',
         component:() => import('@/views/dashboard/index'),
-        meta:{ title: '首页', icon: 'rili'}
+        meta:{ title: '首页', icon: 'wansheng'}
       }
     ]
   },

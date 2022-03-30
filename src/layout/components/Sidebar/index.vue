@@ -5,6 +5,8 @@
                :unique-opened="false"
                :collapse-transition="false"
                default-active="/dashboard"
+               :background-color="variables.menuBg"
+               :text-color="variables.menuText"
                mode="vertical">
         <sidebar-item v-for="route in routes"
                       :key="route.path"
@@ -19,6 +21,7 @@
 import { computed } from "@vue/runtime-core";
 import { useStore } from 'vuex'
 import SidebarItem from './SidebarItem'
+import variables from '@/less/variables.less'
 //import { useRouter } from "vue-router";
 export default {
   components: { SidebarItem },
@@ -31,8 +34,8 @@ export default {
       return store.getters.isCollapse
     })
 
-
-    return { routes, isCollapse }
+    console.log(variables);
+    return { routes, isCollapse, variables }
   },
 }
 </script>

@@ -10,7 +10,7 @@
   .sidebar-container {
     transition: width 0.28s;
     width: 210px !important;
-    background-color: #304156;
+    background-color: @sidebarBg;
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -48,15 +48,33 @@
 
       //字体激活时颜色
       .router-link-active .el-menu-item {
-        color: #409eff;
+        color: @menuActText;
       }
 
       //字体默认颜色
       .is-active {
-        color: #303133;
+        color: @menuText;
       }
     }
 
+    .is-active>.el-sub-menu__title {
+      color: @subMenuActText  !important;
+    }
+
+    .submenu-title-noDropdown,
+    .el-sub-menu__title {
+      &:hover {
+        background-color: @menuHover  !important;
+      }
+    }
+
+    .el-sub-menu .el-menu-item {
+      background-color: @subMenuBg  !important;
+
+      &:hover {
+        background-color: @subMenuHover  !important;
+      }
+    }
 
   }
 
@@ -145,25 +163,5 @@
         display: inline-block;
       }
     } */
-  }
-
-  // mobile responsive
-  .mobile {
-    .main-container {
-      margin-left: 0px;
-    }
-
-    .sidebar-container {
-      transition: transform .28s;
-      width: 210px !important;
-    }
-
-    &.hideSidebar {
-      .sidebar-container {
-        pointer-events: none;
-        transition-duration: 0.3s;
-        transform: translate3d(-210px, 0, 0);
-      }
-    }
   }
 }

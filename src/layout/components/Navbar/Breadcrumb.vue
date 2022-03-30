@@ -27,8 +27,6 @@ export default {
     let route = useRoute()
 
     function getBreadcrumb () {
-      // only show routes with meta.title
-
       let matched = route.matched.filter(item => item.meta && item.meta.title)
 
       if (matched[0].path !== '/dashboard') {
@@ -45,7 +43,6 @@ export default {
   },
   watch: {
     $route (route) {
-      // if you go to the redirect page, do not update the breadcrumbs
       if (route.path.startsWith('/redirect/')) {
         return
       }
@@ -54,7 +51,6 @@ export default {
   },
   methods: {
     pathCompile (path) {
-      // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
       const { params } = this.$route
       var toPath = pathToRegexp.compile(path)
       return toPath(params)
@@ -78,11 +74,6 @@ export default {
   font-size: 14px;
   //line-height: 40px;
   margin-left: -20px;
-
-  .no-redirect {
-    color: #97a8be;
-    cursor: text;
-  }
 }
 
 .breadcrumb-enter-active {
