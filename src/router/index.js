@@ -88,12 +88,11 @@ export const asyncRoutes = [
     path: '/permissiontext',
     component: Layout,
     redirect: '/permissiontext/page',
-    alwaysShow: true, // will always show the root menu
     name: 'Permissiontext',
     meta: {
       title: 'Permissiontext',
       icon: 'rili',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'customer'] // you can set roles in root nav
     },
     children: [
       {
@@ -102,7 +101,7 @@ export const asyncRoutes = [
         name: 'PagePermission',
         meta: {
           title: 'Page Permission',
-          roles: ['editor']
+          roles: ['customer']
         }
       },
       {

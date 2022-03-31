@@ -8,7 +8,7 @@ export function login(data) {
   }) 
  /* return new Promise((res,rej)=>{
     res({
-      code: 20000,
+      code: 0,
       data: {'admin-token':'admin-token'}
     })
   }) */
@@ -23,7 +23,7 @@ export function getInfo(token) {
   })
   /* return new Promise((res,rej)=>{
     res({
-      code: 20000,
+      code: 0,
       data: {'admin-token':'admin-token'}
     })
   }) */

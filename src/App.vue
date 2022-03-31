@@ -8,4 +8,4 @@
 export default {
   name: 'App'
 }
-</script>.
+</script>

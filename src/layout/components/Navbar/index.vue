@@ -21,8 +21,11 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="login">
-              <span style="display:block;">Log In</span>
+            <el-dropdown-item @click="loginadmin">
+              <span style="display:block;">Log In|admin</span>
+            </el-dropdown-item>
+            <el-dropdown-item @click="logincus">
+              <span style="display:block;">Log In|customer</span>
             </el-dropdown-item>
             <router-link to="/profile/index">
               <el-dropdown-item divided>Profile</el-dropdown-item>
@@ -70,14 +73,19 @@ export default {
       })
     }
 
-    function login () {
+    function logincus () {
+      store.dispatch('user/login', { username: 'customer', password: 'sss' }).then(() => {
+        router.replace({
+          path: '/redirect' + '/'
+        })
+      })
+    }
+    function loginadmin () {
       store.dispatch('user/login', { username: 'admin', password: 'sss' }).then(() => {
         router.replace({
           path: '/redirect' + '/'
         })
       })
-
-
     }
 
     function logout () {
@@ -88,7 +96,7 @@ export default {
       })
 
     }
-    return { toggleSideBar, isCollapse, refresh, logout, login }
+    return { toggleSideBar, isCollapse, refresh, logout, loginadmin, logincus }
   }
 
 }
