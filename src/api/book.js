@@ -40,3 +40,18 @@ export function getBookByID(bookID) {
         params: {bookID}
     })
 }
+
+
+/**
+ *
+ * @param bookID
+ * @param userToken
+ * @returns {isSuccess}
+ */
+export function borrowBookByID(bookID, userToken) {
+    return request({
+        url: '/user/borrow',
+        method: 'get',
+        params: {bookID, userToken}
+    })
+}
