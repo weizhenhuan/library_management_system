@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="footer">
     ©2021 xxx. All rights reserved.
   </div>
     
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style>
-.container {
+.footer {
   background: #3d3d3d;
   color: #fff;
   float: absolute;

@@ -79,6 +79,12 @@ const routes = [
       }
     ]
   },
+
+  {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  }
 ]
 
 export const constantRoutes = routes
