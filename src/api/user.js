@@ -23,6 +23,14 @@ export function register(data) {
   })
 }
 
+export function checkUserName(userName){
+  return request({
+    url: '/user/checkUserName',
+    method: 'get',
+    params: { userName }
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/user/getInfo',

@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="box">
-
       <div class="title">
         <h2>Sign up</h2>
       </div>
@@ -13,7 +12,6 @@
                       label="Username">
           <el-input v-model="formData.userName"
                     placeholder="Username"
-                    prefix-icon="icon-login_user"
                     clearable></el-input>
         </el-form-item>
         <el-form-item prop="password"
@@ -21,7 +19,6 @@
           <el-input v-model="formData.password"
                     placeholder="Password"
                     type="password"
-                    prefix-icon="icon-login_pwd"
                     show-password></el-input>
         </el-form-item>
         <el-form-item prop="cheackPassword"
@@ -29,7 +26,6 @@
           <el-input v-model="formData.cheackPassword"
                     placeholder="Password again"
                     type="password"
-                    prefix-icon="icon-login_pwd"
                     show-password></el-input>
         </el-form-item>
 
@@ -50,16 +46,14 @@
   <LoginFooter />
 </template>
 <script>
-
 import LoginFooter from "../../components/LoginFooter"
 import { ElMessage } from "element-plus"
-import { register } from "../../api/user"
+import { register, checkUserName } from "../../api/user"
 
 export default {
-
   components: { LoginFooter },
   data () {
-    var validatePass = (rule, value, callback) => {
+    let validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please enter your password again'));
       } else if (value !== this.formData.password) {
@@ -68,7 +62,11 @@ export default {
         callback();
       }
     };
-
+    let chekUserName = function (rule, value, callback) {
+      checkUserName(value).catch(() => {
+        callback(new Error('User name already exists!'))
+      })
+    }
     return {
       formData: {
         userName: '',
@@ -84,6 +82,7 @@ export default {
             message: "Username length should be at least 4 characters",
             trigger: "blur",
           },
+          { validator: chekUserName, trigger: 'blur' }
         ],
         password: [
           { required: true, message: 'Password is required!', trigger: 'blur' },
@@ -101,13 +100,10 @@ export default {
   methods: {
     register (formName) {
       this.$refs[formName].validate(valid => {
-        console.log(valid)
         if (valid) {
-          console.log("register");
           ElMessage.success('Successful registration!');
 
           register(this.formData).then((res) => {
-            console.log(res);
             if (res.data.code === 0) {
               this.$router.push("/login");
             } else {
@@ -123,7 +119,7 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields();
-    }
+    },
 
   }
 };

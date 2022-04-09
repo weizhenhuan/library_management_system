@@ -13,7 +13,6 @@ export default {
   components: { adminDashboard, customerDashboard },
   setup () {
     let dashboard = ref('customerDashboard')
-    console.log(useStore().getters.roles);
     if (useStore().getters.roles.includes('admin')) {
       dashboard.value = 'adminDashboard'
     }

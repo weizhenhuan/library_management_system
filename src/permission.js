@@ -11,7 +11,6 @@ const whiteList = ['/login','/register'] // no redirect whitelist
 router.beforeEach(async(to) => {
   NProgress.start()
   const hasToken = getToken()
-  console.log(hasToken);
   if (hasToken) {
     if (to.path === '/login') {
       //next({ path: '/' })
@@ -46,7 +45,6 @@ router.beforeEach(async(to) => {
   } else {
     store.dispatch('permission/initRoutes')
     if (whiteList.indexOf(to.path) !== -1) {
-      console.log('sssss');
       return true
     } else {
       NProgress.done()

@@ -28,7 +28,6 @@ export default {
 
     function getBreadcrumb () {
       let matched = route.matched.filter(item => item.meta && item.meta.title)
-      console.log(matched);
       if (matched.length && matched[0].path !== '/dashboard') {
         matched = [{ path: '/dashboard', meta: { title: '首页' } }].concat(matched)
       }
