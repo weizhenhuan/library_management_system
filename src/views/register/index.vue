@@ -5,98 +5,127 @@
       <div class="title">
         <h2>Sign up</h2>
       </div>
-      <el-form ref="formData" :model="formData" :rules="rules" label-width="80px">
-        <el-form-item prop="userName" label="Username"><el-input v-model="formData.userName" placeholder="Username" prefix-icon="icon-login_user" clearable></el-input></el-form-item>
-        <el-form-item prop="password" label="Password"><el-input v-model="formData.password" placeholder="Password" type="password" prefix-icon="icon-login_pwd" show-password></el-input></el-form-item>
-        <el-form-item prop="cheackPassword" label="Confirm"><el-input v-model="formData.cheackPassword" placeholder="Password again" type="password" prefix-icon="icon-login_pwd" show-password></el-input></el-form-item>
-        
+      <el-form ref="formData"
+               :model="formData"
+               :rules="rules"
+               label-width="80px">
+        <el-form-item prop="userName"
+                      label="Username">
+          <el-input v-model="formData.userName"
+                    placeholder="Username"
+                    prefix-icon="icon-login_user"
+                    clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="password"
+                      label="Password">
+          <el-input v-model="formData.password"
+                    placeholder="Password"
+                    type="password"
+                    prefix-icon="icon-login_pwd"
+                    show-password></el-input>
+        </el-form-item>
+        <el-form-item prop="cheackPassword"
+                      label="Confirm">
+          <el-input v-model="formData.cheackPassword"
+                    placeholder="Password again"
+                    type="password"
+                    prefix-icon="icon-login_pwd"
+                    show-password></el-input>
+        </el-form-item>
+
         <el-form-item>
-          <el-button type="primary" @click="register('formData')">sign up</el-button>
-          <el-button @click="resetForm('formData')" style="margin-left: 145px">reset</el-button></el-form-item>    
+          <el-button type="primary"
+                     @click="register('formData')">sign up</el-button>
+          <el-button @click="resetForm('formData')"
+                     style="margin-left: 145px">reset</el-button>
+        </el-form-item>
       </el-form>
       <div class="goLogin">
-        Already having an account? <router-link to="login" class="router">Login in</router-link>
+        Already having an account? <router-link to="login"
+                     class="router">Login in</router-link>
       </div>
     </div>
 
   </div>
-  <Footer/>
+  <LoginFooter />
 </template>
 <script>
 
-import Footer from "../../components/Footer"
-import {ElMessage} from "element-plus"
-import {register} from "../../api/user"
+import LoginFooter from "../../components/LoginFooter"
+import { ElMessage } from "element-plus"
+import { register } from "../../api/user"
 
 export default {
 
-  components: {Footer, ElMessage},
-  data() {
+  components: { LoginFooter },
+  data () {
     var validatePass = (rule, value, callback) => {
-			if (value === '') {
-				callback(new Error('Please enter your password again'));
-			} else if (value !== this.formData.password) {
-				callback(new Error('The password and confirm password are inconsistent'));
-			} else {
-				callback();
-			}
-		};
- 
-  return {
-   formData: {
-    userName: '',
-    password: '',
-    cheackPassword:''
-   },
-   rules: {
-    userName: [
-      { required: true, message: 'Username is required', trigger: 'blur' },
-      {
-        min: 4,
-        max: 20,
-        message: "Username length should be at least 4 characters",
-        trigger: "blur",
-      },
-    ],
-    password: [
-      { required: true, message: 'Password is required!', trigger: 'blur' },
-      {
-        min: 8,
-        max: 20,
-        message: "Password length should be at least 8 characters",
-        trigger: "blur",
-      },
-    ],
-    cheackPassword: [{ required: true, validator: validatePass, trigger: 'blur' }]
-   }
-  };
- },
- methods: {
-  register(formName) {
-   this.$refs[formName].validate(valid => {
-     console.log(valid)
-				if (valid) {
-          console.log("register");
-					ElMessage.success('Successful registration!');
+      if (value === '') {
+        callback(new Error('Please enter your password again'));
+      } else if (value !== this.formData.password) {
+        callback(new Error('The password and confirm password are inconsistent'));
+      } else {
+        callback();
+      }
+    };
 
-          let res = register(this.formData);
-          console.log(res);
-          if (res.data.code === 0) {
-            this.$router.push("/login");
-          } else {
-            ElMessage.error(res.data.msg);
-          }
-				} else {
-					console.log('error submit!!');
-					return false;
-				}
-			});
+    return {
+      formData: {
+        userName: '',
+        password: '',
+        cheackPassword: ''
+      },
+      rules: {
+        userName: [
+          { required: true, message: 'Username is required', trigger: 'blur' },
+          {
+            min: 4,
+            max: 20,
+            message: "Username length should be at least 4 characters",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          { required: true, message: 'Password is required!', trigger: 'blur' },
+          {
+            min: 8,
+            max: 20,
+            message: "Password length should be at least 8 characters",
+            trigger: "blur",
+          },
+        ],
+        cheackPassword: [{ required: true, validator: validatePass, trigger: 'blur' }]
+      }
+    };
   },
-  resetForm(formName) {
-			this.$refs[formName].resetFields();
-		}
- 
- }
+  methods: {
+    register (formName) {
+      this.$refs[formName].validate(valid => {
+        console.log(valid)
+        if (valid) {
+          console.log("register");
+          ElMessage.success('Successful registration!');
+
+          register(this.formData).then((res) => {
+            console.log(res);
+            if (res.data.code === 0) {
+              this.$router.push("/login");
+            } else {
+              ElMessage.error(res.data.msg);
+            }
+          })
+
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields();
+    }
+
+  }
 };
 </script>
 
@@ -106,7 +135,7 @@ export default {
   height: 100%;
   width: 100%;
 }
-.box{
+.box {
   width: 390px;
   height: 390px;
   position: absolute;

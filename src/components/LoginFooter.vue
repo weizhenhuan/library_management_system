@@ -2,18 +2,14 @@
   <div class="footer">
     ©2021 xxx. All rights reserved.
   </div>
-    
-       
-   
+
 </template>
 
 <script>
 export default {
-  name: "footer",
-
-  data() {
+  name: "LoginFooter",
+  data () {
     return {
-
     }
   }
 }
@@ -30,5 +26,4 @@ export default {
   text-align: center;
   padding: 20px;
 }
-
 </style>

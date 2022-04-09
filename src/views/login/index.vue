@@ -5,58 +5,52 @@
         <h2>Sign in</h2>
       </div>
       <!-- 登录表单区域 -->
-      <el-form
-        class="login-form"
-        :model="loginForm"
-        :rules="rules"
-        ref="loginFormRel"
-      >
+      <el-form class="login-form"
+               :model="loginForm"
+               :rules="rules"
+               ref="loginFormRel">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <div class="tishi">Username:</div>
-          <el-input
-            placeholder="Username"
-            v-model="loginForm.username"
-            prefix-icon="icon-login_user"
-          ></el-input>
+          <el-input placeholder="Username"
+                    v-model="loginForm.username"
+                    prefix-icon="icon-login_user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
           <div class="tishi">Password:</div>
-          <el-input
-            placeholder="Password"
-            v-model="loginForm.password"
-            type="password"
-            prefix-icon="icon-login_pwd"
-            show-password
-          ></el-input>
+          <el-input placeholder="Password"
+                    v-model="loginForm.password"
+                    type="password"
+                    prefix-icon="icon-login_pwd"
+                    show-password></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item class="login_btn">
-          <el-button :loading="loading" type="primary" block @click="beginLogin"
-            >Login</el-button
-          >
+          <el-button :loading="loading"
+                     type="primary"
+                     block
+                     @click="beginLogin">Login</el-button>
         </el-form-item>
         <div class="register">
           New to here?
-            <router-link to="register" class="router">Create an account.</router-link>
-          
+          <router-link to="register"
+                       class="router">Create an account.</router-link>
         </div>
       </el-form>
     </div>
   </div>
 
-  <Footer />
+  <LoginFooter />
 </template>
 <script>
-import { login } from "../../api/user";
 import { ElMessage } from "element-plus";
-import Footer from "../../components/Footer";
+import LoginFooter from "../../components/LoginFooter";
 
 export default {
-  components: { Footer },
+  components: { LoginFooter },
   name: "login",
-  data() {
+  data () {
     return {
       loginForm: {
         username: "",
@@ -88,20 +82,17 @@ export default {
   },
 
   methods: {
-    beginLogin() {
+    beginLogin () {
       this.$refs.loginFormRel.validate(async (valid) => {
         if (!valid) return;
         this.loading = true;
 
-        let res = await login(this.loginForm);
-        console.log(res);
-        if (res.code === 0) {
+        this.$store.dispatch('user/login', this.loginForm).then(() => {
           ElMessage.success("Login successfully");
-          window.sessionStorage.setItem("token", res.data);
           this.$router.push("/dashboard");
-        } else {
+        }).catch(() => {
           ElMessage.success("Login failed");
-        }
+        })
       });
     },
   },

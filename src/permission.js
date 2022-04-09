@@ -6,12 +6,12 @@ import { getToken } from '@/utils/auth' // get token from cookie
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login','/register'] // no redirect whitelist
 
 router.beforeEach(async(to) => {
   NProgress.start()
   const hasToken = getToken()
-
+  console.log(hasToken);
   if (hasToken) {
     if (to.path === '/login') {
       //next({ path: '/' })
@@ -46,11 +46,11 @@ router.beforeEach(async(to) => {
   } else {
     store.dispatch('permission/initRoutes')
     if (whiteList.indexOf(to.path) !== -1) {
+      console.log('sssss');
       return true
     } else {
-      //next(`/login?redirect=${to.path}`)
       NProgress.done()
-      //router.push(`/login?redirect=${to.path}`)
+      router.push('/login')
       return true
     }
   }
