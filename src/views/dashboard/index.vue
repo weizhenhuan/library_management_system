@@ -1,29 +1,23 @@
 <template>
-  <el-row :gutter="20">
-
-    <el-col :span="8"
-            :xs="24">
-      <user></user>
-    </el-col>
-
-    <el-col :span="16"
-            :xs="24">
-      <information></information>
-    </el-col>
-
-  </el-row>
+  <component :is="dashboard" />
 </template>
 
 <script>
-import User from './components/User.vue'
-import Information from './components/Information.vue'
+import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex'
+import adminDashboard from './admin'
+import customerDashboard from './customer'
 
 export default {
-  components: { User, Information },
-  name: 'dashboard',
+  name: 'Dashboard',
+  components: { adminDashboard, customerDashboard },
   setup () {
-  }
+    let dashboard = ref('customerDashboard')
+    console.log(useStore().getters.roles);
+    if (useStore().getters.roles.includes('admin')) {
+      dashboard.value = 'adminDashboard'
+    }
+    return { dashboard }
+  },
 }
 </script>
-
-

@@ -35,3 +35,27 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getExinfo(token){
+  return request({
+    url:'/user/getExinfo',
+    method: 'get',
+    params: { token }
+  })
+}
+
+export function borrowing(token){
+  return request({
+    url:'/user/borrowing',
+    method: 'get',
+    params: { token }
+  })
+}
+
+export function dynamic(token){
+  return request({
+    url:'/user/dynamic',
+    method: 'get',
+    params: { token }
+  })
+}
