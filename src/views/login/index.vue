@@ -105,9 +105,6 @@ export default {
       });
     },
   },
-  toRegister() {
-    this.$router.push("/dashboard");
-  },
 };
 </script>
 
