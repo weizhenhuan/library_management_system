@@ -1,17 +1,23 @@
 <template>
-  <div>item:ssss</div>
+  <component :is="dashboard" />
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex'
+import adminDashboard from './admin'
+import customerDashboard from './customer'
 
 export default {
-  name: 'dashboard',
+  name: 'Dashboard',
+  components: { adminDashboard, customerDashboard },
   setup () {
-  }
+    let dashboard = ref('customerDashboard')
+    console.log(useStore().getters.roles);
+    if (useStore().getters.roles.includes('admin')) {
+      dashboard.value = 'adminDashboard'
+    }
+    return { dashboard }
+  },
 }
 </script>
-
-<style>
-</style>
-
-

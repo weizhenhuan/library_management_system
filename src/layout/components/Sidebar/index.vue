@@ -34,7 +34,6 @@ export default {
       return store.getters.isCollapse
     })
 
-    console.log(variables);
     return { routes, isCollapse, variables }
   },
 }
