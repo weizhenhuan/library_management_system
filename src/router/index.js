@@ -68,7 +68,20 @@ const routes = [
       },
     ]
   },
-
+  {
+    path:'/booklist',
+    redirect: '/booklist',
+    component: Layout,
+    // hidden:true,
+    children:[
+      {
+        name:'booklist',
+        path:'index',
+        component:() => import('@/views/booklist/bookList'),
+        meta:{ title: 'all books',}
+      },
+    ]
+  },
   {
     path: '/external-link',
     component: Layout,
