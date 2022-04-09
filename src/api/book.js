@@ -6,38 +6,11 @@ import request from '@/utils/request'
  * @param pageNum 页数
  * @returns data{bookdata, total}
  */
-export function getBookBybookName(bookName, pageSize, pageNum) {
+export function getBookByNameAndISBN(bookName,ISBN, pageSize, pageNum) {
     return request({
         url: '/book/booklist/bookname',
         method: 'get',
-        params: {bookName, pageSize, pageNum}
-    })
-}
-
-/**
- * @param ISBN
- * @param pageSize 每页大小
- * @param pageNum 页数
- * @returns data{bookdata, total}
- */
-export function getBookByISBN(ISBN, pageSize, pageNum) {
-    return request({
-        url: '/book/booklist/isbn',
-        method: 'get',
-        params: {ISBN, pageSize, pageNum}
-    })
-}
-
-/**
- *
- * @param bookID 图书ID
- * @returns bookdata
- */
-export function getBookByID(bookID) {
-    return request({
-        url: '/book/booklist/bookid',
-        method: 'get',
-        params: {bookID}
+        params: {bookName,ISBN, pageSize, pageNum}
     })
 }
 
@@ -54,4 +27,12 @@ export function borrowBookByID(bookID, userToken) {
         method: 'get',
         params: {bookID, userToken}
     })
+}
+
+export function buyBookByID(bookID, userToken) {
+  return request({
+      url: '/user/buybook',
+      method: 'get',
+      params: {bookID, userToken}
+  })
 }
