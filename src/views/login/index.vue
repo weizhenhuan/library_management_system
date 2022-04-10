@@ -53,8 +53,8 @@ export default {
   data () {
     return {
       loginForm: {
-        username: "",
-        password: "",
+        username: "customer",
+        password: "ssssssss",
       },
       loading: false,
       rules: {

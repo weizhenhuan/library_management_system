@@ -71,7 +71,7 @@ import { reactive } from '@vue/reactivity'
 import { parseTime } from '@/utils/index.js'
 import Return from '@/components/Return'
 import Borrow from '@/components/Borrow'
-//import { borrowing, dynamic } from '@/api/user'
+import { borrowing, dynamic } from '@/api/user'
 
 export default {
   components: { Return, Borrow },
@@ -82,7 +82,7 @@ export default {
       currBook: {},
     })
 
-    let borrowBooks = [
+    let borrowBooks = reactive([])/* [
       {
         start: new Date('2022-3-2'),
         end: new Date('2022-4-15'),
@@ -111,9 +111,9 @@ export default {
         id: 'xcdfaz1324',
         overdue: false,
       }
-    ]
+    ] */
 
-    let dynamics = [
+    let dynamics = reactive([])/* = [
       {
         time: new Date('2022-4-3'),
         bookName: '前端从入门到入土',
@@ -137,7 +137,22 @@ export default {
         bookName: '前端从入门到入土',
         action: 'buy',
       },
-    ]
+    ] */
+    borrowing().then((res) => {
+
+      res.data.forEach((item) => {
+        item.start = new Date(item.start)
+        item.end = new Date(item.end)
+        borrowBooks.push(item)
+      })
+    })
+    dynamic().then((res) => {
+      res.data.forEach((item) => {
+        item.time = new Date(item.time)
+        dynamics.push(item)
+      })
+      //dynamics = res.date
+    })
 
     function percent (start, end) {
       let now = new Date()

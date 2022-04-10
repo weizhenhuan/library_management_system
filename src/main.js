@@ -12,20 +12,3 @@ import './icons'
 import './permission'
 
 createApp(App).component('svg-icon',SvgIcon).use(store).use(router).mount('#app')
-
-
-/* import {getInfo,logout} from '@/api/user'
-
-
-logout('admin').then(response => {
-  const data  = response.data
-  
-  console.log('data:',data);
-
-})
-getInfo('admin-token').then(response => {
-  const data  = response.data
-  
-  console.log('data:',data);
-
-}) */

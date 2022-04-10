@@ -55,12 +55,14 @@ export default {
     function borrowBook () {
       if (props.type === 'borrow') {
         borrowBookByID(props.book.id, store.getters.token, input.value).then(() => {
+          change()
           router.replace({
             path: '/redirect' + route.fullPath
           })
         })
       } else {
         renewBookByID(props.book.id, store.getters.token, input.value).then(() => {
+          change()
           router.replace({
             path: '/redirect' + route.fullPath
           })

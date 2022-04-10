@@ -2,8 +2,9 @@ import {param2Obj} from '@/utils'
 const Mock = require('mockjs')
 
 const User = require('./user')
+const Book = require('./book')
 
-const reqs = [...User]
+const reqs = [...User,...Book]
 
 // mock的两处返回形式处理：函数或者json数据模板
 function twoMockData(response){

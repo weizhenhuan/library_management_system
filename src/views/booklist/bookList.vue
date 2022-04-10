@@ -115,7 +115,7 @@ import { getBookByNameAndISBN, buyBookByID } from '@/api/book'
 import Borrow from '@/components/Borrow'
 
 export default {
-  name: "bookList.vue",
+  name: "bookList",
   components: { Borrow },
   data () {
     return {
@@ -133,104 +133,14 @@ export default {
     this.load()
   },
   methods: {
-    getBookData () {
-      return {
-        bookList: [
-          {
-            bookId: '1',
-            bookName: 'vue从入门到入土',
-            bookAuthor: 'Mr.GGLS',
-            leftNum: 10,
-            ISBN: '666',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: "https://img2.baidu.com/it/u=942228482,2348826349&fm=26&fmt=auto",
-            createTime: '2022-02-02',
-          },
-          {
-            bookId: '2',
-            bookName: '三十年精通vue',
-            bookAuthor: 'Mr.GGLS',
-            leftNum: 0,
-            ISBN: '666',
-            bookState: 'available',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: "https://64.media.tumblr.com/3a5e6d3ae5b48f51e7523c0451692de1/tumblr_p7pyh6VUfB1snerhxo4_400.jpg",
-            createTime: '2022-02-02',
-          },
-          {
-            bookId: '3',
-            bookName: 'vue底层源码解析',
-            ISBN: '666',
-            bookState: 'available',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: null,
-            createTime: '2022-02-02',
-          },
-          {
-            bookId: '4',
-            bookName: 'vue设计与实现',
-            ISBN: '666',
-            bookState: 'available',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: null,
-            createTime: '2022-02-02',
-          },
-          {
-            bookId: '512',
-            bookName: '中华养生宝典',
-            ISBN: '666',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: null,
-            bookState: 'available',
-          },
-          {
-            bookName: '如何避免脱发',
-            ISBN: '666',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: null,
-            bookState: 'available',
-          },
-          {
-            bookName: '活着',
-            ISBN: '666',
-            // borrowTimes: 1,
-            bookPrice: 78,
-            bookImg: null,
-            bookState: 'available',
-          },
-        ]
-        , total: 20,
-      }
-    },
+
     load (searchCondition) {
-      var res = this.getBookData(searchCondition)
-      var start = this.pageSize * (this.pageNum - 1)
-      var length = this.pageSize
-      var _tableData = []
-      for (let i = start; i < start + length; i++) {
-        if ((this.input_book_name.length > 0 && res.bookList[i].bookName.indexOf(this.input_book_name) > -1)
-          || (this.input_book_isbn.length > 0 && res.bookList[i].ISBN.indexOf(this.input_book_isbn) > -1)) {
-          if (this.input_book_name.length > 0 && this.input_book_isbn.length > 0) {
-            if (res.bookList[i].bookName.indexOf(this.input_book_name) > -1
-              && res.bookList[i].ISBN.indexOf(this.input_book_isbn) > -1) {
-              _tableData.push(res.bookList[i])
-            }
-          } else {
-            _tableData.push(res.bookList[i])
-          }
-        }
-        if (this.input_book_isbn.length === 0 && this.input_book_name.length === 0) {
-          _tableData.push(res.bookList[i])
-        }
-      }
-      this.tableData = _tableData
-      this.total = res.total
+      getBookByNameAndISBN(searchCondition).then(res => {
+        this.tableData = res.data.bookList
+        this.total = res.data.total
+      })
+
+
 
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn).then()
     },
@@ -257,8 +167,6 @@ export default {
   },
 
 }
-// const tableData = []
-
 </script>
 
 <style scoped>
