@@ -21,11 +21,11 @@ export function getBookByNameAndISBN(bookName,ISBN, pageSize, pageNum) {
  * @param userToken
  * @returns {isSuccess}
  */
-export function borrowBookByID(bookID, userToken) {
+export function borrowBookByID(bookID, userToken,days) {
     return request({
         url: '/user/borrow',
         method: 'get',
-        params: {bookID, userToken}
+        params: {bookID, userToken,days}
     })
 }
 
@@ -34,5 +34,21 @@ export function buyBookByID(bookID, userToken) {
       url: '/user/buybook',
       method: 'get',
       params: {bookID, userToken}
+  })
+}
+
+export function returnBookByID(bookID,userToken){
+  return request({
+    url: '/user/returnbook',
+    method: 'get',
+    params: {bookID, userToken}
+  })
+}
+
+export function renewBookByID(bookID,userToken,days){
+  return request({
+    url: '/user/renewbook',
+    method: 'get',
+    params: {bookID, userToken,days}
   })
 }

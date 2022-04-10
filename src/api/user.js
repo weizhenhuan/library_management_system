@@ -15,6 +15,22 @@ export function login(data) {
   
 }
 
+export function register(data) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data
+  })
+}
+
+export function checkUserName(userName){
+  return request({
+    url: '/user/checkUserName',
+    method: 'get',
+    params: { userName }
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/user/getInfo',
@@ -33,5 +49,29 @@ export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+export function getExinfo(token){
+  return request({
+    url:'/user/getExinfo',
+    method: 'get',
+    params: { token }
+  })
+}
+
+export function borrowing(token){
+  return request({
+    url:'/user/borrowing',
+    method: 'get',
+    params: { token }
+  })
+}
+
+export function dynamic(token){
+  return request({
+    url:'/user/dynamic',
+    method: 'get',
+    params: { token }
   })
 }

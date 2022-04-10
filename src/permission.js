@@ -6,14 +6,11 @@ import { getToken } from '@/utils/auth' // get token from cookie
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login','/register'] // no redirect whitelist
 
 router.beforeEach(async(to) => {
   NProgress.start()
-  console.log(router.options);
-
   const hasToken = getToken()
-
   if (hasToken) {
     if (to.path === '/login') {
       //next({ path: '/' })
@@ -32,14 +29,15 @@ router.beforeEach(async(to) => {
               accessedRoutes.map(item=>{
                 router.addRoute(item)
               })
-              return to
+              router.push(to.path)
+              return true
               //next(to.path) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             })
           })
         } catch (error) {
           await store.dispatch('user/resetToken')
-          //next(`/login?redirect=${to.path}`)
           NProgress.done()
+          //router.push(`/login?redirect=${to.path}`)
           return true
         }
       }
@@ -47,11 +45,10 @@ router.beforeEach(async(to) => {
   } else {
     store.dispatch('permission/initRoutes')
     if (whiteList.indexOf(to.path) !== -1) {
-      //next()
       return true
     } else {
-      //next(`/login?redirect=${to.path}`)
       NProgress.done()
+      router.push('/login')
       return true
     }
   }

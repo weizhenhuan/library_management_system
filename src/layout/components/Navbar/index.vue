@@ -91,7 +91,7 @@ export default {
     function logout () {
       store.dispatch('user/logout').then(() => {
         router.replace({
-          path: '/redirect' + '/'
+          path: '/login'
         })
       })
 

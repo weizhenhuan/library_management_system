@@ -28,7 +28,18 @@ export function throttle(fn, delay) {
     }
   };
 }
-
+//防抖函数
+export function debounce(func, delay) { 
+  let timeout; 
+  return function () { 
+      let context = this; 
+      let args = arguments; 
+      timeout?clearTimeout(timeout):null; 
+      timeout = setTimeout(() => { 
+          func.apply(context, args) 
+      }, delay);
+   } 
+} 
 
 //获取QueryString的数组
 export function getQueryString() {

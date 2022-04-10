@@ -29,7 +29,7 @@ const routes = [
         name:'dashboard',
         path:'dashboard',
         component:() => import('@/views/dashboard/index'),
-        meta:{ title: '首页', icon: 'wansheng'}
+        meta:{ title: '首页', icon: 'shouye'}
       }
     ]
   },
@@ -92,6 +92,12 @@ const routes = [
       }
     ]
   },
+
+  {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  }
 ]
 
 export const constantRoutes = routes
