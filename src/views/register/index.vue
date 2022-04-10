@@ -65,7 +65,7 @@ export default {
     let chekUserName = function (rule, value, callback) {
       checkUserName(value).catch(() => {
         callback(new Error('User name already exists!'))
-      })
+      }).then(callback())
     }
     return {
       formData: {
@@ -102,15 +102,13 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           ElMessage.success('Successful registration!');
-
           register(this.formData).then((res) => {
-            if (res.data.code === 0) {
+            if (res.code === 0) {
               this.$router.push("/login");
             } else {
               ElMessage.error(res.data.msg);
             }
           })
-
         } else {
           console.log('error submit!!');
           return false;

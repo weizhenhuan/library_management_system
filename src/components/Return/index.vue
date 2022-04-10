@@ -53,12 +53,14 @@ export default {
     function returnBook () {
       if (props.book.overdue && input.value == props.book.bookName) {
         returnBookByID(props.book.id, store.getters.token).then(() => {
+          change()
           router.replace({
             path: '/redirect' + route.fullPath
           })
         })
       } else if (!props.book.overdue) {
         returnBookByID(props.book.id, store.getters.token).then(() => {
+          change()
           router.replace({
             path: '/redirect' + route.fullPath
           })

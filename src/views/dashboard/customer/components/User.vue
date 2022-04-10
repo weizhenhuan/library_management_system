@@ -71,7 +71,7 @@
 import { reactive, ref } from '@vue/reactivity'
 import { mapGetters, useStore } from 'vuex'
 import { computed } from '@vue/runtime-core'
-//import { getExinfo } from '@/api/user.js'
+import { getExinfo } from '@/api/user.js'
 
 export default {
   setup () {
@@ -86,7 +86,7 @@ export default {
       user[itemfn] = item
     })
 
-    user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
+    //user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
     function changePage () {
       page.value = !page.value
     }
@@ -96,9 +96,9 @@ export default {
       loading.value = false
     }, 10);
 
-    /*     getExinfo(store.getters.token).then(() => {
-          user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
-        }) */
+    getExinfo(store.getters.token).then((res) => {
+      user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
+    })
 
 
     return { loading, page, changePage, user, }

@@ -77,5 +77,83 @@ module.exports = [
         data: 'success'
       }
     }
-  }
+  },
+  {
+    url: '/user/register',
+    type: 'post',
+    response: () => {
+      return {
+        code: 0,
+        data: '****'
+      }
+    }
+  },
+  {
+    url: /\/user\/checkUserName\.*/,
+    type: 'get',
+    response: () => {
+      return {
+        code: 0/1,
+        data: '****'
+      }
+    }
+  },
+  {
+    url: /\/user\/getExinfo\.*/,
+    type: 'get',
+    response: () => {
+      return {
+        code:0,
+        data:{
+        days: 123,
+        books: 147,
+        likes: 10
+      }
+    }
+    }
+  },
+  {
+    url: /\/user\/borrowing\.*/,
+    type: 'get',
+    response: () => {
+      return {
+        code:0,
+        data: [{
+              start:'2011-3-2',
+              end:'2022-10-2',
+              bookName: '算法从入门到入土',
+              overdue: false,
+              id:'23144'
+      },
+      {
+              start:'2011-3-2',
+              end: '2021-10-2',
+              bookName: '算法从入门到入土',
+              overdue: true,
+              id:'szxczc'
+      }]
+      }
+    }
+  },
+  {
+    url: /\/user\/dynamic\.*/,
+    type: 'get',
+    response: () => {
+      return {
+        code:0,
+        data: [{
+          time: '2022-4-3',
+              bookName: '前端从入门到入土',
+              action: 'borrow',
+              days: '10',
+      },
+      {
+              time: '2022-4-3',
+              bookName: '前端从入门到入土',
+              action: 'renew',
+              days: '10',
+            }]
+      }
+    }
+  },
 ]
