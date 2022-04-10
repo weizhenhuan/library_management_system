@@ -1,13 +1,12 @@
 <template>
-  <transition name="user-card"
-              mode="out-in">
-    <el-card class="information-container">
-      <div class="borrow-head">
-        <span>Borrowing Books</span>
-      </div>
-      <div class="progress-item text-center"
-           v-for="(book,index) in borrowBooks"
-           :key="index">
+  <el-card class="information-container">
+    <div class="borrow-head">
+      <span>Borrowing Books</span>
+    </div>
+    <div class="progress-item text-center clearfix"
+         v-for="(book,index) in borrowBooks"
+         :key="index">
+      <div class="book-info">
         <span>{{book.bookName}}</span>
         <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
         <el-progress :percentage="percent(book.start,book.end)"
@@ -18,83 +17,103 @@
                      class="progress" />
         <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
       </div>
-
-      <div class="timeline-head">
-        <span>Dynamic</span>
+      <div class="book-btn">
+        <el-button type="primary"
+                   :disabled="book.overdue"
+                   @click="{bookState.showRenew=true ;bookState.currBook=book}">renew</el-button>
+        <el-button type="success"
+                   @click="{bookState.showReturn=true ;bookState.currBook=book}">return</el-button>
       </div>
-      <el-timeline class="timeline">
-        <el-timeline-item v-for="(activity, index) in dynamics"
-                          :key="index"
-                          :timestamp="parseTime(activity.time)"
-                          :icon="icon(activity.action)"
-                          placement='top'>
-          <div v-if="activity.action==='borrow'">
-            <span>
-              借阅《{{ activity.bookName }}》{{activity.days}}天
-            </span>
-          </div>
-          <div v-else-if="activity.action==='renew'">
-            <span>
-              续借《{{ activity.bookName }}》{{activity.days}}天
-            </span>
-          </div>
-          <div v-else-if="activity.action==='return'">
-            <span>
-              归还了《{{ activity.bookName }}》
-            </span>
-          </div>
-          <div v-else-if="activity.action==='buy'">
-            <span>
-              购买了《{{ activity.bookName }}》
-            </span>
-          </div>
+    </div>
 
-        </el-timeline-item>
-      </el-timeline>
+    <div class="timeline-head">
+      <span>Dynamic</span>
+    </div>
+    <el-timeline class="timeline">
+      <el-timeline-item v-for="(activity, index) in dynamics"
+                        :key="index"
+                        :timestamp="parseTime(activity.time)"
+                        :icon="icon(activity.action)"
+                        placement='top'>
+        <div v-if="activity.action==='borrow'">
+          <span>
+            借阅《{{ activity.bookName }}》{{activity.days}}天
+          </span>
+        </div>
+        <div v-else-if="activity.action==='renew'">
+          <span>
+            续借《{{ activity.bookName }}》{{activity.days}}天
+          </span>
+        </div>
+        <div v-else-if="activity.action==='return'">
+          <span>
+            归还了《{{ activity.bookName }}》
+          </span>
+        </div>
+        <div v-else-if="activity.action==='buy'">
+          <span>
+            购买了《{{ activity.bookName }}》
+          </span>
+        </div>
 
-    </el-card>
-  </transition>
+      </el-timeline-item>
+    </el-timeline>
+  </el-card>
+  <Return v-model:showReturn="bookState.showReturn"
+          :book='bookState.currBook' />
+  <Borrow v-model:showBorrow="bookState.showRenew"
+          type="renew"
+          :book='bookState.currBook' />
 </template>
 
 <script>
 import { reactive } from '@vue/reactivity'
 import { parseTime } from '@/utils/index.js'
+import Return from '@/components/Return'
+import Borrow from '@/components/Borrow'
 //import { borrowing, dynamic } from '@/api/user'
 
 export default {
+  components: { Return, Borrow },
   setup () {
+    let bookState = reactive({
+      showReturn: false,
+      showRenew: false,
+      currBook: {},
+    })
+
     let borrowBooks = [
       {
         start: new Date('2022-3-2'),
-        end: new Date('2022-4-10'),
+        end: new Date('2022-4-15'),
         bookName: '算法从入门到入土',
+        id: 'xcdfa1324',
         overdue: false,
-        key: '123',
       },
       {
         start: new Date('2022-4-1'),
         end: new Date('2022-4-3'),
         bookName: '计网从入门到入土',
+        id: 'xcdfac1324',
         overdue: true,
-        key: '234',
       },
       {
         start: new Date('2022-4-1'),
-        end: new Date('2022-4-9'),
+        end: new Date('2022-4-13'),
         bookName: '前端从入门到入土',
+        id: 'xcdfa13s24',
         overdue: false,
-        key: '23s4',
       },
       {
         start: new Date('2022-3-1'),
         end: new Date('2022-4-18'),
         bookName: '后端从入门到入土',
+        id: 'xcdfaz1324',
         overdue: false,
-        key: '2z34',
       }
     ]
 
-    let dynamics = reactive([
+    let dynamics = [
       {
         time: new Date('2022-4-3'),
         bookName: '前端从入门到入土',
@@ -118,7 +137,7 @@ export default {
         bookName: '前端从入门到入土',
         action: 'buy',
       },
-    ])
+    ]
 
     function percent (start, end) {
       let now = new Date()
@@ -139,7 +158,7 @@ export default {
 
 
 
-    return { borrowBooks, percent, parseTime, dynamics, icon }
+    return { borrowBooks, percent, parseTime, dynamics, icon, bookState }
   }
 }
 </script>
@@ -153,26 +172,39 @@ export default {
     border-bottom: 1px solid #dfe6ec;
   }
   .progress-item {
-    position: relative;
-    span {
-      line-height: 30px;
+    .book-info {
+      position: relative;
+      width: 80%;
+      float: left;
+      span {
+        line-height: 30px;
+      }
+      .start {
+        position: absolute;
+        width: 25%;
+        bottom: 0;
+        line-height: 24px;
+      }
+      .progress {
+        width: 50%;
+        margin: 0 auto;
+      }
+      .end {
+        position: absolute;
+        width: 25%;
+        bottom: 0;
+        right: 0;
+        line-height: 24px;
+      }
     }
-    .start {
-      position: absolute;
-      width: 25%;
-      bottom: 0;
-      line-height: 24px;
-    }
-    .progress {
-      width: 50%;
-      margin: 0 auto;
-    }
-    .end {
-      position: absolute;
-      width: 25%;
-      bottom: 0;
-      right: 0;
-      line-height: 24px;
+    .book-btn {
+      float: right;
+      width: 20%;
+      position: relative;
+      bottom: -20px;
+      .el-button {
+        width: 45%;
+      }
     }
   }
 
