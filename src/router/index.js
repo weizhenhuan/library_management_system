@@ -93,70 +93,71 @@ const routes = [
     ]
   },
 
-  {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
-  }
+    {
+        path: '/register',
+        component: () =>
+            import ('@/views/register/index'),
+        hidden: true
+    }
 ]
 
 export const constantRoutes = routes
 
-export const asyncRoutes = [
-  {
+export const asyncRoutes = [{
     path: '/permissiontext',
     component: Layout,
     redirect: '/permissiontext/page',
     name: 'Permissiontext',
     meta: {
-      title: 'Permissiontext',
-      icon: 'rili',
-      roles: ['admin', 'customer'] // you can set roles in root nav
+        title: 'Permissiontext',
+        icon: 'test',
+        roles: ['admin', 'customer'] // you can set roles in root nav
     },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permissiontext/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page Permission',
-          roles: ['customer']
+    children: [{
+            path: 'page',
+            component: () =>
+                import ('@/views/permissiontext/page'),
+            name: 'PagePermission',
+            meta: {
+                title: 'Page Permission',
+                roles: ['customer']
+            }
+        },
+        {
+            path: 'text1',
+            component: () =>
+                import ('@/views/permissiontext/text1'),
+            name: 'DirectivePermission',
+            meta: {
+                title: 'text1 Permission'
+            }
+        },
+        {
+            path: 'admin',
+            component: () =>
+                import ('@/views/permissiontext/admin'),
+            name: 'RolePermission',
+            meta: {
+                title: 'admin Permission',
+                roles: ['admin']
+            }
         }
-      },
-      {
-        path: 'text1',
-        component: () => import('@/views/permissiontext/text1'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'text1 Permission'
-        }
-      },
-      {
-        path: 'admin',
-        component: () => import('@/views/permissiontext/admin'),
-        name: 'RolePermission',
-        meta: {
-          title: 'admin Permission',
-          roles: ['admin']
-        }
-      }
     ]
-  },
-]
+}, ]
 
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 })
 
 //重置路由
 export function resetRouter() {
-  const newRouter = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
-    routes
-  })
-  router.matcher = newRouter.matcher // reset router
+    const newRouter = createRouter({
+        history: createWebHistory(process.env.BASE_URL),
+        routes
+    })
+    router.matcher = newRouter.matcher // reset router
 }
 
 

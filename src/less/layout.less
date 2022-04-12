@@ -49,6 +49,9 @@
       //字体激活时颜色
       .router-link-active .el-menu-item {
         color: @menuActText;
+        background-color: #ecf5ff;
+        margin:5px 5px;
+        border-radius: 8px;
       }
 
       //字体默认颜色
@@ -58,24 +61,35 @@
     }
 
     .is-active>.el-sub-menu__title {
-      color: @subMenuActText  !important;
+      color: @subMenuActText;
     }
 
     .submenu-title-noDropdown,
     .el-sub-menu__title {
       &:hover {
-        background-color: @menuHover  !important;
+        color: @menuActText !important;
+        background-color: white;
+      }
+      &:active{
+        color:@menuActText !important;
+        background-color: #ecf5ff;
+        margin:5px 5px;
+        border-radius: 8px;
       }
     }
 
-    .el-sub-menu .el-menu-item {
-      background-color: @subMenuBg  !important;
-
+    .el-menu-item {
       &:hover {
-        background-color: @subMenuHover  !important;
+        color: @menuActText;
+        background-color: white;
+      }
+
+      &:active{
+        background-color: #ecf5ff;
+        margin:5px 5px;
+        border-radius: 8px;
       }
     }
-
   }
 
   .hideSidebar {
@@ -143,8 +157,6 @@
       }
 
     }
-
-
 
     /* .el-menu-item {
       .svg-icon {
