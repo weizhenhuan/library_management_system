@@ -1,4 +1,4 @@
-import {param2Obj} from '@/utils'
+import {param2Obj,body2Obj} from '@/utils'
 const Mock = require('mockjs')
 
 const User = require('./user')
@@ -13,7 +13,8 @@ function twoMockData(response){
       let {type,url,body} = options
       return response({
         method:type,
-        body: JSON.parse(body),
+        //body: JSON.parse(body),
+        body:body2Obj(body),
         query: param2Obj(url)
       })
     }

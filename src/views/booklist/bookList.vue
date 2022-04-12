@@ -1,30 +1,34 @@
 <template>
   <div>
-    <el-main>
-      <div class="search_book_line">
-        <el-space :size="30"
-                  spacer="|">
-          <el-input v-model="input_book_name"
-                    placeholder="please input book name"
-                    class="search_input" />
-          <el-input v-model="input_book_isbn"
-                    placeholder="please input book ISBN"
-                    class="search_input" />
-        </el-space>
+    <el-row class="search-container">
+      <el-col :span="8">
+        <el-input v-model="input_book_name"
+                  placeholder="please input book name"
+                  class="search_input" />
+      </el-col>
+      <span style="display: block;line-height: 40px;text-align: center;width:10px">|</span>
+      <el-col :span="8">
+        <el-input v-model="input_book_isbn"
+                  placeholder="please input book ISBN"
+                  class="search_input" />
+      </el-col>
+      <el-col :span="3">
         <el-button type="primary"
-                   @click="load">
-          <svg-icon icon-class="search"
-                    style="vertical-align: middle;">
-          </svg-icon>
-          <span style="vertical-align: middle;"> search </span>
+                   @click="load"
+                   :loading="loading">
+          <template v-slot:icon>
+            <svg-icon icon-class="search" />
+          </template>
         </el-button>
-      </div>
+      </el-col>
+    </el-row>
 
+    <div class="booklist-container"
+         v-if="tableData.length">
       <el-table :data="tableData"
                 border
                 stripe
                 :header-cell-style="{color:'#606266'}">
-
         <el-table-column type="expand">
           <template v-slot="props">
             <el-form label-position="left"
@@ -33,11 +37,11 @@
                      style="color: #989fa5;background: #F0F5F6">
               <el-form-item label="book name"
                             style="width: 400px;height: 100px">
-                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bookName }}</span>
+                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bName }}</span>
               </el-form-item>
               <el-form-item label="author"
                             style="width: 400px;height: 100px;margin-left: 200px">
-                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bookAuthor }}</span>
+                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bAuthor }}</span>
               </el-form-item>
               <el-form-item label="ISBN"
                             style="width: 400px;height: 100px">
@@ -45,29 +49,29 @@
               </el-form-item>
               <el-form-item label="price"
                             style="width: 400px;height: 100px; margin-left: 200px">
-                <span style="margin-top: -65px; margin-left: 61px;">￥{{ props.row.bookPrice }}</span>
+                <span style="margin-top: -65px; margin-left: 61px;">￥{{ props.row.bPrice }}</span>
               </el-form-item>
               <el-form-item label="left num"
                             style="width: 400px;height: 100px">
-                <span style="margin-top: -65px; margin-left: 66px;">{{ props.row.leftNum}}</span>
+                <span style="margin-top: -65px; margin-left: 66px;">{{ props.row.bLeftNum}}</span>
               </el-form-item>
               <el-form-item label="cover"
                             style="width: 200px;height: 220px; margin-left: 200px">
-                <img :src="props.row.bookImg"
-                     :alt="props.row.bookName"
+                <img :src="props.row.bPhoto"
+                     :alt="props.row.bName"
                      class="book_image"
                      style="margin-left: 50px;">
               </el-form-item>
               <el-form-item style="position: relative; height: 80px;width: 300px;">
                 <el-button type="primary"
-                           @click="{showBorrow=true;currBook={'bookName':props.row.bookName,'id':props.row.bookId}}">
+                           @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
                   <svg-icon icon-class="book"
                             style="vertical-align: middle;">
                   </svg-icon>
                   <span>borrow</span>
                 </el-button>
                 <el-button type="success"
-                           @click="handleBuyBook(props.row.bookId, props.row.leftNum)"
+                           @click="handleBuyBook(props.row.bId, props.row.bLeftNum)"
                            style="margin-left: 50px; width: 124px">
                   <svg-icon icon-class="book"
                             style="vertical-align: middle">
@@ -77,33 +81,35 @@
               </el-form-item>
             </el-form>
           </template>
-
         </el-table-column>
 
-        <!--      <el-table-column prop="bookId" label="book id" width="150"/>-->
-        <el-table-column prop="bookName"
+        <el-table-column prop="bName"
                          label="book name"
                          width="280" />
         <el-table-column prop="ISBN"
                          label="ISBN"
                          width="280" />
-        <el-table-column prop="bookPrice"
+        <el-table-column prop="bPrice"
                          label="price"
                          width="280" />
-        <el-table-column prop="bookAuthor"
+        <el-table-column prop="bAuthor"
                          label="book author" />
       </el-table>
+
       <div class="demo-pagination-block">
-        <el-pagination @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       v-model:currentPage="pageNum"
+        <el-pagination v-model:currentPage="pageNum"
                        v-model:page-size="pageSize"
                        :page-sizes="[2, 5, 10, 20]"
-                       small="small"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="total" />
       </div>
-    </el-main>
+    </div>
+
+    <div v-else
+         class="recommend">
+      Recommend queries according to your preferences:The Legend of Zelda: Breath of the Wild、Super Mario Galaxy
+    </div>
+
     <Borrow v-model:showBorrow="showBorrow"
             type="borrow"
             :book='currBook' />
@@ -126,58 +132,66 @@ export default {
       pageSize: 2,
       pageNum: 1,
       showBorrow: false,
-      currBook: {}
+      currBook: {},
+      loading: false
     }
   },
   created () {
-    this.load()
+    //this.load()
   },
   methods: {
 
-    load (searchCondition) {
-      getBookByNameAndISBN(searchCondition).then(res => {
+    load () {
+      this.loading = true
+      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, 10, 1).then((res) => {
         this.tableData = res.data.bookList
         this.total = res.data.total
+        console.log(this.tableData);
+        this.loading = false
       })
-
-
-
-      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn).then()
     },
-    handleSizeChange (pageSize) {
-      this.pageSize = pageSize
+    handleSizeChange () {
+      console.log(this.pageSize);
       this.load()
     },
-    handleCurrentChange (pageNum) {
-      this.pageNum = pageNum
+    handleCurrentChange () {
+      console.log(this.pageNum);
       this.load()
     },
     handleBuyBook (bookId, leftNum) {
       if (leftNum < 1) {
         alert("There's no book on sale")
       }
-      buyBookByID(bookId, this.$store.getter.token).then()
-      /*TODO
-      * check book state
-      * change book state
-      * reload page?
-      * */
-
+      console.log(this.$store);
+      buyBookByID(bookId, this.$store.getters.token).then()
     },
   },
 
 }
 </script>
 
-<style scoped>
-.search_book_line {
-  margin-bottom: 20px;
-  margin-left: 300px;
+<style scoped lang="less">
+.search-container {
+  margin: 10px auto 10px;
+  justify-content: center;
+  .el-button {
+    height: 40px;
+    font-size: 2em;
+    padding-left: 20px;
+    margin-left: 20px;
+  }
+  .el-input /deep/ .el-input__inner {
+    height: 40px;
+  }
+}
+.booklist-container {
+  .el-pagination {
+    justify-content: center;
+  }
 }
 
-.search_input {
-  width: 300px;
-  /*margin-left: 20px;*/
+.recommend {
+  padding: 60px 0 0 60px;
 }
 
 span {
@@ -205,7 +219,5 @@ span {
 
 .el-form-item {
   margin-left: 50px;
-  /*border-style: solid;*/
-  /*border-width: 5px;*/
 }
 </style>

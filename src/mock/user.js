@@ -51,15 +51,18 @@ module.exports = [
     url: /\/user\/getInfo\.*/,
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
+      
+      const { userToken } = config.query
+      const info = users[userToken]
       // mock error
       if (!info) {
+        console.log('zzxx');
         return {
           code: 50008,
           message: 'Login failed, unable to get user details.'
         }
       }
+      console.log(info);
       return {
         code: 0,
         data: info
@@ -118,20 +121,36 @@ module.exports = [
     response: () => {
       return {
         code:0,
-        data: [{
-              start:'2011-3-2',
-              end:'2022-10-2',
-              bookName: '算法从入门到入土',
-              overdue: false,
-              id:'23144'
-      },
-      {
-              start:'2011-3-2',
-              end: '2021-10-2',
-              bookName: '算法从入门到入土',
-              overdue: true,
-              id:'szxczc'
-      }]
+        data: [
+          {
+            start: new Date('2022-3-2'),
+            end: new Date('2022-4-15'),
+            bookName: '算法从入门到入土',
+            id: 'xcdfa1324',
+            overdue: false,
+          },
+          {
+            start: new Date('2022-4-1'),
+            end: new Date('2022-4-3'),
+            bookName: '计网从入门到入土',
+            id: 'xcdfac1324',
+            overdue: true,
+          },
+          {
+            start: new Date('2022-4-1'),
+            end: new Date('2022-4-13'),
+            bookName: '前端从入门到入土',
+            id: 'xcdfa13s24',
+            overdue: false,
+          },
+          {
+            start: new Date('2022-3-1'),
+            end: new Date('2022-4-18'),
+            bookName: '后端从入门到入土',
+            id: 'xcdfaz1324',
+            overdue: false,
+          }
+        ]
       }
     }
   },
@@ -141,18 +160,30 @@ module.exports = [
     response: () => {
       return {
         code:0,
-        data: [{
-          time: '2022-4-3',
+        data: [
+            {
+              time: new Date('2022-4-3'),
               bookName: '前端从入门到入土',
               action: 'borrow',
               days: '10',
-      },
-      {
-              time: '2022-4-3',
+            },
+            {
+              time: new Date('2022-4-3'),
               bookName: '前端从入门到入土',
               action: 'renew',
               days: '10',
-            }]
+            },
+            {
+              time: new Date('2022-4-4'),
+              bookName: '前端从入门到入土',
+              action: 'return',
+      
+            },
+            {
+              time: new Date('2022-4-6'),
+              bookName: '前端从入门到入土',
+              action: 'buy',
+            },]
       }
     }
   },

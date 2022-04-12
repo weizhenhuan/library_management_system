@@ -111,3 +111,24 @@ export function param2Obj(url){
     return res
   }
 }
+
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
+ export function body2Obj(url){
+  let search = url
+  if(!search){
+    return {}
+  }else{
+    let res = {}
+    let searchArr = search.split('&')
+    searchArr.forEach((item)=>{
+      let index = item.indexOf('=')
+      if(index){
+        res[item.slice(0,index)] = item.slice(index+1)
+      }
+    })
+    return res
+  }
+}

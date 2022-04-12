@@ -29,13 +29,12 @@ router.beforeEach(async(to) => {
               accessedRoutes.map(item=>{
                 router.addRoute(item)
               })
-              router.push(to.path)
+              router.push(to.path)// hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
               return true
-              //next(to.path) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             })
           })
         } catch (error) {
-          await store.dispatch('user/resetToken')
+          //await store.dispatch('user/resetToken')
           NProgress.done()
           //router.push(`/login?redirect=${to.path}`)
           return true

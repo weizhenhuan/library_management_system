@@ -72,6 +72,7 @@ import { parseTime } from '@/utils/index.js'
 import Return from '@/components/Return'
 import Borrow from '@/components/Borrow'
 import { borrowing, dynamic } from '@/api/user'
+import { useStore } from 'vuex'
 
 export default {
   components: { Return, Borrow },
@@ -81,64 +82,12 @@ export default {
       showRenew: false,
       currBook: {},
     })
+    let store = useStore()
 
-    let borrowBooks = reactive([])/* [
-      {
-        start: new Date('2022-3-2'),
-        end: new Date('2022-4-15'),
-        bookName: '算法从入门到入土',
-        id: 'xcdfa1324',
-        overdue: false,
-      },
-      {
-        start: new Date('2022-4-1'),
-        end: new Date('2022-4-3'),
-        bookName: '计网从入门到入土',
-        id: 'xcdfac1324',
-        overdue: true,
-      },
-      {
-        start: new Date('2022-4-1'),
-        end: new Date('2022-4-13'),
-        bookName: '前端从入门到入土',
-        id: 'xcdfa13s24',
-        overdue: false,
-      },
-      {
-        start: new Date('2022-3-1'),
-        end: new Date('2022-4-18'),
-        bookName: '后端从入门到入土',
-        id: 'xcdfaz1324',
-        overdue: false,
-      }
-    ] */
+    let borrowBooks = reactive([])
 
-    let dynamics = reactive([])/* = [
-      {
-        time: new Date('2022-4-3'),
-        bookName: '前端从入门到入土',
-        action: 'borrow',
-        days: '10',
-      },
-      {
-        time: new Date('2022-4-3'),
-        bookName: '前端从入门到入土',
-        action: 'renew',
-        days: '10',
-      },
-      {
-        time: new Date('2022-4-4'),
-        bookName: '前端从入门到入土',
-        action: 'return',
-
-      },
-      {
-        time: new Date('2022-4-6'),
-        bookName: '前端从入门到入土',
-        action: 'buy',
-      },
-    ] */
-    borrowing().then((res) => {
+    let dynamics = reactive([])
+    borrowing(store.getters.token).then((res) => {
 
       res.data.forEach((item) => {
         item.start = new Date(item.start)
@@ -146,7 +95,7 @@ export default {
         borrowBooks.push(item)
       })
     })
-    dynamic().then((res) => {
+    dynamic(store.getters.token).then((res) => {
       res.data.forEach((item) => {
         item.time = new Date(item.time)
         dynamics.push(item)
@@ -180,7 +129,7 @@ export default {
 
 <style scoped lang='less'>
 .information-container {
-  margin-top: 30px;
+  margin: 30px 10px 0 0;
   .borrow-head {
     font-weight: bold;
     font-size: 20px;
