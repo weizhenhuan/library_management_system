@@ -78,7 +78,7 @@ const routes = [
         name:'booklist',
         path:'index',
         component:() => import('@/views/booklist/bookList'),
-        meta:{ title: 'all books',}
+        meta:{ title: 'all books',icon:'book'}
       },
     ]
   },
@@ -87,7 +87,7 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: 'https://www.bilibili.com/',
+        path: 'https://gitee.com/violet-umberto/online-library-management-system',
         meta: { title: 'External Link', icon: 'rili' }
       }
     ]

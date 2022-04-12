@@ -96,7 +96,7 @@ export default {
       loading.value = false
     }, 10);
 
-    getExinfo(store.getters.token).then((res) => {
+    getExinfo(store.getters.token).then(() => {
       user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
     })
 
@@ -108,7 +108,7 @@ export default {
 
 <style scoped lang='less'>
 .user-container {
-  margin-top: 30px;
+  margin: 30px 0 0 10px;
   .user-info {
     .avatar {
       display: block;
