@@ -26,6 +26,7 @@ import { ref, toRef } from '@vue/reactivity'
 import { renewBookByID, borrowBookByID } from '@/api/book'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from "element-plus";
 
 export default {
   name: 'return',
@@ -55,17 +56,36 @@ export default {
     function borrowBook () {
       if (props.type === 'borrow') {
         borrowBookByID(props.book.id, store.getters.token, input.value).then(() => {
+          ElMessage.success({
+            message: 'borrow success!.',
+            type: 'success',
+          });
           change()
           router.replace({
             path: '/redirect' + route.fullPath
           })
+        }).catch((res) => {
+          ElMessage.error({
+            message: res.message,
+            center: true,
+          });
         })
+        //chaoyesaad
       } else {
         renewBookByID(props.book.id, store.getters.token, input.value).then(() => {
+          ElMessage.success({
+            message: 'renew success.',
+            type: 'success',
+          });
           change()
           router.replace({
             path: '/redirect' + route.fullPath
           })
+        }).catch((res) => {
+          ElMessage.error({
+            message: res.message,
+            center: true,
+          });
         })
       }
     }

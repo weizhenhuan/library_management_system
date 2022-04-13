@@ -49,22 +49,22 @@
                         placement='top'>
         <div v-if="activity.action==='borrow'">
           <span>
-            借阅《{{ activity.bookName }}》{{activity.days}}天
+            borrow《{{ activity.bookName }}》{{activity.days}}days
           </span>
         </div>
         <div v-else-if="activity.action==='renew'">
           <span>
-            续借《{{ activity.bookName }}》{{activity.days}}天
+            renew《{{ activity.bookName }}》{{activity.days}}days
           </span>
         </div>
         <div v-else-if="activity.action==='return'">
           <span>
-            归还了《{{ activity.bookName }}》
+            return《{{ activity.bookName }}》
           </span>
         </div>
         <div v-else-if="activity.action==='buy'">
           <span>
-            购买了《{{ activity.bookName }}》
+            buy《{{ activity.bookName }}》
           </span>
         </div>
       </el-timeline-item>

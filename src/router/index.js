@@ -33,7 +33,7 @@ const routes = [
       }
     ]
   },
-  {
+  /* {
     path:'/test',
     name:'text',
     redirect: '/test/dashboard',
@@ -53,7 +53,7 @@ const routes = [
         meta:{ title: 'hhhh'}
       },
     ]
-  },
+  }, */
   {
     path:'/profile',
     redirect: '/profile/index',
@@ -111,7 +111,7 @@ export const asyncRoutes = [{
     meta: {
         title: 'Permissiontext',
         icon: 'test',
-        roles: ['admin', 'customer'] // you can set roles in root nav
+        roles: ['admin'] // you can set roles in root nav
     },
     children: [{
             path: 'page',

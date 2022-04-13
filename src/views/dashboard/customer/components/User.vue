@@ -49,7 +49,7 @@
                  v-for="statistic in user.statistics"
                  :key="statistic.title">
               {{statistic.number}}
-              <span>{{statistic.title}}</span>
+              <span style="display:block;width:50px">{{statistic.title}}</span>
             </div>
           </div>
         </el-card>

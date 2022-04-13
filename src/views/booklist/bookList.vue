@@ -122,7 +122,7 @@
                          width="350" />
         <el-table-column prop="bLeftNum"
                          label="remainder"
-                         width="350" />
+                         width="250" />
         <el-table-column prop="bAuthor"
                          label="book author" />
       </el-table>
@@ -130,9 +130,11 @@
       <div class="demo-pagination-block">
         <el-pagination v-model:currentPage="pageNum"
                        v-model:page-size="pageSize"
+                       @current-change="handleCurrentChange"
                        :page-sizes="[2, 5, 10, 20]"
                        layout="total, sizes, prev, pager, next, jumper"
-                       :total="total" />
+                       :total="total"
+                       hide-on-single-page />
       </div>
     </div>
 
@@ -153,6 +155,7 @@
 import { getBookByNameAndISBN, buyBookByID } from '@/api/book'
 import Borrow from '@/components/Borrow'
 import Buy from '@/components/Buy'
+import { ElMessage } from "element-plus";
 
 export default {
   name: "bookList",
@@ -163,7 +166,7 @@ export default {
       input_book_name: "",
       input_book_isbn: "",
       total: 100,
-      pageSize: 2,
+      pageSize: 10,
       pageNum: 1,
       showBorrow: false,
       showBuy: false,
@@ -172,21 +175,22 @@ export default {
     }
   },
   created () {
-    //this.load()
+    this.load()
   },
   methods: {
 
     load () {
       this.loading = true
-      if (this.input_book_name.indexOf('+') !== -1) {
-        //this.input_book_name.replace(/\+/g, '%2B')
-        //encodeURIComponent(this.input_book_name)
-      }
-      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, 10, 1).then((res) => {
+      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
         console.log(this.tableData);
         this.total = res.data.total
         this.loading = false
+      }).catch((res) => {
+        this.loading = false
+        ElMessage.error({
+          message: res.message
+        })
       })
 
       //bBookshelf

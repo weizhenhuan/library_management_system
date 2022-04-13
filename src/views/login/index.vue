@@ -93,15 +93,14 @@ export default {
           console.dir(ElMessage);
           this.loading = false;
           ElMessage.success({
-            //showClose: true,
             message: 'Congrats, this is a success message.',
             type: 'success',
           });
           this.$router.push("/dashboard");
-        }).catch(() => {
-          ElMessage.success({
+        }).catch((res) => {
+          ElMessage.error({
             showClose: false,
-            message: 'Centered text',
+            message: res.message,
             center: true,
           });
           this.loading = false;
