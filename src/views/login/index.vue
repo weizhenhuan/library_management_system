@@ -55,8 +55,8 @@ export default {
       loginForm: {
         //username: "customer",
         //password: "12345678",
-        username: "lhw",
-        password: "123456",
+        username: "Alice",
+        password: "a12345678",
       },
       loading: false,
       rules: {

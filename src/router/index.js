@@ -29,7 +29,7 @@ const routes = [
         name:'dashboard',
         path:'dashboard',
         component:() => import('@/views/dashboard/index'),
-        meta:{ title: '首页', icon: 'shouye'}
+        meta:{ title: 'Home', icon: 'shouye'}
       }
     ]
   },
@@ -38,7 +38,7 @@ const routes = [
     name:'text',
     redirect: '/test/dashboard',
     component: Layout,
-    meta:{ title: '测试', icon: 'rili'},
+    meta:{ title: '测试', icon: 'link'},
     children:[
       {
         name:'xczc',
@@ -88,7 +88,7 @@ const routes = [
     children: [
       {
         path: 'https://gitee.com/violet-umberto/online-library-management-system',
-        meta: { title: 'External Link', icon: 'rili' }
+        meta: { title: 'External Link', icon: 'link' }
       }
     ]
   },

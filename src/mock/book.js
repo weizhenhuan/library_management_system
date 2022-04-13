@@ -15,7 +15,7 @@ module.exports = [
               bLeftNum: 10,
               ISBN: '666',
               bPrice: 78,
-              bPhoto: "https://img2.baidu.com/it/u=942228482,2348826349&fm=26&fmt=auto",
+              bPhoto: "https://zs.xianmaigu.com/hbzjk_book/api/bookCover/getBookCover.html?isbn=978-7-115-52163-7",
               bBookshelf:'b203-3-2-1',
               bTotalNum:30,
               bTypeid:'jisuan',

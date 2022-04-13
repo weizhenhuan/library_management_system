@@ -32,6 +32,7 @@ const actions = {
   // user login
   login({commit},userFrom){
     const {username,password} = userFrom
+    console.log(username,password);
     return new Promise((resolve,reject)=>{
       login({username,password}).then(res=>{
         commit('SET_TOKEN',res.data.token)

@@ -28,17 +28,48 @@
       <el-table :data="tableData"
                 border
                 stripe
+                size="large"
                 :header-cell-style="{color:'#606266'}">
         <el-table-column type="expand">
-          <template v-slot="props">
-            <el-form label-position="left"
+          <template #default="props">
+
+            <el-row class="bookitem-wrapper">
+              <el-col :span="6"
+                      :offset="2">
+                <img :src="props.row.bPhoto"
+                     alt="cover"
+                     style="width:200px;height:200px">
+                <ul class="bookinfo">
+                  <li><span style="font-weight:bold">Title:</span>{{props.row.bName}}</li>
+                  <li><span style="font-weight:bold">Author:</span>{{props.row.bAuthor}}</li>
+                  <li><span style="font-weight:bold">Classification:</span>{{props.row.bTypeid}}</li>
+                  <li><span style="font-weight:bold">ISBN:</span>{{props.row.ISBN}}</li>
+                </ul>
+
+              </el-col>
+              <el-col :span="12"
+                      class="bookinfo-wrapper">
+                <ul class="library-bookinfo">
+                  <li><span style="font-weight:bold">Location:</span>{{props.row.bBookshelf}}</li>
+                  <li><span style="font-weight:bold">Price:</span>{{props.row.bPrice}}￥</li>
+                  <li><span style="font-weight:bold">Remainder:</span>{{props.row.bLeftNum}}</li>
+                </ul>
+                <el-button type="primary"
+                           @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
+                  <svg-icon icon-class="book"></svg-icon>
+                  <span>borrow</span>
+                </el-button>
+                <el-button type="success"
+                           @click="()=>{showBuy=true;currBook={'bookName':props.row.bName,'id':props.row.bId,'price':props.row.bPrice}}">
+                  <svg-icon icon-class="book"></svg-icon>
+                  <span>buy</span>
+                </el-button>
+              </el-col>
+            </el-row>
+            <!--            <el-form label-position="left"
                      inline
                      class="demo-table-expand"
                      style="color: #989fa5;background: #F0F5F6">
-              <el-form-item label="book name"
-                            style="width: 400px;height: 100px">
-                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bName }}</span>
-              </el-form-item>
               <el-form-item label="author"
                             style="width: 400px;height: 100px;margin-left: 200px">
                 <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bAuthor }}</span>
@@ -79,7 +110,7 @@
                   <span>buy</span>
                 </el-button>
               </el-form-item>
-            </el-form>
+            </el-form> -->
           </template>
         </el-table-column>
 
@@ -113,16 +144,19 @@
     <Borrow v-model:showBorrow="showBorrow"
             type="borrow"
             :book='currBook' />
+    <Buy v-model:showBuy="showBuy"
+         :book='currBook' />
   </div>
 </template>
 
 <script>
 import { getBookByNameAndISBN, buyBookByID } from '@/api/book'
 import Borrow from '@/components/Borrow'
+import Buy from '@/components/Buy'
 
 export default {
   name: "bookList",
-  components: { Borrow },
+  components: { Borrow, Buy },
   data () {
     return {
       tableData: [],
@@ -132,6 +166,7 @@ export default {
       pageSize: 2,
       pageNum: 1,
       showBorrow: false,
+      showBuy: false,
       currBook: {},
       loading: false
     }
@@ -149,18 +184,15 @@ export default {
       }
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, 10, 1).then((res) => {
         this.tableData = res.data.bookList
+        console.log(this.tableData);
         this.total = res.data.total
         this.loading = false
       })
 
       //bBookshelf
-      //bPrice
-      //bAuthor
-      //bTotalNum
-      //bLeftNum
-      //bPhoto
-      //bTypeid
-      //ISBN
+      //props.bPrice
+      //props.bPhoto
+      //props.bTypeid
     },
     handleCurrentChange () {
       this.load()
@@ -182,8 +214,8 @@ export default {
   justify-content: center;
   .el-button {
     height: 40px;
-    font-size: 2em;
-    padding-left: 20px;
+    font-size: 1.5em;
+    padding-left: 15px;
     margin-left: 20px;
   }
   .el-input :deep(.el-input__inner) {
@@ -191,39 +223,30 @@ export default {
   }
 }
 .booklist-container {
+  .bookitem-wrapper {
+    .bookinfo {
+      li {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .bookinfo-wrapper {
+    .library-bookinfo {
+      margin-top: 30px;
+      li {
+        margin-top: 10px;
+      }
+    }
+  }
+
   .el-pagination {
+    margin-top: 20px;
     justify-content: center;
   }
 }
 
 .recommend {
   padding: 60px 0 0 60px;
-}
-
-span {
-  font-size: large;
-  font-weight: bolder;
-  /*border-style: solid;*/
-  /*border-width: 2px;*/
-}
-
-.svg-icon {
-  margin-right: 10px;
-  color: white;
-  font-size: large;
-  font-weight: bold;
-}
-
-.demo-pagination-block + .demo-pagination-block {
-  margin-top: 10px;
-}
-
-.book_image {
-  height: 200px;
-  width: 140px;
-}
-
-.el-form-item {
-  margin-left: 50px;
 }
 </style>

@@ -105,8 +105,8 @@ export default {
           register(this.formData).then((res) => {
             if (res.code === 0) {
               this.$store.dispatch('user/login', {
-                username: this.userName,
-                password: this.password,
+                username: this.formData.userName,
+                password: this.formData.password,
               }).then(() => {
                 ElMessage.success("Login successfully");
                 this.$router.push("/dashboard");

@@ -107,13 +107,13 @@ export default {
       res.data.forEach((item) => {
         item.start = new Date(item.start)
         item.end = new Date(item.end)
-        //borrowBooks.push(item)
+        borrowBooks.push(item)
       })
     })
     dynamic(store.getters.token).then((res) => {
       res.data.forEach((item) => {
         item.time = new Date(item.time)
-        //dynamics.push(item)
+        dynamics.push(item)
       })
     })
 
