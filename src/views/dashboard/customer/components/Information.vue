@@ -3,33 +3,45 @@
     <div class="borrow-head">
       <span>Borrowing Books</span>
     </div>
-    <div class="progress-item text-center clearfix"
-         v-for="(book,index) in borrowBooks"
-         :key="index">
-      <div class="book-info">
-        <span>{{book.bookName}}</span>
-        <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
-        <el-progress :percentage="percent(book.start,book.end)"
-                     :status="book.overdue?'warning':''"
-                     :stroke-width="24"
-                     :text-inside="true"
-                     :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
-                     class="progress" />
-        <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
+    <div class="process-wrapper"
+         v-if="borrowBooks.length">
+      <div class="progress-item text-center clearfix"
+           v-for="(book,index) in borrowBooks"
+           :key="index">
+        <div class="book-info">
+          <span>{{book.bookName}}</span>
+          <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
+          <el-progress :percentage="percent(book.start,book.end)"
+                       :status="book.overdue?'warning':''"
+                       :stroke-width="24"
+                       :text-inside="true"
+                       :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
+                       class="progress" />
+          <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
+        </div>
+        <div class="book-btn">
+          <el-button type="primary"
+                     :disabled="book.overdue"
+                     @click="{bookState.showRenew=true ;bookState.currBook=book}">renew</el-button>
+          <el-button type="success"
+                     @click="{bookState.showReturn=true ;bookState.currBook=book}">return</el-button>
+        </div>
       </div>
-      <div class="book-btn">
-        <el-button type="primary"
-                   :disabled="book.overdue"
-                   @click="{bookState.showRenew=true ;bookState.currBook=book}">renew</el-button>
-        <el-button type="success"
-                   @click="{bookState.showReturn=true ;bookState.currBook=book}">return</el-button>
-      </div>
+    </div>
+    <div v-else
+         class="prompt-wrapper">
+      You don't have any books you're borrowing.
+      <router-link to='/booklist'
+                   class="link">
+        click here to borrow
+      </router-link>
     </div>
 
     <div class="timeline-head">
       <span>Dynamic</span>
     </div>
-    <el-timeline class="timeline">
+    <el-timeline class="timeline"
+                 v-if="dynamics.length">
       <el-timeline-item v-for="(activity, index) in dynamics"
                         :key="index"
                         :timestamp="parseTime(activity.time)"
@@ -55,9 +67,12 @@
             购买了《{{ activity.bookName }}》
           </span>
         </div>
-
       </el-timeline-item>
     </el-timeline>
+    <div v-else
+         class="prompt-wrapper">
+      You haven't do anything yet.
+    </div>
   </el-card>
   <Return v-model:showReturn="bookState.showReturn"
           :book='bookState.currBook' />
@@ -92,15 +107,14 @@ export default {
       res.data.forEach((item) => {
         item.start = new Date(item.start)
         item.end = new Date(item.end)
-        borrowBooks.push(item)
+        //borrowBooks.push(item)
       })
     })
     dynamic(store.getters.token).then((res) => {
       res.data.forEach((item) => {
         item.time = new Date(item.time)
-        dynamics.push(item)
+        //dynamics.push(item)
       })
-      //dynamics = res.date
     })
 
     function percent (start, end) {
@@ -169,6 +183,14 @@ export default {
       .el-button {
         width: 45%;
       }
+    }
+  }
+  .prompt-wrapper {
+    font-size: 17px;
+    padding: 10px 0 0 15px;
+    .link {
+      display: block;
+      color: #66ccff;
     }
   }
 

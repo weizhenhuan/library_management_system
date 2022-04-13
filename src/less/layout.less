@@ -38,9 +38,6 @@
 
     .el-menu {
       border: none;
-      height: 100%;
-      width: 100%;
-
       span {
         position: absolute;
         left: 54px;
@@ -50,7 +47,6 @@
       .router-link-active .el-menu-item {
         color: @menuActText;
         background-color: #ecf5ff;
-        margin:5px 5px;
         border-radius: 8px;
       }
 
@@ -58,7 +54,17 @@
       .is-active {
         color: @menuText;
       }
+
+      //给样式加一个内边距美化
+      a{
+        display: block;
+        padding: 5px;
+      }
+      .el-sub-menu__title{
+        padding-left: 25px !important;
+      }
     }
+    
 
     .is-active>.el-sub-menu__title {
       color: @subMenuActText;
@@ -68,12 +74,11 @@
     .el-sub-menu__title {
       &:hover {
         color: @menuActText !important;
-        background-color: white;
+        background-color: @menuHover;
       }
       &:active{
         color:@menuActText !important;
         background-color: #ecf5ff;
-        margin:5px 5px;
         border-radius: 8px;
       }
     }
@@ -81,12 +86,11 @@
     .el-menu-item {
       &:hover {
         color: @menuActText;
-        background-color: white;
+        background-color: @subMenuHover;
       }
 
       &:active{
         background-color: #ecf5ff;
-        margin:5px 5px;
         border-radius: 8px;
       }
     }
@@ -106,7 +110,7 @@
       overflow: hidden;
 
       &>.el-sub-menu__title {
-        padding: 0 !important;
+        padding: 5px !important;
 
         .svg-icon {
           margin-left: 20px;

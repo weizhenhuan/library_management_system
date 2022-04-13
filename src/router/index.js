@@ -70,7 +70,7 @@ const routes = [
   },
   {
     path:'/booklist',
-    redirect: '/booklist',
+    redirect: '/booklist/index',
     component: Layout,
     // hidden:true,
     children:[

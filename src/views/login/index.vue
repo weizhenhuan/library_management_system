@@ -90,10 +90,21 @@ export default {
         this.loading = true;
 
         this.$store.dispatch('user/login', this.loginForm).then(() => {
-          ElMessage.success("Login successfully");
+          console.dir(ElMessage);
+          this.loading = false;
+          ElMessage.success({
+            //showClose: true,
+            message: 'Congrats, this is a success message.',
+            type: 'success',
+          });
           this.$router.push("/dashboard");
         }).catch(() => {
-          ElMessage.success("Login failed");
+          ElMessage.success({
+            showClose: false,
+            message: 'Centered text',
+            center: true,
+          });
+          this.loading = false;
         })
       });
     },

@@ -56,13 +56,11 @@ module.exports = [
       const info = users[userToken]
       // mock error
       if (!info) {
-        console.log('zzxx');
         return {
           code: 50008,
           message: 'Login failed, unable to get user details.'
         }
       }
-      console.log(info);
       return {
         code: 0,
         data: info
@@ -162,25 +160,25 @@ module.exports = [
         code:0,
         data: [
             {
-              time: new Date('2022-4-3'),
+              time: '2018-02-19 12:00:00',
               bookName: '前端从入门到入土',
               action: 'borrow',
               days: '10',
             },
             {
-              time: new Date('2022-4-3'),
+              time: '2018-02-19 12:00:00',
               bookName: '前端从入门到入土',
               action: 'renew',
               days: '10',
             },
             {
-              time: new Date('2022-4-4'),
+              time: '2018-02-19 12:00:00',
               bookName: '前端从入门到入土',
               action: 'return',
       
             },
             {
-              time: new Date('2022-4-6'),
+              time: '2018-02-19 12:00:00',
               bookName: '前端从入门到入土',
               action: 'buy',
             },]

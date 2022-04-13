@@ -85,13 +85,13 @@
 
         <el-table-column prop="bName"
                          label="book name"
-                         width="280" />
+                         width="350" />
         <el-table-column prop="ISBN"
                          label="ISBN"
-                         width="280" />
-        <el-table-column prop="bPrice"
-                         label="price"
-                         width="280" />
+                         width="350" />
+        <el-table-column prop="bLeftNum"
+                         label="remainder"
+                         width="350" />
         <el-table-column prop="bAuthor"
                          label="book author" />
       </el-table>
@@ -143,26 +143,32 @@ export default {
 
     load () {
       this.loading = true
+      if (this.input_book_name.indexOf('+') !== -1) {
+        //this.input_book_name.replace(/\+/g, '%2B')
+        //encodeURIComponent(this.input_book_name)
+      }
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, 10, 1).then((res) => {
         this.tableData = res.data.bookList
         this.total = res.data.total
-        console.log(this.tableData);
         this.loading = false
       })
-    },
-    handleSizeChange () {
-      console.log(this.pageSize);
-      this.load()
+
+      //bBookshelf
+      //bPrice
+      //bAuthor
+      //bTotalNum
+      //bLeftNum
+      //bPhoto
+      //bTypeid
+      //ISBN
     },
     handleCurrentChange () {
-      console.log(this.pageNum);
       this.load()
     },
     handleBuyBook (bookId, leftNum) {
       if (leftNum < 1) {
         alert("There's no book on sale")
       }
-      console.log(this.$store);
       buyBookByID(bookId, this.$store.getters.token).then()
     },
   },
@@ -180,7 +186,7 @@ export default {
     padding-left: 20px;
     margin-left: 20px;
   }
-  .el-input /deep/ .el-input__inner {
+  .el-input :deep(.el-input__inner) {
     height: 40px;
   }
 }

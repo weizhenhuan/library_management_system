@@ -38,6 +38,9 @@ module.exports = {
       require('unplugin-vue-components/webpack')({
         resolvers: [ElementPlusResolver()],
       }),
+      require('unplugin-element-plus/webpack')({
+        // options
+      }),
     ],
   },
   chainWebpack(config){
