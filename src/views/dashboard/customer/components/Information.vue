@@ -3,33 +3,45 @@
     <div class="borrow-head">
       <span>Borrowing Books</span>
     </div>
-    <div class="progress-item text-center clearfix"
-         v-for="(book,index) in borrowBooks"
-         :key="index">
-      <div class="book-info">
-        <span>{{book.bookName}}</span>
-        <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
-        <el-progress :percentage="percent(book.start,book.end)"
-                     :status="book.overdue?'warning':''"
-                     :stroke-width="24"
-                     :text-inside="true"
-                     :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
-                     class="progress" />
-        <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
+    <div class="process-wrapper"
+         v-if="borrowBooks.length">
+      <div class="progress-item text-center clearfix"
+           v-for="(book,index) in borrowBooks"
+           :key="index">
+        <div class="book-info">
+          <span>{{book.bookName}}</span>
+          <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
+          <el-progress :percentage="percent(book.start,book.end)"
+                       :status="book.overdue?'warning':''"
+                       :stroke-width="24"
+                       :text-inside="true"
+                       :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
+                       class="progress" />
+          <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
+        </div>
+        <div class="book-btn">
+          <el-button type="primary"
+                     :disabled="book.overdue"
+                     @click="{bookState.showRenew=true ;bookState.currBook=book}">renew</el-button>
+          <el-button type="success"
+                     @click="{bookState.showReturn=true ;bookState.currBook=book}">return</el-button>
+        </div>
       </div>
-      <div class="book-btn">
-        <el-button type="primary"
-                   :disabled="book.overdue"
-                   @click="{bookState.showRenew=true ;bookState.currBook=book}">renew</el-button>
-        <el-button type="success"
-                   @click="{bookState.showReturn=true ;bookState.currBook=book}">return</el-button>
-      </div>
+    </div>
+    <div v-else
+         class="prompt-wrapper">
+      You don't have any books you're borrowing.
+      <router-link to='/booklist'
+                   class="link">
+        click here to borrow
+      </router-link>
     </div>
 
     <div class="timeline-head">
       <span>Dynamic</span>
     </div>
-    <el-timeline class="timeline">
+    <el-timeline class="timeline"
+                 v-if="dynamics.length">
       <el-timeline-item v-for="(activity, index) in dynamics"
                         :key="index"
                         :timestamp="parseTime(activity.time)"
@@ -55,9 +67,12 @@
             购买了《{{ activity.bookName }}》
           </span>
         </div>
-
       </el-timeline-item>
     </el-timeline>
+    <div v-else
+         class="prompt-wrapper">
+      You haven't do anything yet.
+    </div>
   </el-card>
   <Return v-model:showReturn="bookState.showReturn"
           :book='bookState.currBook' />
@@ -72,6 +87,7 @@ import { parseTime } from '@/utils/index.js'
 import Return from '@/components/Return'
 import Borrow from '@/components/Borrow'
 import { borrowing, dynamic } from '@/api/user'
+import { useStore } from 'vuex'
 
 export default {
   components: { Return, Borrow },
@@ -81,64 +97,12 @@ export default {
       showRenew: false,
       currBook: {},
     })
+    let store = useStore()
 
-    let borrowBooks = reactive([])/* [
-      {
-        start: new Date('2022-3-2'),
-        end: new Date('2022-4-15'),
-        bookName: '算法从入门到入土',
-        id: 'xcdfa1324',
-        overdue: false,
-      },
-      {
-        start: new Date('2022-4-1'),
-        end: new Date('2022-4-3'),
-        bookName: '计网从入门到入土',
-        id: 'xcdfac1324',
-        overdue: true,
-      },
-      {
-        start: new Date('2022-4-1'),
-        end: new Date('2022-4-13'),
-        bookName: '前端从入门到入土',
-        id: 'xcdfa13s24',
-        overdue: false,
-      },
-      {
-        start: new Date('2022-3-1'),
-        end: new Date('2022-4-18'),
-        bookName: '后端从入门到入土',
-        id: 'xcdfaz1324',
-        overdue: false,
-      }
-    ] */
+    let borrowBooks = reactive([])
 
-    let dynamics = reactive([])/* = [
-      {
-        time: new Date('2022-4-3'),
-        bookName: '前端从入门到入土',
-        action: 'borrow',
-        days: '10',
-      },
-      {
-        time: new Date('2022-4-3'),
-        bookName: '前端从入门到入土',
-        action: 'renew',
-        days: '10',
-      },
-      {
-        time: new Date('2022-4-4'),
-        bookName: '前端从入门到入土',
-        action: 'return',
-
-      },
-      {
-        time: new Date('2022-4-6'),
-        bookName: '前端从入门到入土',
-        action: 'buy',
-      },
-    ] */
-    borrowing().then((res) => {
+    let dynamics = reactive([])
+    borrowing(store.getters.token).then((res) => {
 
       res.data.forEach((item) => {
         item.start = new Date(item.start)
@@ -146,12 +110,11 @@ export default {
         borrowBooks.push(item)
       })
     })
-    dynamic().then((res) => {
+    dynamic(store.getters.token).then((res) => {
       res.data.forEach((item) => {
         item.time = new Date(item.time)
         dynamics.push(item)
       })
-      //dynamics = res.date
     })
 
     function percent (start, end) {
@@ -180,7 +143,7 @@ export default {
 
 <style scoped lang='less'>
 .information-container {
-  margin-top: 30px;
+  margin: 30px 10px 0 0;
   .borrow-head {
     font-weight: bold;
     font-size: 20px;
@@ -220,6 +183,14 @@ export default {
       .el-button {
         width: 45%;
       }
+    }
+  }
+  .prompt-wrapper {
+    font-size: 17px;
+    padding: 10px 0 0 15px;
+    .link {
+      display: block;
+      color: #66ccff;
     }
   }
 

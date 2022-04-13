@@ -41,7 +41,7 @@
             </div>
             <div class="user-introduction text-center">
               <div class="intro-header">introduction</div>
-              <div class="intro-body">{{user.introduction}}我是用来凑行数的，不用在意我.乃琳嘉然卡比塞尔达奎托斯马里奥</div>
+              <div class="intro-body">{{user.introduction}}</div>
             </div>
           </div>
           <div class="user-statistics clearfix text-center">
@@ -91,13 +91,9 @@ export default {
       page.value = !page.value
     }
 
-    setTimeout(() => {
-
-      loading.value = false
-    }, 10);
-
     getExinfo(store.getters.token).then((res) => {
-      user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
+      user.statistics = [{ title: 'days', number: res.data.days }, { title: 'books', number: res.data.books }, { title: 'likes', number: res.data.likes }]
+      loading.value = false
     })
 
 
@@ -108,7 +104,7 @@ export default {
 
 <style scoped lang='less'>
 .user-container {
-  margin-top: 30px;
+  margin: 30px 0 0 10px;
   .user-info {
     .avatar {
       display: block;

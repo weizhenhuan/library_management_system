@@ -104,7 +104,13 @@ export default {
           ElMessage.success('Successful registration!');
           register(this.formData).then((res) => {
             if (res.code === 0) {
-              this.$router.push("/login");
+              this.$store.dispatch('user/login', {
+                username: this.formData.userName,
+                password: this.formData.password,
+              }).then(() => {
+                ElMessage.success("Login successfully");
+                this.$router.push("/dashboard");
+              })
             } else {
               ElMessage.error(res.data.msg);
             }
@@ -118,7 +124,6 @@ export default {
     resetForm (formName) {
       this.$refs[formName].resetFields();
     },
-
   }
 };
 </script>

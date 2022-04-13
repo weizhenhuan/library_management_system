@@ -1,10 +1,12 @@
 import request from '@/utils/request'
-
+import qs from 'qs'
 export function login(data) {
   return request({
     url: '/user/login',
     method: 'post',
-    data
+    //data,
+    data:qs.stringify(data),
+    headers:{'Content-Type':'application/x-www-form-urlencoded'}
   }) 
  /* return new Promise((res,rej)=>{
     res({
@@ -19,7 +21,8 @@ export function register(data) {
   return request({
     url: '/user/register',
     method: 'post',
-    data
+    data:qs.stringify(data),
+    headers:{'Content-Type':'application/x-www-form-urlencoded'}
   })
 }
 
@@ -35,7 +38,7 @@ export function getInfo(token) {
   return request({
     url: '/user/getInfo',
     method: 'get',
-    params: { token }
+    params: { userToken:token }
   })
   /* return new Promise((res,rej)=>{
     res({
@@ -56,7 +59,7 @@ export function getExinfo(token){
   return request({
     url:'/user/getExinfo',
     method: 'get',
-    params: { token }
+    params: { userToken:token }
   })
 }
 
@@ -64,7 +67,7 @@ export function borrowing(token){
   return request({
     url:'/user/borrowing',
     method: 'get',
-    params: { token }
+    params: { userToken:token }
   })
 }
 
@@ -72,6 +75,6 @@ export function dynamic(token){
   return request({
     url:'/user/dynamic',
     method: 'get',
-    params: { token }
+    params: { userToken:token }
   })
 }
