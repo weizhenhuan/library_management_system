@@ -51,18 +51,12 @@
                       class="bookinfo-wrapper">
                 <ul class="library-bookinfo">
                   <li><span style="font-weight:bold">Location:</span>{{props.row.bBookshelf}}</li>
-                  <li><span style="font-weight:bold">Price:</span>{{props.row.bPrice}}￥</li>
                   <li><span style="font-weight:bold">Remainder:</span>{{props.row.bLeftNum}}</li>
                 </ul>
                 <el-button type="primary"
                            @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
                   <svg-icon icon-class="book"></svg-icon>
                   <span>borrow</span>
-                </el-button>
-                <el-button type="success"
-                           @click="()=>{showBuy=true;currBook={'bookName':props.row.bName,'id':props.row.bId,'price':props.row.bPrice}}">
-                  <svg-icon icon-class="book"></svg-icon>
-                  <span>buy</span>
                 </el-button>
               </el-col>
             </el-row>
@@ -152,15 +146,15 @@
 </template>
 
 <script>
-import { getBookByNameAndISBN, buyBookByID } from '@/api/book'
-import Borrow from '@/components/Borrow'
-import Buy from '@/components/Buy'
-import { ElMessage } from "element-plus";
+import { getBookByNameAndISBN, buyBookByID } from "@/api/book"
+import Borrow from "@/components/Borrow"
+import Buy from "@/components/Buy"
+import { ElMessage } from "element-plus"
 
 export default {
-  name: "bookList",
+  name: "BookList",
   components: { Borrow, Buy },
-  data () {
+  data() {
     return {
       tableData: [],
       input_book_name: "",
@@ -174,16 +168,16 @@ export default {
       loading: false
     }
   },
-  created () {
+  created() {
     this.load()
   },
   methods: {
 
-    load () {
+    load() {
       this.loading = true
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
-        console.log(this.tableData);
+        console.log(this.tableData)
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {
@@ -193,21 +187,21 @@ export default {
         })
       })
 
-      //bBookshelf
-      //props.bPrice
-      //props.bPhoto
-      //props.bTypeid
+      // bBookshelf
+      // props.bPrice
+      // props.bPhoto
+      // props.bTypeid
     },
-    handleCurrentChange () {
+    handleCurrentChange() {
       this.load()
     },
-    handleBuyBook (bookId, leftNum) {
+    handleBuyBook(bookId, leftNum) {
       if (leftNum < 1) {
         alert("There's no book on sale")
       }
       buyBookByID(bookId, this.$store.getters.token).then()
-    },
-  },
+    }
+  }
 
 }
 </script>

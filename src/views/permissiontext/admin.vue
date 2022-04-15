@@ -4,13 +4,12 @@
 
 <script>
 export default {
-  name: 'admin',
-  setup () {
+  name: "Admin",
+  setup() {
   }
 }
 </script>
 
 <style>
 </style>
-
 

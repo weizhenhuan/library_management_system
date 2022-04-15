@@ -3,17 +3,17 @@
   </div>
 </template>
 <script>
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from "vue-router"
 export default {
-  name: 'redirect',
-  setup () {
+  name: "Redirect",
+  setup() {
     const route = useRoute()
     const router = useRouter()
-    console.log('redirect:', route);
+    console.log("redirect:", route)
     const { params, query } = route
     const { path } = params
-    console.log(path, params, query);
-    router.replace({ path: '/' + path, query })
-  },
+    console.log(path, params, query)
+    router.replace({ path: "/" + path, query })
+  }
 }
 </script>

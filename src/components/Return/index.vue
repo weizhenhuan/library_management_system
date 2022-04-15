@@ -8,7 +8,7 @@
       <span>您已逾期，请正确输入书名进行还书</span>
       <el-input v-model="input"
                 style="margin-top:20px"
-                placeholder="Please input" />
+                placeholder="Please input"/>
     </div>
     <div v-else>
       <span>是否确认还书？</span>
@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import { ref, toRef } from '@vue/reactivity'
-import { returnBookByID } from '@/api/book'
-import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, toRef } from "@vue/reactivity"
+import { returnBookByID } from "@/api/book"
+import { useStore } from "vuex"
+import { useRoute, useRouter } from "vue-router"
 
 export default {
-  name: 'return',
+  name: "Return",
   props: {
     book: {
       type: Object,
@@ -41,35 +41,35 @@ export default {
       required: true
     }
   },
-  emits: ['update:showReturn'],
-  setup (props, { emit }) {
-    let isShow = toRef(props, 'showReturn')
-    let store = useStore()
-    let router = useRouter()
-    let route = useRoute()
-    function change () {
-      emit('update:showReturn', false)
+  emits: ["update:showReturn"],
+  setup(props, { emit }) {
+    const isShow = toRef(props, "showReturn")
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+    function change() {
+      emit("update:showReturn", false)
     }
-    function returnBook () {
-      if (props.book.overdue && input.value == props.book.bookName) {
+    function returnBook() {
+      if (props.book.overdue && input.value === props.book.bookName) {
         returnBookByID(props.book.id, store.getters.token).then(() => {
           change()
           router.replace({
-            path: '/redirect' + route.fullPath
+            path: "/redirect" + route.fullPath
           })
         })
       } else if (!props.book.overdue) {
         returnBookByID(props.book.id, store.getters.token).then(() => {
           change()
           router.replace({
-            path: '/redirect' + route.fullPath
+            path: "/redirect" + route.fullPath
           })
         })
       }
     }
-    let input = ref('')
+    const input = ref("")
     return { isShow, change, input, returnBook }
-  },
+  }
 }
 </script>
 

@@ -3,20 +3,20 @@
 </template>
 
 <script>
-import { ref } from '@vue/reactivity'
-import { useStore } from 'vuex'
-import adminDashboard from './admin'
-import customerDashboard from './customer'
+import { ref } from "@vue/reactivity"
+import { useStore } from "vuex"
+import adminDashboard from "./admin"
+import customerDashboard from "./customer"
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: { adminDashboard, customerDashboard },
-  setup () {
-    let dashboard = ref('customerDashboard')
-    if (useStore().getters.roles.includes('admin')) {
-      dashboard.value = 'adminDashboard'
+  setup() {
+    const dashboard = ref("customerDashboard")
+    if (useStore().getters.roles.includes("admin")) {
+      dashboard.value = "adminDashboard"
     }
     return { dashboard }
-  },
+  }
 }
 </script>

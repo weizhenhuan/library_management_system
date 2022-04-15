@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { asyncRoutes, constantRoutes } from "@/router"
 
 /**
  * @param roles
@@ -33,30 +33,30 @@ export function filterAsyncRoutes(routes, roles) {
 }
 
 const state = {
-  routes: [],
+  routes: []
 }
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.routes = constantRoutes.concat(routes)
   },
-  INIT_ROUTES:(state)=>{
+  INIT_ROUTES: (state) => {
     state.routes = constantRoutes
   }
 }
 
 const actions = {
-  generateRoutes({commit},roles){
-    return new Promise((resolve)=>{
-      let addRoutes = filterAsyncRoutes(asyncRoutes, roles) || []
-      commit('SET_ROUTES',addRoutes)
+  generateRoutes({ commit }, roles) {
+    return new Promise((resolve) => {
+      const addRoutes = filterAsyncRoutes(asyncRoutes, roles) || []
+      commit("SET_ROUTES", addRoutes)
       resolve(addRoutes)
     })
   },
 
-  initRoutes({commit}){
-    return new Promise((resolve)=>{
-      commit('INIT_ROUTES')
+  initRoutes({ commit }) {
+    return new Promise((resolve) => {
+      commit("INIT_ROUTES")
       resolve()
     })
   }

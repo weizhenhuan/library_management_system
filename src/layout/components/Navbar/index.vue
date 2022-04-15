@@ -44,59 +44,59 @@
 </template>
 
 <script>
-import { computed } from "@vue/runtime-core";
-import { useStore } from "vuex";
-import Breadcrumb from "./Breadcrumb";
-import { useRoute, useRouter } from "vue-router";
+import { computed } from "@vue/runtime-core"
+import { useStore } from "vuex"
+import Breadcrumb from "./Breadcrumb"
+import { useRoute, useRouter } from "vue-router"
 
 export default {
   name: "Navbar",
   components: { Breadcrumb },
-  setup () {
-    let store = useStore();
-    let route = useRoute();
-    let router = useRouter();
-    let isCollapse = computed(() => {
-      return store.getters.isCollapse;
-    });
+  setup() {
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
+    const isCollapse = computed(() => {
+      return store.getters.isCollapse
+    })
 
-    function toggleSideBar () {
-      store.dispatch("app/toggleSideBar");
+    function toggleSideBar() {
+      store.dispatch("app/toggleSideBar")
     }
 
-    function refresh () {
+    function refresh() {
       router.replace({
-        path: "/redirect" + route.fullPath,
-      });
+        path: "/redirect" + route.fullPath
+      })
     }
 
-    function logincus () {
+    function logincus() {
       store
         .dispatch("user/login", { username: "customer", password: "sss" })
         .then(() => {
           router.replace({
-            path: "/redirect" + "/",
-          });
-        });
+            path: "/redirect" + "/"
+          })
+        })
     }
-    function loginadmin () {
+    function loginadmin() {
       store
         .dispatch("user/login", { username: "admin", password: "sss" })
         .then(() => {
           router.replace({
-            path: "/redirect" + "/",
-          });
-        });
+            path: "/redirect" + "/"
+          })
+        })
     }
 
-    function logout () {
+    function logout() {
       store.dispatch("user/logout").then(() => {
         router.replace({
-          path: "/login",
-        });
-      });
+          path: "/login"
+        })
+      })
     }
-    return { toggleSideBar, isCollapse, refresh, logout, loginadmin, logincus };
-  },
-};
+    return { toggleSideBar, isCollapse, refresh, logout, loginadmin, logincus }
+  }
+}
 </script>

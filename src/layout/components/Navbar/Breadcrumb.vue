@@ -14,60 +14,60 @@
 </template>
 
 <script>
-import pathToRegexp from "path-to-regexp";
-import { reactive } from "@vue/reactivity";
-import { useRoute } from "vue-router";
-import { onMounted } from "@vue/runtime-core";
+import pathToRegexp from "path-to-regexp"
+import { reactive } from "@vue/reactivity"
+import { useRoute } from "vue-router"
+import { onMounted } from "@vue/runtime-core"
 
 export default {
-  setup () {
-    let levelList = reactive({
-      value: [],
-    });
-    let route = useRoute();
+  setup() {
+    const levelList = reactive({
+      value: []
+    })
+    const route = useRoute()
 
-    function getBreadcrumb () {
+    function getBreadcrumb() {
       let matched = route.matched.filter(
         (item) => item.meta && item.meta.title
-      );
+      )
       if (matched.length && matched[0].path !== "/dashboard") {
-        matched = [{ path: "/dashboard", meta: { title: "首页" } }].concat(
+        matched = [{ path: "/dashboard", meta: { title: "首页" }}].concat(
           matched
-        );
+        )
       }
-      levelList.value = matched;
+      levelList.value = matched
     }
 
     onMounted(() => {
-      getBreadcrumb();
-    });
+      getBreadcrumb()
+    })
 
-    return { getBreadcrumb, levelList };
+    return { getBreadcrumb, levelList }
   },
   watch: {
-    $route (route) {
+    $route(route) {
       if (route.path.startsWith("/redirect/")) {
-        return;
+        return
       }
-      this.getBreadcrumb();
-    },
+      this.getBreadcrumb()
+    }
   },
   methods: {
-    pathCompile (path) {
-      const { params } = this.$route;
-      var toPath = pathToRegexp.compile(path);
-      return toPath(params);
+    pathCompile(path) {
+      const { params } = this.$route
+      var toPath = pathToRegexp.compile(path)
+      return toPath(params)
     },
-    handleLink (item) {
-      const { redirect, path } = item;
+    handleLink(item) {
+      const { redirect, path } = item
       if (redirect) {
-        this.$router.push(redirect);
-        return;
+        this.$router.push(redirect)
+        return
       }
-      this.$router.push(this.pathCompile(path));
-    },
-  },
-};
+      this.$router.push(this.pathCompile(path))
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

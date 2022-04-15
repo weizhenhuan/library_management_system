@@ -1,22 +1,22 @@
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie"
 
 const state = {
-  sidebarOpened:Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
-  device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  sidebarOpened: Cookies.get("sidebarStatus") ? !!+Cookies.get("sidebarStatus") : true,
+  device: "desktop",
+  size: Cookies.get("size") || "medium"
 }
 
 const mutations = {
   TOGGLE_SIDEBAR: state => {
     state.sidebarOpened = !state.sidebarOpened
     if (state.sidebarOpened) {
-      Cookies.set('sidebarStatus', 1)
+      Cookies.set("sidebarStatus", 1)
     } else {
-      Cookies.set('sidebarStatus', 0)
+      Cookies.set("sidebarStatus", 0)
     }
   },
   CLOSE_SIDEBAR: (state) => {
-    Cookies.set('sidebarStatus', 0)
+    Cookies.set("sidebarStatus", 0)
     state.sidebarOpened = false
   },
   TOGGLE_DEVICE: (state, device) => {
@@ -24,22 +24,22 @@ const mutations = {
   },
   SET_SIZE: (state, size) => {
     state.size = size
-    Cookies.set('size', size)
+    Cookies.set("size", size)
   }
 }
 
 const actions = {
   toggleSideBar({ commit }) {
-    commit('TOGGLE_SIDEBAR')
+    commit("TOGGLE_SIDEBAR")
   },
   closeSideBar({ commit }, { withoutAnimation }) {
-    commit('CLOSE_SIDEBAR', withoutAnimation)
+    commit("CLOSE_SIDEBAR", withoutAnimation)
   },
   toggleDevice({ commit }, device) {
-    commit('TOGGLE_DEVICE', device)
+    commit("TOGGLE_DEVICE", device)
   },
   setSize({ commit }, size) {
-    commit('SET_SIZE', size)
+    commit("SET_SIZE", size)
   }
 }
 

@@ -1,44 +1,43 @@
-import request from '@/utils/request'
-import qs from 'qs'
+import request from "@/utils/request"
+import qs from "qs"
 export function login(data) {
   return request({
-    url: '/user/login',
-    method: 'post',
-    //data,
-    data:qs.stringify(data),
-    headers:{'Content-Type':'application/x-www-form-urlencoded'}
-  }) 
- /* return new Promise((res,rej)=>{
+    url: "/user/login",
+    method: "post",
+    // data,
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+  /* return new Promise((res,rej)=>{
     res({
       code: 0,
       data: {'admin-token':'admin-token'}
     })
   }) */
-  
 }
 
 export function register(data) {
   return request({
-    url: '/user/register',
-    method: 'post',
-    data:qs.stringify(data),
-    headers:{'Content-Type':'application/x-www-form-urlencoded'}
+    url: "/user/register",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
 
-export function checkUserName(userName){
+export function checkUserName(userName) {
   return request({
-    url: '/user/checkUserName',
-    method: 'get',
+    url: "/user/checkUserName",
+    method: "get",
     params: { userName }
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/getInfo',
-    method: 'get',
-    params: { userToken:token }
+    url: "/user/getInfo",
+    method: "get",
+    params: { userToken: token }
   })
   /* return new Promise((res,rej)=>{
     res({
@@ -50,31 +49,31 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: "/user/logout",
+    method: "post"
   })
 }
 
-export function getExinfo(token){
+export function getExinfo(token) {
   return request({
-    url:'/user/getExinfo',
-    method: 'get',
-    params: { userToken:token }
+    url: "/user/getExinfo",
+    method: "get",
+    params: { userToken: token }
   })
 }
 
-export function borrowing(token){
+export function borrowing(token) {
   return request({
-    url:'/user/borrowing',
-    method: 'get',
-    params: { userToken:token }
+    url: "/user/borrowing",
+    method: "get",
+    params: { userToken: token }
   })
 }
 
-export function dynamic(token){
+export function dynamic(token) {
   return request({
-    url:'/user/dynamic',
-    method: 'get',
-    params: { userToken:token }
+    url: "/user/dynamic",
+    method: "get",
+    params: { userToken: token }
   })
 }

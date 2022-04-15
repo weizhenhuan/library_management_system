@@ -1,5 +1,4 @@
 <template>
-
   <el-skeleton style="margin-top:20px"
                :loading="loading"
                animated>
@@ -68,36 +67,35 @@
 </template>
 
 <script>
-import { reactive, ref } from '@vue/reactivity'
-import { mapGetters, useStore } from 'vuex'
-import { computed } from '@vue/runtime-core'
-import { getExinfo } from '@/api/user.js'
+import { reactive, ref } from "@vue/reactivity"
+import { mapGetters, useStore } from "vuex"
+import { computed } from "@vue/runtime-core"
+import { getExinfo } from "@/api/user.js"
 
 export default {
-  setup () {
-    let page = ref(true)
-    let user = reactive({})
-    let store = useStore()
-    let loading = ref(true)
+  setup() {
+    const page = ref(true)
+    const user = reactive({})
+    const store = useStore()
+    const loading = ref(true)
 
-    const mapget = mapGetters(['name', 'introduction'])
+    const mapget = mapGetters(["name", "introduction"])
     Object.keys(mapget).forEach((itemfn) => {
-      let item = computed(mapget[itemfn].bind({ $store: store }))
+      const item = computed(mapget[itemfn].bind({ $store: store }))
       user[itemfn] = item
     })
 
-    //user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
-    function changePage () {
+    // user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
+    function changePage() {
       page.value = !page.value
     }
 
     getExinfo(store.getters.token).then((res) => {
-      user.statistics = [{ title: 'days', number: res.data.days }, { title: 'books', number: res.data.books }, { title: 'likes', number: res.data.likes }]
+      user.statistics = [{ title: "days", number: res.data.days }, { title: "books", number: res.data.books }, { title: "likes", number: res.data.likes }]
       loading.value = false
     })
 
-
-    return { loading, page, changePage, user, }
+    return { loading, page, changePage, user }
   }
 }
 </script>
@@ -165,5 +163,4 @@ export default {
   opacity: 0;
 }
 </style>
-
 

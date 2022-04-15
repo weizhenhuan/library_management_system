@@ -1,35 +1,35 @@
-import { createRouter, createWebHistory, } from 'vue-router'
-import Layout from '@/layout'
+import { createRouter, createWebHistory } from "vue-router"
+import Layout from "@/layout"
 
 const routes = [
   {
-    path: '/redirect',
+    path: "/redirect",
     component: Layout,
-    hidden:true,
-    children:[
+    hidden: true,
+    children: [
       {
-        name:'redirect',
-        path:'/redirect/:path(.*)',
-        component:() => import('@/views/redirect/index'),
+        name: "redirect",
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index")
       }
     ]
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: "/login",
+    component: () => import("@/views/login/index"),
     hidden: true
   },
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Layout,
-    redirect: '/dashboard',
-    children:[
+    redirect: "/dashboard",
+    children: [
       {
-        name:'dashboard',
-        path:'dashboard',
-        component:() => import('@/views/dashboard/index'),
-        meta:{ title: 'Home', icon: 'shouye'}
+        name: "dashboard",
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: { title: "Home", icon: "shouye" }
       }
     ]
   },
@@ -55,110 +55,108 @@ const routes = [
     ]
   }, */
   {
-    path:'/profile',
-    redirect: '/profile/index',
+    path: "/profile",
+    redirect: "/profile/index",
     component: Layout,
-    hidden:true,
-    children:[
+    hidden: true,
+    children: [
       {
-        name:'profile',
-        path:'index',
-        component:() => import('@/views//profile/index'),
-        meta:{ title: '个人主页'}
-      },
+        name: "profile",
+        path: "index",
+        component: () => import("@/views//profile/index"),
+        meta: { title: "个人主页" }
+      }
     ]
   },
   {
-    path:'/booklist',
-    redirect: '/booklist/index',
+    path: "/booklist",
+    redirect: "/booklist/index",
     component: Layout,
     // hidden:true,
-    children:[
+    children: [
       {
-        name:'booklist',
-        path:'index',
-        component:() => import('@/views/booklist/bookList'),
-        meta:{ title: 'all books',icon:'book'}
-      },
+        name: "booklist",
+        path: "index",
+        component: () => import("@/views/booklist/bookList"),
+        meta: { title: "all books", icon: "book" }
+      }
     ]
   },
   {
-    path: '/external-link',
+    path: "/external-link",
     component: Layout,
     children: [
       {
-        path: 'https://gitee.com/violet-umberto/online-library-management-system',
-        meta: { title: 'External Link', icon: 'link' }
+        path: "https://gitee.com/violet-umberto/online-library-management-system",
+        meta: { title: "External Link", icon: "link" }
       }
     ]
   },
 
-    {
-        path: '/register',
-        component: () =>
-            import ('@/views/register/index'),
-        hidden: true
-    }
+  {
+    path: "/register",
+    component: () =>
+      import ("@/views/register/index"),
+    hidden: true
+  }
 ]
 
 export const constantRoutes = routes
 
 export const asyncRoutes = [{
-    path: '/permissiontext',
-    component: Layout,
-    redirect: '/permissiontext/page',
-    name: 'Permissiontext',
+  path: "/permissiontext",
+  component: Layout,
+  redirect: "/permissiontext/page",
+  name: "Permissiontext",
+  meta: {
+    title: "Permissiontext",
+    icon: "test",
+    roles: ["admin"] // you can set roles in root nav
+  },
+  children: [{
+    path: "page",
+    component: () =>
+      import ("@/views/permissiontext/page"),
+    name: "PagePermission",
     meta: {
-        title: 'Permissiontext',
-        icon: 'test',
-        roles: ['admin'] // you can set roles in root nav
-    },
-    children: [{
-            path: 'page',
-            component: () =>
-                import ('@/views/permissiontext/page'),
-            name: 'PagePermission',
-            meta: {
-                title: 'Page Permission',
-                roles: ['customer']
-            }
-        },
-        {
-            path: 'text1',
-            component: () =>
-                import ('@/views/permissiontext/text1'),
-            name: 'DirectivePermission',
-            meta: {
-                title: 'text1 Permission'
-            }
-        },
-        {
-            path: 'admin',
-            component: () =>
-                import ('@/views/permissiontext/admin'),
-            name: 'RolePermission',
-            meta: {
-                title: 'admin Permission',
-                roles: ['admin']
-            }
-        }
-    ]
-}, ]
-
+      title: "Page Permission",
+      roles: ["customer"]
+    }
+  },
+  {
+    path: "text1",
+    component: () =>
+      import ("@/views/permissiontext/text1"),
+    name: "DirectivePermission",
+    meta: {
+      title: "text1 Permission"
+    }
+  },
+  {
+    path: "admin",
+    component: () =>
+      import ("@/views/permissiontext/admin"),
+    name: "RolePermission",
+    meta: {
+      title: "admin Permission",
+      roles: ["admin"]
+    }
+  }
+  ]
+}]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
-    routes
+  history: createWebHistory(process.env.BASE_URL),
+  routes
 })
 
-//重置路由
+// 重置路由
 export function resetRouter() {
-    const newRouter = createRouter({
-        history: createWebHistory(process.env.BASE_URL),
-        routes
-    })
-    router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
+    routes
+  })
+  router.matcher = newRouter.matcher // reset router
 }
-
 
 export default router

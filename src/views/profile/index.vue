@@ -4,13 +4,12 @@
 
 <script>
 export default {
-  name: 'profile',
-  setup () {
+  name: "Profile",
+  setup() {
   }
 }
 </script>
 
 <style>
 </style>
-
 

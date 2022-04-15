@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from "@/utils/request"
 
 /**
  * @param bookName 书名
@@ -6,14 +6,13 @@ import request from '@/utils/request'
  * @param pageNum 页数
  * @returns data{bookdata, total}
  */
-export function getBookByNameAndISBN(bookName,ISBN, pageSize, pageNum) {
-    return request({
-        url: '/book/booklist/bookname',
-        method: 'get',
-        params: {bookName,ISBN, pageSize, pageNum}
-    })
+export function getBookByNameAndISBN(bookName, ISBN, pageSize, pageNum) {
+  return request({
+    url: "/book/booklist/bookname",
+    method: "get",
+    params: { bookName, ISBN, pageSize, pageNum }
+  })
 }
-
 
 /**
  *
@@ -21,34 +20,34 @@ export function getBookByNameAndISBN(bookName,ISBN, pageSize, pageNum) {
  * @param userToken
  * @returns {isSuccess}
  */
-export function borrowBookByID(bookID, userToken,days) {
-    return request({
-        url: '/user/borrow',
-        method: 'get',
-        params: {bookID, userToken,days}
-    })
+export function borrowBookByID(bookID, userToken, days) {
+  return request({
+    url: "/user/borrow",
+    method: "get",
+    params: { bookID, userToken, days }
+  })
 }
 
 export function buyBookByID(bookID, userToken) {
   return request({
-      url: '/user/buybook',
-      method: 'get',
-      params: {bookID, userToken}
+    url: "/user/buybook",
+    method: "get",
+    params: { bookID, userToken }
   })
 }
 
-export function returnBookByID(bookID,userToken){
+export function returnBookByID(bookID, userToken) {
   return request({
-    url: '/user/returnbook',
-    method: 'get',
-    params: {bookID, userToken}
+    url: "/user/returnbook",
+    method: "get",
+    params: { bookID, userToken }
   })
 }
 
-export function renewBookByID(bookID,userToken,days){
+export function renewBookByID(bookID, userToken, days) {
   return request({
-    url: '/user/renewbook',
-    method: 'get',
-    params: {bookID, userToken,days}
+    url: "/user/renewbook",
+    method: "get",
+    params: { bookID, userToken, days }
   })
 }

@@ -1,18 +1,18 @@
 <script>
 export default {
-  name: 'MenuItem',
+  name: "MenuItem",
   functional: true,
   props: {
     icon: {
       type: String,
-      default: ''
+      default: ""
     },
     title: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  render () {
+  render() {
     const { icon, title } = this
     const vnodes = []
     if (icon) {
@@ -22,6 +22,6 @@ export default {
       vnodes.push(<span slot='title'>{(title)}</span>)
     }
     return (vnodes)
-  },
+  }
 }
 </script>

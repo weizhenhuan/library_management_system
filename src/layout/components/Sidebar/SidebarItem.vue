@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import path from 'path'
-import { reactive } from '@vue/reactivity'
-import Item from './Item'
+import path from "path"
+import { reactive } from "@vue/reactivity"
+import Item from "./Item"
 
 export default {
-  name: 'SidebarItem',
+  name: "SidebarItem",
   components: { Item },
   props: {
     // route object
@@ -48,18 +48,18 @@ export default {
     },
     basePath: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  setup (props) {
-    let onlyOneChild = reactive({
+  setup(props) {
+    const onlyOneChild = reactive({
       date: {}
     })
 
-    function onlyHasOneShowing (item) {
+    function onlyHasOneShowing(item) {
       if (item.children) {
         const children = item.children
-        let showChild = []
+        const showChild = []
         children.map(item => {
           if (item.hidden) {
             return false
@@ -67,39 +67,38 @@ export default {
             showChild.push(item)
           }
         })
-        if (showChild.length == 0) {
-          onlyOneChild.date = { ...item, path: '', noShowChild: true }
+        if (showChild.length === 0) {
+          onlyOneChild.date = { ...item, path: "", noShowChild: true }
           return true
         }
-        if (showChild.length == 1) {
+        if (showChild.length === 1) {
           onlyOneChild.date = showChild[0]
           return true
         }
-
       } else {
-        onlyOneChild.date = { ...item, path: '', noShowChild: true }
+        onlyOneChild.date = { ...item, path: "", noShowChild: true }
         return true
       }
       return false
     }
 
-    function pathResolve (routePath) {
+    function pathResolve(routePath) {
       return path.resolve(props.basePath, routePath)
     }
 
-    function isHttp (path) {
-      if (path.includes('http')) {
-        return 'a'
+    function isHttp(path) {
+      if (path.includes("http")) {
+        return "a"
       } else {
-        return 'router-link'
+        return "router-link"
       }
     }
 
-    function attrObj (path) {
-      if (path.includes('http')) {
+    function attrObj(path) {
+      if (path.includes("http")) {
         return {
           href: path,
-          target: '_blank',
+          target: "_blank"
         }
       }
       return {
@@ -108,6 +107,6 @@ export default {
     }
 
     return { onlyOneChild, onlyHasOneShowing, pathResolve, isHttp, attrObj }
-  },
+  }
 }
 </script>

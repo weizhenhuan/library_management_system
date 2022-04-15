@@ -10,30 +10,29 @@
 </template>
 
 <script>
-import { computed } from '@vue/runtime-core'
-import { useStore } from 'vuex'
-import { AppMain, Navbar, Sidebar } from './components'
+import { computed } from "@vue/runtime-core"
+import { useStore } from "vuex"
+import { AppMain, Navbar, Sidebar } from "./components"
 
 export default {
-  name: 'Layout',
+  name: "Layout",
   components: {
     AppMain,
     Navbar,
     Sidebar
   },
-  setup () {
-    let store = useStore()
-    let classObj = computed(() => {
+  setup() {
+    const store = useStore()
+    const classObj = computed(() => {
       return {
         hideSidebar: store.getters.isCollapse,
-        openSidebar: !store.getters.isCollapse,
+        openSidebar: !store.getters.isCollapse
       }
     })
-    //store.dispatch('permission/initRoutes')
+    // store.dispatch('permission/initRoutes')
     return { classObj }
   }
 
 }
 </script>
-
 

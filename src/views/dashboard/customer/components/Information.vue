@@ -82,28 +82,27 @@
 </template>
 
 <script>
-import { reactive } from '@vue/reactivity'
-import { parseTime } from '@/utils/index.js'
-import Return from '@/components/Return'
-import Borrow from '@/components/Borrow'
-import { borrowing, dynamic } from '@/api/user'
-import { useStore } from 'vuex'
+import { reactive } from "@vue/reactivity"
+import { parseTime } from "@/utils/index.js"
+import Return from "@/components/Return"
+import Borrow from "@/components/Borrow"
+import { borrowing, dynamic } from "@/api/user"
+import { useStore } from "vuex"
 
 export default {
   components: { Return, Borrow },
-  setup () {
-    let bookState = reactive({
+  setup() {
+    const bookState = reactive({
       showReturn: false,
       showRenew: false,
-      currBook: {},
+      currBook: {}
     })
-    let store = useStore()
+    const store = useStore()
 
-    let borrowBooks = reactive([])
+    const borrowBooks = reactive([])
 
-    let dynamics = reactive([])
+    const dynamics = reactive([])
     borrowing(store.getters.token).then((res) => {
-
       res.data.forEach((item) => {
         item.start = new Date(item.start)
         item.end = new Date(item.end)
@@ -117,24 +116,23 @@ export default {
       })
     })
 
-    function percent (start, end) {
-      let now = new Date()
-      let res = Math.round(((now - start) / (end - start)) * 100)
+    function percent(start, end) {
+      const now = new Date()
+      const res = Math.round(((now - start) / (end - start)) * 100)
       return res > 100 ? 100 : res
     }
 
-    function icon (action) {
-      if (action == 'borrow')
+    function icon(action) {
+      if (action === "borrow") {
         return <svg-icon icon-class='borrow' />
-      else if (action == 'buy')
+      } else if (action === "buy") {
         return <svg-icon icon-class='buy' />
-      else if (action == 'renew')
+      } else if (action === "renew") {
         return <svg-icon icon-class='renew' />
-      else if (action == 'return')
+      } else if (action === "return") {
         return <svg-icon icon-class='return' />
+      }
     }
-
-
 
     return { borrowBooks, percent, parseTime, dynamics, icon, bookState }
   }
@@ -205,5 +203,4 @@ export default {
   }
 }
 </style>
-
 
