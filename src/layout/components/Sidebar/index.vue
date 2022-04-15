@@ -18,25 +18,23 @@
 </template>
 
 <script>
-import { computed } from "@vue/runtime-core";
-import { useStore } from 'vuex'
-import SidebarItem from './SidebarItem'
-import variables from '@/less/variables.less'
-//import { useRouter } from "vue-router";
+import { computed } from "@vue/runtime-core"
+import { useStore } from "vuex"
+import SidebarItem from "./SidebarItem"
+import variables from "@/less/variables.less"
+// import { useRouter } from "vue-router";
 export default {
   components: { SidebarItem },
-  setup () {
-
-    let store = useStore()
+  setup() {
+    const store = useStore()
 
     const routes = computed(() => store.getters.routes)
-    let isCollapse = computed(() => {
+    const isCollapse = computed(() => {
       return store.getters.isCollapse
     })
 
     return { routes, isCollapse, variables }
-  },
+  }
 }
 </script>
-
 

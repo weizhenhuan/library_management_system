@@ -51,18 +51,12 @@
                       class="bookinfo-wrapper">
                 <ul class="library-bookinfo">
                   <li><span style="font-weight:bold">Location:</span>{{props.row.bBookshelf}}</li>
-                  <li><span style="font-weight:bold">Price:</span>{{props.row.bPrice}}￥</li>
                   <li><span style="font-weight:bold">Remainder:</span>{{props.row.bLeftNum}}</li>
                 </ul>
                 <el-button type="primary"
                            @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
                   <svg-icon icon-class="book"></svg-icon>
                   <span>borrow</span>
-                </el-button>
-                <el-button type="success"
-                           @click="()=>{showBuy=true;currBook={'bookName':props.row.bName,'id':props.row.bId,'price':props.row.bPrice}}">
-                  <svg-icon icon-class="book"></svg-icon>
-                  <span>buy</span>
                 </el-button>
               </el-col>
             </el-row>
@@ -122,7 +116,7 @@
                          width="350" />
         <el-table-column prop="bLeftNum"
                          label="remainder"
-                         width="350" />
+                         width="250" />
         <el-table-column prop="bAuthor"
                          label="book author" />
       </el-table>
@@ -130,9 +124,11 @@
       <div class="demo-pagination-block">
         <el-pagination v-model:currentPage="pageNum"
                        v-model:page-size="pageSize"
+                       @current-change="handleCurrentChange"
                        :page-sizes="[2, 5, 10, 20]"
                        layout="total, sizes, prev, pager, next, jumper"
-                       :total="total" />
+                       :total="total"
+                       hide-on-single-page />
       </div>
     </div>
 
@@ -150,20 +146,21 @@
 </template>
 
 <script>
-import { getBookByNameAndISBN, buyBookByID } from '@/api/book'
-import Borrow from '@/components/Borrow'
-import Buy from '@/components/Buy'
+import { getBookByNameAndISBN, buyBookByID } from "@/api/book"
+import Borrow from "@/components/Borrow"
+import Buy from "@/components/Buy"
+import { ElMessage } from "element-plus"
 
 export default {
-  name: "bookList",
+  name: "BookList",
   components: { Borrow, Buy },
-  data () {
+  data() {
     return {
       tableData: [],
       input_book_name: "",
       input_book_isbn: "",
       total: 100,
-      pageSize: 2,
+      pageSize: 10,
       pageNum: 1,
       showBorrow: false,
       showBuy: false,
@@ -171,39 +168,40 @@ export default {
       loading: false
     }
   },
-  created () {
-    //this.load()
+  created() {
+    this.load()
   },
   methods: {
 
-    load () {
+    load() {
       this.loading = true
-      if (this.input_book_name.indexOf('+') !== -1) {
-        //this.input_book_name.replace(/\+/g, '%2B')
-        //encodeURIComponent(this.input_book_name)
-      }
-      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, 10, 1).then((res) => {
+      getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
-        console.log(this.tableData);
+        console.log(this.tableData)
         this.total = res.data.total
         this.loading = false
+      }).catch((res) => {
+        this.loading = false
+        ElMessage.error({
+          message: res.message
+        })
       })
 
-      //bBookshelf
-      //props.bPrice
-      //props.bPhoto
-      //props.bTypeid
+      // bBookshelf
+      // props.bPrice
+      // props.bPhoto
+      // props.bTypeid
     },
-    handleCurrentChange () {
+    handleCurrentChange() {
       this.load()
     },
-    handleBuyBook (bookId, leftNum) {
+    handleBuyBook(bookId, leftNum) {
       if (leftNum < 1) {
         alert("There's no book on sale")
       }
       buyBookByID(bookId, this.$store.getters.token).then()
-    },
-  },
+    }
+  }
 
 }
 </script>

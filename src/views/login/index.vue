@@ -44,72 +44,71 @@
   <LoginFooter />
 </template>
 <script>
-import { ElMessage } from "element-plus";
-import LoginFooter from "../../components/LoginFooter";
+import { ElMessage } from "element-plus"
+import LoginFooter from "../../components/LoginFooter"
 
 export default {
   components: { LoginFooter },
-  name: "login",
-  data () {
+  name: "Login",
+  data() {
     return {
       loginForm: {
-        //username: "customer",
-        //password: "12345678",
+        // username: "customer",
+        // password: "12345678",
         username: "Alice",
-        password: "a12345678",
+        password: "a12345678"
       },
       loading: false,
       rules: {
         username: [
           { required: true, message: "Username is required", trigger: "blur" },
           {
-            //min: 4,
-            //max: 20,
+            // min: 4,
+            // max: 20,
             message: "Username length should be at least 4 characters",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
 
         password: [
           { required: true, message: "Password is required", trigger: "blur" },
           {
-            //min: 8,
-            //max: 20,
+            // min: 8,
+            // max: 20,
             message: "Password length should be at least 8 characters",
-            trigger: "blur",
-          },
-        ],
-      },
-    };
+            trigger: "blur"
+          }
+        ]
+      }
+    }
   },
 
   methods: {
-    beginLogin () {
-      this.$refs.loginFormRel.validate(async (valid) => {
-        if (!valid) return;
-        this.loading = true;
+    beginLogin() {
+      this.$refs.loginFormRel.validate(async(valid) => {
+        if (!valid) return
+        this.loading = true
 
-        this.$store.dispatch('user/login', this.loginForm).then(() => {
-          console.dir(ElMessage);
-          this.loading = false;
+        this.$store.dispatch("user/login", this.loginForm).then(() => {
+          console.dir(ElMessage)
+          this.loading = false
           ElMessage.success({
-            //showClose: true,
-            message: 'Congrats, this is a success message.',
-            type: 'success',
-          });
-          this.$router.push("/dashboard");
-        }).catch(() => {
-          ElMessage.success({
+            message: "Congrats, this is a success message.",
+            type: "success"
+          })
+          this.$router.push("/dashboard")
+        }).catch((res) => {
+          ElMessage.error({
             showClose: false,
-            message: 'Centered text',
-            center: true,
-          });
-          this.loading = false;
+            message: res.message,
+            center: true
+          })
+          this.loading = false
         })
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

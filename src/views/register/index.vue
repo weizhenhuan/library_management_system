@@ -14,15 +14,13 @@
                     placeholder="Username"
                     clearable></el-input>
         </el-form-item>
-        <el-form-item prop="password"
-                      label="Password">
+        <el-form-item prop="password" label="Password">
           <el-input v-model="formData.password"
                     placeholder="Password"
                     type="password"
                     show-password></el-input>
         </el-form-item>
-        <el-form-item prop="cheackPassword"
-                      label="Confirm">
+        <el-form-item prop="cheackPassword" label="Confirm">
           <el-input v-model="formData.cheackPassword"
                     placeholder="Password again"
                     type="password"
@@ -37,8 +35,8 @@
         </el-form-item>
       </el-form>
       <div class="goLogin">
-        Already having an account? <router-link to="login"
-                     class="router">Login in</router-link>
+        Already having an account?
+        <router-link to="login" class="router">Login in</router-link>
       </div>
     </div>
 
@@ -52,80 +50,80 @@ import { register, checkUserName } from "../../api/user"
 
 export default {
   components: { LoginFooter },
-  data () {
-    let validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please enter your password again'));
+  data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Please enter your password again"))
       } else if (value !== this.formData.password) {
-        callback(new Error('The password and confirm password are inconsistent'));
+        callback(new Error("The password and confirm password are inconsistent"))
       } else {
-        callback();
+        callback()
       }
-    };
-    let chekUserName = function (rule, value, callback) {
+    }
+    const chekUserName = function(rule, value, callback) {
       checkUserName(value).catch(() => {
-        callback(new Error('User name already exists!'))
+        callback(new Error("User name already exists!"))
       }).then(callback())
     }
     return {
       formData: {
-        userName: '',
-        password: '',
-        cheackPassword: ''
+        userName: "",
+        password: "",
+        cheackPassword: ""
       },
       rules: {
         userName: [
-          { required: true, message: 'Username is required', trigger: 'blur' },
+          { required: true, message: "Username is required", trigger: "blur" },
           {
             min: 4,
             max: 20,
             message: "Username length should be at least 4 characters",
-            trigger: "blur",
+            trigger: "blur"
           },
-          { validator: chekUserName, trigger: 'blur' }
+          { validator: chekUserName, trigger: "blur" }
         ],
         password: [
-          { required: true, message: 'Password is required!', trigger: 'blur' },
+          { required: true, message: "Password is required!", trigger: "blur" },
           {
             min: 8,
             max: 20,
             message: "Password length should be at least 8 characters",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
-        cheackPassword: [{ required: true, validator: validatePass, trigger: 'blur' }]
+        cheackPassword: [{ required: true, validator: validatePass, trigger: "blur" }]
       }
-    };
+    }
   },
   methods: {
-    register (formName) {
+    register(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          ElMessage.success('Successful registration!');
+          ElMessage.success("Successful registration!")
           register(this.formData).then((res) => {
             if (res.code === 0) {
-              this.$store.dispatch('user/login', {
+              this.$store.dispatch("user/login", {
                 username: this.formData.userName,
-                password: this.formData.password,
+                password: this.formData.password
               }).then(() => {
-                ElMessage.success("Login successfully");
-                this.$router.push("/dashboard");
+                ElMessage.success("Login successfully")
+                this.$router.push("/dashboard")
               })
             } else {
-              ElMessage.error(res.data.msg);
+              ElMessage.error(res.data.msg)
             }
           })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     },
-    resetForm (formName) {
-      this.$refs[formName].resetFields();
-    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    }
   }
-};
+}
 </script>
 
 <style scoped>

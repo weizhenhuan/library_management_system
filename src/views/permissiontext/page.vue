@@ -4,13 +4,12 @@
 
 <script>
 export default {
-  name: 'both',
-  setup () {
+  name: "Both",
+  setup() {
   }
 }
 </script>
 
 <style>
 </style>
-
 

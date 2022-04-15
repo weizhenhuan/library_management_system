@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint:fix": "npx eslint --fix --ext .js,.jsx,.vue src"
   },
   "dependencies": {
     "axios": "^0.26.1",
@@ -30,6 +31,7 @@
     "eslint-plugin-vue": "^7.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "prettier": "^2.6.2",
     "svg-sprite-loader": "^6.0.11",
     "unplugin-auto-import": "^0.6.6",
     "unplugin-element-plus": "^0.3.4",

@@ -5,10 +5,9 @@
 <script>
 
 export default {
-  name: 'adminDashboard',
-  setup () {
+  name: "AdminDashboard",
+  setup() {
   }
 }
 </script>
-
 

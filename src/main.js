@@ -1,14 +1,14 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from "vue"
+import App from "./App.vue"
+import router from "./router"
+import store from "./store"
 
-import '@/less/index.less'
+import "@/less/index.less"
 
-//import '@/mock'
+import "@/mock"
 
-import SvgIcon from '@/components/SvgIcon'
-import './icons'
-import './permission'
+import SvgIcon from "@/components/SvgIcon"
+import "./icons"
+import "./permission"
 
-createApp(App).component('svg-icon',SvgIcon).use(store).use(router).mount('#app')
+createApp(App).component("svg-icon", SvgIcon).use(store).use(router).mount("#app")
