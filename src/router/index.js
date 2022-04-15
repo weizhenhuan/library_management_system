@@ -1,97 +1,91 @@
 import { createRouter, createWebHistory } from "vue-router"
 import Layout from "@/layout"
 
-const routes = [
-  {
-    path: "/redirect",
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        name: "redirect",
-        path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect/index")
-      }
-    ]
-  },
-  {
-    path: "/login",
-    component: () => import("@/views/login/index"),
-    hidden: true
-  },
-  {
-    path: "/",
-    name: "Home",
-    component: Layout,
-    redirect: "/dashboard",
-    children: [
-      {
-        name: "dashboard",
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
-        meta: { title: "Home", icon: "shouye" }
-      }
-    ]
-  },
-  /* {
-    path:'/test',
-    name:'text',
-    redirect: '/test/dashboard',
-    component: Layout,
-    meta:{ title: '测试', icon: 'link'},
-    children:[
-      {
-        name:'xczc',
-        path:'dashboard',
-        component:() => import('@/views/profile/index'),
-        meta:{ title: '测试首页'}
-      },
-      {
-        name:'sssss',
-        path:'sssss',
-        component:() => import('@/views/dashboard/index'),
-        meta:{ title: 'hhhh'}
-      },
-    ]
-  }, */
-  {
-    path: "/profile",
-    redirect: "/profile/index",
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        name: "profile",
-        path: "index",
-        component: () => import("@/views//profile/index"),
-        meta: { title: "个人主页" }
-      }
-    ]
-  },
-  {
-    path: "/booklist",
-    redirect: "/booklist/index",
-    component: Layout,
-    // hidden:true,
-    children: [
-      {
-        name: "booklist",
-        path: "index",
-        component: () => import("@/views/booklist/bookList"),
-        meta: { title: "all books", icon: "book" }
-      }
-    ]
-  },
-  {
-    path: "/external-link",
-    component: Layout,
-    children: [
-      {
-        path: "https://gitee.com/violet-umberto/online-library-management-system",
-        meta: { title: "External Link", icon: "link" }
-      }
-    ]
-  },
+const routes = [{
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [{
+            name: 'redirect',
+            path: '/redirect/:path(.*)',
+            component: () =>
+                import ('@/views/redirect/index'),
+        }]
+    },
+    {
+        path: '/login',
+        component: () =>
+            import ('@/views/login/index'),
+        hidden: true
+    },
+    {
+        path: '/',
+        name: 'Home',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [{
+            name: 'dashboard',
+            path: 'dashboard',
+            component: () =>
+                import ('@/views/dashboard/index'),
+            meta: { title: 'Home', icon: 'home' }
+        }]
+    },
+    /* {
+      path:'/test',
+      name:'text',
+      redirect: '/test/dashboard',
+      component: Layout,
+      meta:{ title: '测试', icon: 'link'},
+      children:[
+        {
+          name:'xczc',
+          path:'dashboard',
+          component:() => import('@/views/profile/index'),
+          meta:{ title: '测试首页'}
+        },
+        {
+          name:'sssss',
+          path:'sssss',
+          component:() => import('@/views/dashboard/index'),
+          meta:{ title: 'hhhh'}
+        },
+      ]
+    }, */
+    {
+        path: '/profile',
+        redirect: '/profile/index',
+        component: Layout,
+        hidden: true,
+        children: [{
+            name: 'profile',
+            path: 'index',
+            component: () =>
+                import ('@/views//profile/index'),
+            meta: { title: '个人主页' }
+        }, ]
+    },
+    {
+        path: '/booklist',
+        redirect: '/booklist/index',
+        component: Layout,
+        // hidden:true,
+        children: [{
+            name: 'booklist',
+            path: 'index',
+            component: () =>
+                import ('@/views/booklist/bookList'),
+            meta: { title: 'all books', icon: 'book' }
+        }, ]
+    },
+    {
+        path: '/external-link',
+        component: Layout,
+        children: [{
+            path: 'https://gitee.com/violet-umberto/online-library-management-system',
+            meta: { title: 'External Link', icon: 'link' }
+        }]
+    },
 
   {
     path: "/register",
