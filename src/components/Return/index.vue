@@ -4,13 +4,7 @@
              :model-value="isShow"
              :before-close="change"
              destroy-on-close>
-    <div v-if="book.overdue">
-      <span>您已逾期，请正确输入书名进行还书</span>
-      <el-input v-model="input"
-                style="margin-top:20px"
-                placeholder="Please input"/>
-    </div>
-    <div v-else>
+    <div>
       <span>是否确认还书？</span>
     </div>
     <template #footer>
@@ -24,7 +18,7 @@
 </template>
 
 <script>
-import { ref, toRef } from "@vue/reactivity"
+import { toRef } from "@vue/reactivity"
 import { returnBookByID } from "@/api/book"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
@@ -51,14 +45,7 @@ export default {
       emit("update:showReturn", false)
     }
     function returnBook() {
-      if (props.book.overdue && input.value === props.book.bookName) {
-        returnBookByID(props.book.id, store.getters.token).then(() => {
-          change()
-          router.replace({
-            path: "/redirect" + route.fullPath
-          })
-        })
-      } else if (!props.book.overdue) {
+      if (!props.book.overdue) {
         returnBookByID(props.book.id, store.getters.token).then(() => {
           change()
           router.replace({
@@ -67,8 +54,7 @@ export default {
         })
       }
     }
-    const input = ref("")
-    return { isShow, change, input, returnBook }
+    return { isShow, change, returnBook }
   }
 }
 </script>

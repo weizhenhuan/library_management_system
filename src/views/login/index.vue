@@ -45,7 +45,7 @@
 </template>
 <script>
 import { ElMessage } from "element-plus"
-import LoginFooter from "../../components/LoginFooter"
+import LoginFooter from "@/components/LoginFooter"
 
 export default {
   components: { LoginFooter },
@@ -61,13 +61,7 @@ export default {
       loading: false,
       rules: {
         username: [
-          { required: true, message: "Username is required", trigger: "blur" },
-          {
-            // min: 4,
-            // max: 20,
-            message: "Username length should be at least 4 characters",
-            trigger: "blur"
-          }
+          { required: true, message: "Username is required", trigger: "blur" }
         ],
 
         password: [

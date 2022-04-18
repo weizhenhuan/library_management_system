@@ -6,10 +6,6 @@
              destroy-on-close>
     <div>
       <div>Book-Name:{{book.bookName}}</div>
-      <el-input v-model="input"
-                type="number"
-                style="margin-top:20px"
-                :placeholder="type==='borrow'?'Please enter the borrowing days':'Please enter the renewal days'" />
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -22,7 +18,7 @@
 </template>
 
 <script>
-import { ref, toRef } from "@vue/reactivity"
+import { toRef } from "@vue/reactivity"
 import { renewBookByID, borrowBookByID } from "@/api/book"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
@@ -55,7 +51,7 @@ export default {
     }
     function borrowBook() {
       if (props.type === "borrow") {
-        borrowBookByID(props.book.id, store.getters.token, input.value).then(() => {
+        borrowBookByID(props.book.id, store.getters.token, 10).then(() => {
           ElMessage.success({
             message: "borrow success!.",
             type: "success"
@@ -72,7 +68,7 @@ export default {
         })
         // chaoyesaad
       } else {
-        renewBookByID(props.book.id, store.getters.token, input.value).then(() => {
+        renewBookByID(props.book.id, store.getters.token, 10).then(() => {
           ElMessage.success({
             message: "renew success.",
             type: "success"
@@ -89,8 +85,7 @@ export default {
         })
       }
     }
-    const input = ref()
-    return { isShow, change, input, borrowBook }
+    return { isShow, change, borrowBook }
   }
 }
 </script>
