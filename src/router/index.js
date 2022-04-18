@@ -8,14 +8,23 @@ const routes = [{
   children: [{
     name: "redirect",
     path: "/redirect/:path(.*)",
-    component: () =>
-      import ("@/views/redirect/index")
+    component: () => import ("@/views/redirect/index")
+  }]
+},
+{
+  path: "/download",
+  component: Layout,
+  redirect: "/download/index",
+  hidden: true,
+  children: [{
+    name: "download",
+    path: "index",
+    component: () => import ("@/views/download/index")
   }]
 },
 {
   path: "/login",
-  component: () =>
-    import ("@/views/login/index"),
+  component: () => import ("@/views/login/index"),
   hidden: true
 },
 {
@@ -26,32 +35,31 @@ const routes = [{
   children: [{
     name: "dashboard",
     path: "dashboard",
-    component: () =>
-      import ("@/views/dashboard/index"),
+    component: () => import ("@/views/dashboard/index"),
     meta: { title: "Home", icon: "home" }
   }]
 },
-/* {
-      path:'/test',
-      name:'text',
-      redirect: '/test/dashboard',
-      component: Layout,
-      meta:{ title: '测试', icon: 'link'},
-      children:[
-        {
-          name:'xczc',
-          path:'dashboard',
-          component:() => import('@/views/profile/index'),
-          meta:{ title: '测试首页'}
-        },
-        {
-          name:'sssss',
-          path:'sssss',
-          component:() => import('@/views/dashboard/index'),
-          meta:{ title: 'hhhh'}
-        },
-      ]
-    }, */
+{
+  path: "/test",
+  name: "text",
+  redirect: "/test/dashboard",
+  component: Layout,
+  meta: { title: "测试", icon: "link" },
+  children: [
+    {
+      name: "xczc",
+      path: "dashboard",
+      component: () => import("@/views/profile/index"),
+      meta: { title: "测试首页" }
+    },
+    {
+      name: "sssss",
+      path: "sssss",
+      component: () => import("@/views/dashboard/index"),
+      meta: { title: "hhhh" }
+    }
+  ]
+},
 {
   path: "/profile",
   redirect: "/profile/index",
@@ -60,8 +68,7 @@ const routes = [{
   children: [{
     name: "profile",
     path: "index",
-    component: () =>
-      import ("@/views//profile/index"),
+    component: () => import ("@/views//profile/index"),
     meta: { title: "个人主页" }
   }]
 },
@@ -73,8 +80,7 @@ const routes = [{
   children: [{
     name: "booklist",
     path: "index",
-    component: () =>
-      import ("@/views/booklist/bookList"),
+    component: () => import ("@/views/booklist/bookList"),
     meta: { title: "all books", icon: "book" }
   }]
 },
@@ -89,8 +95,7 @@ const routes = [{
 
 {
   path: "/register",
-  component: () =>
-    import ("@/views/register/index"),
+  component: () => import ("@/views/register/index"),
   hidden: true
 }
 ]
@@ -109,8 +114,7 @@ export const asyncRoutes = [{
   },
   children: [{
     path: "page",
-    component: () =>
-      import ("@/views/permissiontext/page"),
+    component: () => import ("@/views/permissiontext/page"),
     name: "PagePermission",
     meta: {
       title: "Page Permission",
@@ -119,8 +123,7 @@ export const asyncRoutes = [{
   },
   {
     path: "text1",
-    component: () =>
-      import ("@/views/permissiontext/text1"),
+    component: () => import ("@/views/permissiontext/text1"),
     name: "DirectivePermission",
     meta: {
       title: "text1 Permission"
@@ -128,8 +131,7 @@ export const asyncRoutes = [{
   },
   {
     path: "admin",
-    component: () =>
-      import ("@/views/permissiontext/admin"),
+    component: () => import ("@/views/permissiontext/admin"),
     name: "RolePermission",
     meta: {
       title: "admin Permission",

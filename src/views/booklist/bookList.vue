@@ -60,51 +60,6 @@
                 </el-button>
               </el-col>
             </el-row>
-            <!--            <el-form label-position="left"
-                     inline
-                     class="demo-table-expand"
-                     style="color: #989fa5;background: #F0F5F6">
-              <el-form-item label="author"
-                            style="width: 400px;height: 100px;margin-left: 200px">
-                <span style="margin-top: -65px; margin-left: 50px;">{{ props.row.bAuthor }}</span>
-              </el-form-item>
-              <el-form-item label="ISBN"
-                            style="width: 400px;height: 100px">
-                <span style="margin-top: -65px; margin-left: 90px;">{{ props.row.ISBN }}</span>
-              </el-form-item>
-              <el-form-item label="price"
-                            style="width: 400px;height: 100px; margin-left: 200px">
-                <span style="margin-top: -65px; margin-left: 61px;">￥{{ props.row.bPrice }}</span>
-              </el-form-item>
-              <el-form-item label="left num"
-                            style="width: 400px;height: 100px">
-                <span style="margin-top: -65px; margin-left: 66px;">{{ props.row.bLeftNum}}</span>
-              </el-form-item>
-              <el-form-item label="cover"
-                            style="width: 200px;height: 220px; margin-left: 200px">
-                <img :src="props.row.bPhoto"
-                     :alt="props.row.bName"
-                     class="book_image"
-                     style="margin-left: 50px;">
-              </el-form-item>
-              <el-form-item style="position: relative; height: 80px;width: 300px;">
-                <el-button type="primary"
-                           @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
-                  <svg-icon icon-class="book"
-                            style="vertical-align: middle;">
-                  </svg-icon>
-                  <span>borrow</span>
-                </el-button>
-                <el-button type="success"
-                           @click="handleBuyBook(props.row.bId, props.row.bLeftNum)"
-                           style="margin-left: 50px; width: 124px">
-                  <svg-icon icon-class="book"
-                            style="vertical-align: middle">
-                  </svg-icon>
-                  <span>buy</span>
-                </el-button>
-              </el-form-item>
-            </el-form> -->
           </template>
         </el-table-column>
 
@@ -123,10 +78,9 @@
 
       <div class="demo-pagination-block">
         <el-pagination v-model:currentPage="pageNum"
-                       v-model:page-size="pageSize"
+                       :page-size="pageSize"
                        @current-change="handleCurrentChange"
-                       :page-sizes="[2, 5, 10, 20]"
-                       layout="total, sizes, prev, pager, next, jumper"
+                       layout="total, prev, pager, next, jumper"
                        :total="total"
                        hide-on-single-page />
       </div>
@@ -176,8 +130,7 @@ export default {
     load() {
       this.loading = true
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
-        this.tableData = res.data.bookList
-        console.log(this.tableData)
+        this.tableData = res.data.bookList.slice(0, 9)
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {
