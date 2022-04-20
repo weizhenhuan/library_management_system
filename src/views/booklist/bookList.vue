@@ -94,20 +94,17 @@
     <Borrow v-model:showBorrow="showBorrow"
             type="borrow"
             :book='currBook' />
-    <Buy v-model:showBuy="showBuy"
-         :book='currBook' />
   </div>
 </template>
 
 <script>
-import { getBookByNameAndISBN, buyBookByID } from "@/api/book"
+import { getBookByNameAndISBN } from "@/api/book"
 import Borrow from "@/components/Borrow"
-import Buy from "@/components/Buy"
 import { ElMessage } from "element-plus"
 
 export default {
   name: "BookList",
-  components: { Borrow, Buy },
+  components: { Borrow },
   data() {
     return {
       tableData: [],
@@ -117,7 +114,6 @@ export default {
       pageSize: 10,
       pageNum: 1,
       showBorrow: false,
-      showBuy: false,
       currBook: {},
       loading: false
     }
@@ -147,12 +143,6 @@ export default {
     },
     handleCurrentChange() {
       this.load()
-    },
-    handleBuyBook(bookId, leftNum) {
-      if (leftNum < 1) {
-        alert("There's no book on sale")
-      }
-      buyBookByID(bookId, this.$store.getters.token).then()
     }
   }
 

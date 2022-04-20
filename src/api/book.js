@@ -28,14 +28,6 @@ export function borrowBookByID(bookID, userToken, days) {
   })
 }
 
-export function buyBookByID(bookID, userToken) {
-  return request({
-    url: "/user/buybook",
-    method: "get",
-    params: { bookID, userToken }
-  })
-}
-
 export function returnBookByID(bookID, userToken) {
   return request({
     url: "/user/returnbook",
