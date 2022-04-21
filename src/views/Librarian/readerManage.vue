@@ -2,7 +2,7 @@
  * @Author: zhaoshuchen
  * @Date: 2022-04-20 15:12:14
  * @LastEditors: zhaoshuchen
- * @LastEditTime: 2022-04-21 16:30:18
+ * @LastEditTime: 2022-04-21 18:42:18
  * @FilePath: /online-library-management-system/src/views/Librarian/readerManage.vue
  * @Description: file content
 -->
@@ -27,7 +27,8 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true"
+          <el-button type="primary"
+          @click="addDialogVisible = true"
             >Add Readers</el-button
           >
         </el-col>
@@ -123,153 +124,154 @@
 </template>
 
 <script>
+// import $ from "jquery"
 export default {
   data() {
     return {
       queryInfo: {
         query: "",
-        pagenum: 1, //当前页数
-        pagesize: 2, //当前页面展示多少条数据
-      }, //获取用户列表的参数对象
+        pagenum: 1, // 当前页数
+        pagesize: 2 // 当前页面展示多少条数据
+      }, // 获取用户列表的参数对象
       userlist: [],
       total: 0,
-      addDialogVisible: false, //控制添加用户对话框的显示
+      addDialogVisible: false, // 控制添加用户对话框的显示
       addForm: {
         username: "",
-        password: "",
-      }, //添加用户的表单数据
+        password: ""
+      }, // 添加用户的表单数据
       addFormRules: {
         username: [
           {
             required: true,
             message: "please input user name",
-            trigger: "blur",
+            trigger: "blur"
           },
           {
             min: 11,
             max: 11,
             message: "The user name contains 11 characters",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         password: [
           {
             required: true,
             message: "please input password",
-            trigger: "blur",
+            trigger: "blur"
           },
           {
             min: 6,
             max: 15,
             message: "The password contains 6 to 15 characters",
-            trigger: "blur",
-          },
-        ],
-      }, //添加表单的验证规则
-      editDialogVisible: false, //控制修改用户对话框的显示
-    };
+            trigger: "blur"
+          }
+        ]
+      }, // 添加表单的验证规则
+      editDialogVisible: false // 控制修改用户对话框的显示
+    }
   },
   created() {
-    this.getUserList();
+    this.getUserList()
   },
   methods: {
     async getUserList() {
       const { data: res } = await this.$http.get("users", {
-        params: this.queryInfo,
-      });
+        params: this.queryInfo
+      })
       if (res.meta.status !== 200) {
-        return this.$message.error("Failed to get user list");
+        return this.$message.error("Failed to get user list")
       }
-      this.userlist = res.data.users;
-      this.total = res.data.total;
+      this.userlist = res.data.users
+      this.total = res.data.total
 
-      console.log(res);
-    }, //获取用户列表
+      console.log(res)
+    }, // 获取用户列表
 
     handleSizeChange(newSize) {
-      this.queryInfo.pagesize = newSize;
-      this.getUserList();
-    }, //监听pagesize改变
+      this.queryInfo.pagesize = newSize
+      this.getUserList()
+    }, // 监听pagesize改变
 
     handleCurrentChange(newPage) {
-      this.queryInfo.pagenum = newPage;
-      this.getUserList();
-    }, //监听页码值改变
+      this.queryInfo.pagenum = newPage
+      this.getUserList()
+    }, // 监听页码值改变
 
     addDialogClosed() {
-      this.$refs.addFormRef.resetFields();
-    }, //监听添加用户对话框关闭
+      this.$refs.addFormRef.resetFields()
+    }, // 监听添加用户对话框关闭
 
     addUser() {
-      this.$refs.addFormRef.validate(async (valid) => {
-        if (!valid) return;
-        //可以发起添加用户的网络请求
-        const { data: res } = await this.$http.post("users", this.addForm);
+      this.$refs.addFormRef.validate(async valid => {
+        if (!valid) return
+        // 可以发起添加用户的网络请求
+        const { data: res } = await this.$http.post("users", this.addForm)
         if (res.meta.status !== 201) {
-          this.$message.error("Failed to add user");
+          this.$message.error("Failed to add user")
         }
-        this.$messaage.success("The user was successfully added");
-        this.addDialogVisible = false;
-        this.getUserList();
-      });
-    }, //点击按钮，添加新用户
+        this.$messaage.success("The user wa successfully added")
+        this.addDialogVisible = false
+        this.getUserList()
+      })
+    }, // 点击按钮，添加新用户
 
     async showEditDialog(id) {
-      const { data: res } = await this.$http.get("users/" + id);
+      const { data: res } = await this.$http.get("users/" + id)
       if (res.meta.status !== 200) {
-        return this.$message.error("Failed to query user's information");
+        return this.$message.error("Failed to query user's information")
       }
-      this.editForm = res.data;
-      this.editDialogVisible = true;
-    }, //展示编辑用户对话框
+      this.editForm = res.data
+      this.editDialogVisible = true
+    }, // 展示编辑用户对话框
 
     editDialogClosed() {
-      this.$refs.edutFormRef.resetFields();
-    }, //监听编辑用户对话框关闭
+      this.$refs.edutFormRef.resetFields()
+    }, // 监听编辑用户对话框关闭
 
     editUserInfo() {
-      this.$refs.editFormRef.validate(async (valid) => {
-        if (!valid) return;
-        //发起修改用户信息的数据请求
+      this.$refs.editFormRef.validate(async valid => {
+        if (!valid) return
+        // 发起修改用户信息的数据请求
         const { data: res } = await this.$http.put(
           "users/" + this.editForm.id,
           {
-            password: this.editForm.password,
+            password: this.editForm.password
           }
-        );
+        )
         if (res.meta.status !== 200) {
-          return this.$message.error("Failed to edit user information");
+          return this.$message.error("Failed to edit user information")
         }
-        this.editDialogVisible = false;
-        this.getUserList();
-        this.$message.success("The user's information was edited successfully");
-      });
-    }, //修改用户信息并提交
+        this.editDialogVisible = false
+        this.getUserList()
+        this.$message.success("The user's information was edited successfully")
+      })
+    }, // 修改用户信息并提交
 
     async removeUserById(id) {
-      //弹框询问用户是否删除数据
+      // 弹框询问用户是否删除数据
       const confirmResult = await this.$confirm(
         "This operation will permanently delete the user. Do you want to continue?",
         "Hint",
         {
           confirmButtonText: "confirm",
           cancelButtonText: "cancel",
-          type: "warning",
+          type: "warning"
         }
-      ).catch((err) => err);
-      //若用户确认删除，则返回值为字符串confirm，反之为cancel
+      ).catch((err) => err)
+      // 若用户确认删除，则返回值为字符串confirm，反之为cancel
       if (confirmResult !== "confirm") {
-        return this.$message.info("Canceled");
+        return this.$message.info("Canceled")
       }
-      const { data: res } = await this.$http.delete("users/" + id);
+      const { data: res } = await this.$http.delete("users/" + id)
       if (res.meta.status !== 200) {
-        return this.$message.error("Failed to delete the user");
+        return this.$message.error("Failed to delete the user")
       }
-      this.$message.success("Successfully delete the user");
-      this.getUserList();
-    }, //根据ID删除用户
-  },
-};
+      this.$message.success("Successfully delete the user")
+      this.getUserList()
+    } // 根据ID删除用户
+  }
+}
 </script>
 
 <style lang="less" scoped>
