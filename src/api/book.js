@@ -51,3 +51,12 @@ export function renewBookByID(bookID, userToken, days) {
     params: { bookID, userToken, days }
   })
 }
+
+export function getBookByID(bookID) {
+  return request({
+    url: "/book/borrow/bookID",
+    // url: "http://127.0.0.1:4523/mock/841301/book/borrow/bookID",
+    method: "get",
+    params: { bookID }
+  })
+}

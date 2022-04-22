@@ -55,7 +55,7 @@ const routes = [{
     {
       name: "sssss",
       path: "sssss",
-      component: () => import("@/views/dashboard/index"),
+      component: () => import("@/views/borrow/index"),
       meta: { title: "hhhh" }
     }
   ]
