@@ -39,30 +39,27 @@ export default {
       } else if (e.which) { // Netscape/Firefox/Opera
         this.nextCode = e.which
       }
- 
       if (e.which === 13) { // 键盘回车事件
         if (this.code.length < 3) return // 扫码枪的速度很快，手动输入的时间不会让code的长度大于2，所以这里不会对扫码枪有效
-        console.log('扫码结束。')
-        console.log('条形码：', this.code)
+        console.log("扫码结束。")
+        console.log("条形码：", this.code)
         this.parseQRCode(this.code) // 获取到扫码枪输入的内容，做别的操作
-        this.lastCode = ''
-        this.lastTime = ''
-        
+        this.lastCode = ""
+        this.lastTime = ""
         return
       }
- 
       this.nextTime = new Date().getTime()
       if (!this.lastTime && !this.lastCode) {
-        this.code = '' // 清空上次的条形码
+        this.code = "" // 清空上次的条形码
         this.code += e.key
-        console.log('扫码开始---', this.code)
+        console.log("扫码开始---", this.code)
       }
       if (this.lastCode && this.lastTime && this.nextTime - this.lastTime > 500) { // 当扫码前有keypress事件时,防止首字缺失
         this.code = e.key
-        console.log('防止首字缺失。。。', this.code)
+        console.log("防止首字缺失。。。", this.code)
       } else if (this.lastCode && this.lastTime) {
         this.code += e.key
-        console.log('扫码中。。。', this.code)
+        console.log("扫码中。。。", this.code)
       }
       this.lastCode = this.nextCode
       this.lastTime = this.nextTime
@@ -73,13 +70,13 @@ export default {
       if (code === this.bookID) {
         this.bookID = ""
         getBookByID(code).then(res => {
-        if (res.code === 200) {
-          current_book.push(res.data)
-        } else {
-          ElMessage.error(res.data.msg)
-        }
-      })
-      this.$emit('barCode', code) //通知父组件
+          if (res.code === 200) {
+            this.current_book.push(res.data)
+          } else {
+            ElMessage.error(res.data.msg)
+          }
+        })
+        this.$emit("barCode", code) //  通知父组件
       }
       this.codeValue = code
     }
@@ -97,7 +94,6 @@ export default {
     })
     const studentID = ref(useStore().getters.token)
     const bookID = ref("")
-   
     function borrow() {
       for (let i = 0; i < current_book.length; i++) {
         if (current_book[i].bStatus === "available") {
@@ -118,13 +114,13 @@ export default {
     return { customer_role, borrow, current_book,
       studentID,
       bookID,
-      codeValue: '',
-      code: '',
-      lastTime: '',
-      nextTime: '',
-      lastCode: '',
-      nextCode: '',
-      dtmainId: ''
+      codeValue: "",
+      code: "",
+      lastTime: "",
+      nextTime: "",
+      lastCode: "",
+      nextCode: "",
+      dtmainId: ""
     }
   }
 
