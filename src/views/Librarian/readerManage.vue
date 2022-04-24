@@ -1,11 +1,3 @@
-<!--
- * @Author: zhaoshuchen
- * @Date: 2022-04-20 15:12:14
- * @LastEditors: zhaoshuchen
- * @LastEditTime: 2022-04-21 18:42:18
- * @FilePath: /online-library-management-system/src/views/Librarian/readerManage.vue
- * @Description: file content
--->
 <template>
   <div>
     <!-- 卡片视图 -->
@@ -13,14 +5,13 @@
       <el-row :gutter="20">
         <el-col :span="7">
           <!-- 搜索与添加 -->
-          <el-input
-            placeholder="please input"
-            v-model="queryInfo.query"
-            clearable
-            @clear="getUserList"
-          >
+          <el-input placeholder="please input"
+                    v-model="query"
+                    clearable
+                    @clear="load">
             <template #append>
-              <el-button @click="getUserList">
+              <el-button @click="load"
+                         :loading="loading">
                 <svg-icon icon-class="search"></svg-icon>
               </el-button>
             </template>
@@ -28,193 +19,212 @@
         </el-col>
         <el-col :span="4">
           <el-button type="primary"
-          @click="addDialogVisible = true"
-            >Add Readers</el-button
-          >
+                     @click="addDialogVisible = true">Add Readers</el-button>
         </el-col>
       </el-row>
       <!-- 用户列表区 -->
-      <el-table :data="userlist" border stripe>
+      <el-table :data="userlist"
+                border
+                stripe>
         <el-table-column type="index"></el-table-column>
-        <el-table-column label="Name" prop="username"></el-table-column>
-        <el-table-column label="Password" prop="password"></el-table-column>
-        <el-table-column label="Barcode" prop="barcode"> </el-table-column>
-        <el-table-column label="Operation">
-          <template v-slot="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row.id)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="removeUserById(scope.row.id)"
-            ></el-button>
+        <el-table-column label="Name"
+                         prop="username"></el-table-column>
+        <el-table-column label="Password"
+                         prop="password"></el-table-column>
+        <el-table-column label="Barcode"
+                         prop="id">
+          <template #default="scope">
+            <Barcode :code="scope.row.id"
+                     :text="scope.row.username" />
           </template>
+        </el-table-column>
+        <el-table-column label="Operation">
+          <el-button type="primary"
+                     @click="showEditDialog(scope.row.username)">
+            <template v-slot:icon>
+              <svg-icon icon-class="edit" />
+            </template>
+          </el-button>
+          <el-button type="danger"
+                     @click="showEditDialog(scope.row.username)">
+            <template v-slot:icon>
+              <svg-icon icon-class="delete" />
+            </template>
+          </el-button>
+          <el-button type="success"
+                     @click="jump">
+            <template v-slot:icon>
+              <svg-icon icon-class="download" />
+            </template>
+          </el-button>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryInfo.pagenum"
-        :page-sizes="[1, 2, 5, 10]"
-        :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      >
+      <el-pagination @current-change="handleCurrentChange"
+                     :currentPage="pagenum"
+                     :page-size="pagesize"
+                     layout="total, prev, pager, next, jumper"
+                     :total="total">
       </el-pagination>
     </el-card>
 
     <!-- 添加用户的对话框 -->
-    <el-dialog
-      title="Add Users"
-      v-model:visible="addDialogVisible"
-      width="50%"
-      @close="addDialogClosed"
-    >
-      <!-- 内容主体 -->
-      <el-form
-        :model="addForm"
-        :rules="addFormRules"
-        ref="ruleFormRef"
-        label-width="70px"
-      >
-        <el-form-item label="User Name" prop="username">
+    <el-dialog title="Add Users"
+               :model-value="addDialogVisible"
+               width="40%"
+               @close="addDialogClosed">
+      <el-form :model="addForm"
+               label-width="100px">
+        <el-form-item label="User Name"
+                      prop="username">
           <el-input v-model="addForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="Password" prop="password">
+        <el-form-item label="Password"
+                      prop="password">
           <el-input v-model="addForm.password"></el-input>
         </el-form-item>
       </el-form>
-      <!-- 底部 -->
-
-      <template v-slot:footer class="dialog-footer">
+      <template v-slot:footer
+                class="dialog-footer">
         <el-button @click="addDialogVisible = false">cancel</el-button>
-        <el-button type="primary" @click="addUser">confirm</el-button>
+        <el-button type="primary"
+                   @click="load1">confirm</el-button>
       </template>
     </el-dialog>
 
     <!-- 修改用户的对话框 -->
-    <el-dialog
-      title="Edit Users"
-      v-model:visible="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <el-form
-        :model="editForm"
-        :rules="editFormRules"
-        ref="editFormRef"
-        label-width="70px"
-      >
+    <el-dialog title="Edit Users"
+               :model-value="editDialogVisible"
+               width="40%"
+               @close="editDialogClosed">
+      <el-form :model="editForm"
+               label-width="100px">
         <el-form-item label="Username">
-          <el-input v-model="editForm.username" disabled></el-input>
+          <el-input v-model="editForm.username"
+                    disabled></el-input>
+        </el-form-item>
+        <el-form-item label="Password">
+          <el-input v-model="editForm.password"></el-input>
         </el-form-item>
       </el-form>
-      <template v-slot:footer class="dialog-footer">
+      <template v-slot:footer
+                class="dialog-footer">
         <el-button @click="editDialogVisible = false">cancel</el-button>
-        <el-button type="primary" @click="editUserInfo">confirm</el-button>
+        <el-button type="primary"
+                   @click="load2">confirm</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
-// import $ from "jquery"
+import { getUserList, addUser, editUser, deleteUser } from "@/api/admin"
+import { ElMessage } from "element-plus"
+import { Barcode } from "@/components/Barcode"
+import { useRouter } from "vue-router"
 export default {
+  components: { Barcode },
+  setup() {
+    const cList = ["123456789"] // code信息
+    const lList = [] // 位置信息 如果type是user，这里就传空数组
+    const type = "user" // 是uid还是bid
+    const router = useRouter()
+
+    function jump() {
+      router.push({ path: "/download", query: { cList: cList, lList: lList, type: type }})
+    }
+    return { jump }
+  },
+
   data() {
     return {
-      queryInfo: {
-        query: "",
-        pagenum: 1, // 当前页数
-        pagesize: 2 // 当前页面展示多少条数据
-      }, // 获取用户列表的参数对象
-      userlist: [],
+      query: "",
+      pagenum: 1,
+      pagesize: 10,
+
       total: 0,
-      addDialogVisible: false, // 控制添加用户对话框的显示
+      userlist: [],
+
+      loading: false,
+
+      addDialogVisible: false,
+      editDialogVisible: false,
+
       addForm: {
         username: "",
         password: ""
-      }, // 添加用户的表单数据
-      addFormRules: {
-        username: [
-          {
-            required: true,
-            message: "please input user name",
-            trigger: "blur"
-          },
-          {
-            min: 11,
-            max: 11,
-            message: "The user name contains 11 characters",
-            trigger: "blur"
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: "please input password",
-            trigger: "blur"
-          },
-          {
-            min: 6,
-            max: 15,
-            message: "The password contains 6 to 15 characters",
-            trigger: "blur"
-          }
-        ]
-      }, // 添加表单的验证规则
-      editDialogVisible: false // 控制修改用户对话框的显示
+      },
+
+      editForm: {
+        editFormRules: {
+          password: [
+            {
+              required: true,
+              message: "please input new password",
+              trigger: "blur"
+            }
+          ]
+        }
+      }
     }
   },
   created() {
-    this.getUserList()
+    this.load()
+    // this.load1()
   },
   methods: {
-    async getUserList() {
-      const { data: res } = await this.$http.get("users", {
-        params: this.queryInfo
+    load() {
+      this.loading = true
+      getUserList(
+        this.query,
+        this.pagenum,
+        this.pagesize
+      ).then((res) => {
+        this.userlist = res.data.users
+        this.total = res.data.total
+        this.pagenum = res.data.pagenum
+        this.pagesize = res.data.pagesize
+        this.loading = false
+      }).catch((res) => {
+        this.loading = false
+        ElMessage.error({
+          message: res.message
+        })
       })
-      if (res.meta.status !== 200) {
-        return this.$message.error("Failed to get user list")
-      }
-      this.userlist = res.data.users
-      this.total = res.data.total
+    },
 
-      console.log(res)
-    }, // 获取用户列表
+    load1() {
+      this.loading = true
+      addUser(this.addForm
+      ).then((res) => {
+        console.log(res)
+        this.username = res.data.username
+        this.password = res.data.password
+        this.addDialogVisible = false
+        this.load()
+        ElMessage.success({
+          message: res.message
+        })
+      }).catch((res) => {
+        console.log(res)
+        this.loading = false
+        this.addDialogVisible = false
+        ElMessage.error({
+          message: res.message
+        })
+      })
+    },
 
-    handleSizeChange(newSize) {
-      this.queryInfo.pagesize = newSize
-      this.getUserList()
-    }, // 监听pagesize改变
-
-    handleCurrentChange(newPage) {
-      this.queryInfo.pagenum = newPage
-      this.getUserList()
-    }, // 监听页码值改变
+    handleCurrentChange() {
+      this.load()
+    },
 
     addDialogClosed() {
-      this.$refs.addFormRef.resetFields()
+      this.addDialogVisible = false
     }, // 监听添加用户对话框关闭
-
-    addUser() {
-      this.$refs.addFormRef.validate(async valid => {
-        if (!valid) return
-        // 可以发起添加用户的网络请求
-        const { data: res } = await this.$http.post("users", this.addForm)
-        if (res.meta.status !== 201) {
-          this.$message.error("Failed to add user")
-        }
-        this.$messaage.success("The user wa successfully added")
-        this.addDialogVisible = false
-        this.getUserList()
-      })
-    }, // 点击按钮，添加新用户
+    editDialogClosed() {
+      this.editDialogVisible = false
+    }, // 监听编辑用户对话框关闭
 
     async showEditDialog(id) {
       const { data: res } = await this.$http.get("users/" + id)
@@ -225,11 +235,7 @@ export default {
       this.editDialogVisible = true
     }, // 展示编辑用户对话框
 
-    editDialogClosed() {
-      this.$refs.edutFormRef.resetFields()
-    }, // 监听编辑用户对话框关闭
-
-    editUserInfo() {
+    editUser() {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
         // 发起修改用户信息的数据请求

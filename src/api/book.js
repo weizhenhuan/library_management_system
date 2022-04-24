@@ -15,7 +15,6 @@ export function getBookByNameAndISBN(bookName, ISBN, pageSize, pageNum) {
 }
 
 /**
- *
  * @param bookID
  * @param userToken
  * @returns {isSuccess}
