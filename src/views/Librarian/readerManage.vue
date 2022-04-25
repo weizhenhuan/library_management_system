@@ -46,7 +46,7 @@
             </template>
           </el-button>
           <el-button type="danger"
-                     @click="showEditDialog(scope.row.username)">
+                     @click="removeUserById(scope.row.username)">
             <template v-slot:icon>
               <svg-icon icon-class="delete" />
             </template>
@@ -269,12 +269,12 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("Canceled")
       }
-      const { data: res } = await this.$http.delete("users/" + id)
-      if (res.meta.status !== 200) {
+      const { data: res } = await this.$http.delete("admin/delete" + id)
+      if (res.code !== 0) {
         return this.$message.error("Failed to delete the user")
       }
       this.$message.success("Successfully delete the user")
-      this.getUserList()
+      this.load()
     } // 根据ID删除用户
   }
 }
