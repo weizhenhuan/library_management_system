@@ -81,7 +81,7 @@ const routes = [{
     name: "booklist",
     path: "index",
     component: () => import ("@/views/booklist/bookList"),
-    meta: { title: "all books", icon: "book" }
+    meta: { title: "search book", icon: "book" }
   }]
 },
 {

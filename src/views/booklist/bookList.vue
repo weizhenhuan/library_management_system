@@ -4,20 +4,20 @@
       <el-col :span="8">
         <el-input v-model="input_book_name"
                   placeholder="please input book name"
-                  class="search_input" />
+                  class="search_input"/>
       </el-col>
       <span style="display: block;line-height: 40px;text-align: center;width:10px">|</span>
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
-                  class="search_input" />
+                  class="search_input"/>
       </el-col>
       <el-col :span="3">
         <el-button type="primary"
                    @click="load"
                    :loading="loading">
           <template v-slot:icon>
-            <svg-icon icon-class="search" />
+            <svg-icon icon-class="search"/>
           </template>
         </el-button>
       </el-col>
@@ -29,7 +29,8 @@
                 border
                 stripe
                 size="large"
-                :header-cell-style="{color:'#606266'}">
+                :header-cell-style="{color:'#606266'}"
+                @expand-change="expandChange">
         <el-table-column type="expand">
           <template #default="props">
 
@@ -38,51 +39,66 @@
                       :offset="2">
                 <img :src="props.row.bPhoto"
                      alt="cover"
-                     style="width:200px;height:200px">
+                     style="width:150px;height:300px">
                 <ul class="bookinfo">
-                  <li><span style="font-weight:bold">Title:</span>{{props.row.bName}}</li>
-                  <li><span style="font-weight:bold">Author:</span>{{props.row.bAuthor}}</li>
-                  <li><span style="font-weight:bold">Classification:</span>{{props.row.bTypeid}}</li>
-                  <li><span style="font-weight:bold">ISBN:</span>{{props.row.ISBN}}</li>
+                  <li><span style="font-weight:bold">Title:</span>{{ props.row.bName }}</li>
+                  <li><span style="font-weight:bold">Author:</span>{{ props.row.bAuthor }}</li>
+                  <li><span style="font-weight:bold">Classification:</span>{{ props.row.bTypeid }}</li>
+                  <li><span style="font-weight:bold">ISBN:</span>{{ props.row.ISBN }}</li>
+                  <li><span style="font-weight:bold">Remainder:</span>{{ props.row.bLeftNum }}</li>
                 </ul>
-
               </el-col>
-              <el-col :span="12"
-                      class="bookinfo-wrapper">
-                <ul class="library-bookinfo">
-                  <li><span style="font-weight:bold">Location:</span>{{props.row.bBookshelf}}</li>
-                  <li><span style="font-weight:bold">Remainder:</span>{{props.row.bLeftNum}}</li>
-                </ul>
-                <el-button type="primary"
-                           @click="()=>{showBorrow=true;currBook={'bookName':props.row.bName,'id':props.row.bId}}">
-                  <svg-icon icon-class="book"></svg-icon>
-                  <span>borrow</span>
-                </el-button>
-              </el-col>
+              <el-scrollbar height="400px" style="margin-left: 100px">
+                <div v-for="item in bookItems" :key="item" class="scrollbar-item">
+                  <div>
+                    <span class="innner-item" style="font-weight:bold">Title:</span>{{ item.bName }}
+                    <span class="innner-item" style="font-weight:bold">book id:</span>{{ item.bID }}
+                    <span class="innner-item" style="font-weight:bold">Location:</span>{{ item.bLocation }}
+                    <span class="innner-item" style="font-weight:bold">status:</span>{{ bStatusMap.get(item.bStatus) }}
+                  </div>
+                  <span style="float: right; border-style: solid; border-width: 2px" v-if="this.$store.getters.roles[0]!='customer'">
+                    <el-button type="primary"
+                               class="innner-item"
+                               :disabled="item.bStatus !== 1"
+                               @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
+                    <svg-icon icon-class="book"></svg-icon>
+                    <span>reserve</span>
+                  </el-button>
+                    <el-button type="danger"
+                               class="innner-item"
+                               :disabled="item.bStatus !== 0"
+                               @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
+                    <svg-icon icon-class="book"></svg-icon>
+                    <span>cancel</span>
+                  </el-button>
+                  </span>
+                </div>
+              </el-scrollbar>
             </el-row>
           </template>
         </el-table-column>
 
         <el-table-column prop="bName"
                          label="book name"
-                         width="350" />
+                         width="350"/>
         <el-table-column prop="ISBN"
                          label="ISBN"
-                         width="350" />
+                         width="350"/>
         <el-table-column prop="bLeftNum"
                          label="remainder"
-                         width="250" />
+                         width="250"/>
         <el-table-column prop="bAuthor"
-                         label="book author" />
+                         label="book author"/>
       </el-table>
 
       <div class="demo-pagination-block">
         <el-pagination v-model:currentPage="pageNum"
-                       :page-size="pageSize"
+                       v-model:page-size="pageSize"
                        @current-change="handleCurrentChange"
-                       layout="total, prev, pager, next, jumper"
+                       :page-sizes="[2, 5, 10, 20]"
+                       layout="total, sizes, prev, pager, next, jumper"
                        :total="total"
-                       hide-on-single-page />
+                       hide-on-single-page/>
       </div>
     </div>
 
@@ -91,33 +107,34 @@
       Recommend queries according to your preferences:The Legend of Zelda: Breath of the Wild、Super Mario Galaxy
     </div>
 
-    <Borrow v-model:showBorrow="showBorrow"
-            type="borrow"
-            :book='currBook' />
-    <Buy v-model:showBuy="showBuy"
-         :book='currBook' />
+    <Reserve v-model:showReserve="showReserve"
+             type="reserve"
+             :book='currBook'/>
+    <!--    <Buy v-model:showBuy="showBuy"-->
+    <!--         :book='currBook' />-->
   </div>
 </template>
 
 <script>
-import { getBookByNameAndISBN, buyBookByID } from "@/api/book"
-import Borrow from "@/components/Borrow"
-import Buy from "@/components/Buy"
+import { getBookByNameAndISBN, getBooksDetailByISBN } from "@/api/book"
+// import Borrow from "@/components/Borrow"
+import Reserve from "@/components/Reserve"
+// import Buy from "@/components/Buy"
 import { ElMessage } from "element-plus"
-
 export default {
   name: "BookList",
-  components: { Borrow, Buy },
+  components: { Reserve },
   data() {
     return {
+      bStatusMap: null,
       tableData: [],
+      bookItems: [],
       input_book_name: "",
       input_book_isbn: "",
       total: 100,
       pageSize: 10,
       pageNum: 1,
-      showBorrow: false,
-      showBuy: false,
+      showReserve: false,
       currBook: {},
       loading: false
     }
@@ -126,11 +143,12 @@ export default {
     this.load()
   },
   methods: {
-
     load() {
       this.loading = true
+      this.bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"]])
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
-        this.tableData = res.data.bookList.slice(0, 9)
+        this.tableData = res.data.bookList
+        console.log(this.tableData)
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {
@@ -139,23 +157,22 @@ export default {
           message: res.message
         })
       })
-
-      // bBookshelf
-      // props.bPrice
-      // props.bPhoto
-      // props.bTypeid
     },
     handleCurrentChange() {
       this.load()
     },
-    handleBuyBook(bookId, leftNum) {
-      if (leftNum < 1) {
-        alert("There's no book on sale")
+    expandChange(row, expandedRows) {
+      if (expandedRows.length > 0) {
+        getBooksDetailByISBN(row.ISBN).then((res) => {
+          this.bookItems = res.bookItems
+        }).catch((res) => {
+          ElMessage.error({
+            message: res.message
+          })
+        })
       }
-      buyBookByID(bookId, this.$store.getters.token).then()
     }
   }
-
 }
 </script>
 
@@ -163,28 +180,34 @@ export default {
 .search-container {
   margin: 10px auto 10px;
   justify-content: center;
+
   .el-button {
     height: 40px;
     font-size: 1.5em;
     padding-left: 15px;
     margin-left: 20px;
   }
+
   .el-input :deep(.el-input__inner) {
     height: 40px;
   }
 }
+
 .booklist-container {
   .bookitem-wrapper {
     .bookinfo {
       li {
         margin-top: 10px;
-      }
     }
   }
 
   .bookinfo-wrapper {
+    border-style: solid;
+    border-width: 5px;
+
     .library-bookinfo {
       margin-top: 30px;
+
       li {
         margin-top: 10px;
       }
@@ -200,4 +223,22 @@ export default {
 .recommend {
   padding: 60px 0 0 60px;
 }
+
+.scrollbar-item {
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+  height: 50px;
+  margin: 10px;
+  text-align: center;
+  border-radius: 4px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+}
+
+.innner-item {
+  margin-left: 10px;
+  margin-right: 10px;
+} }
+
 </style>
