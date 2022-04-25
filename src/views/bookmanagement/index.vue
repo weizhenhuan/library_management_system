@@ -54,7 +54,7 @@
                       :offset="2">
                 <img :src="props.row.bPhoto"
                      alt="cover"
-                     style="width: 200px; height: 200px" />
+                     style="width: 200px; " />
                 <ul class="bookinfo">
                   <li>
                     <span style="font-weight: bold">Title:</span>{{ props.row.bName }}
@@ -63,7 +63,7 @@
                     <span style="font-weight: bold">Author:</span>{{ props.row.bAuthor }}
                   </li>
                   <li>
-                    <span style="font-weight: bold">Classification:</span>{{ props.row.bTypeid }}
+                    <span style="font-weight: bold">Classification:</span>{{ props.row.bType }}
                   </li>
                   <li>
                     <span style="font-weight: bold">ISBN:</span>{{ props.row.ISBN }}
@@ -77,7 +77,7 @@
                     <span style="font-weight: bold">Location:</span>{{ props.row.bBookshelf }}
                   </li>
                   <li>
-                    <span style="font-weight: bold">Remainder:</span>{{ props.row.bLeftNum }}
+                    <span style="font-weight: bold">Info:</span>{{ props.row.bInfo }}
                   </li>
                 </ul>
               </el-col>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { getBookByNameAndISBN } from "@/api/book"
+import { getBookList } from "@/api/admin"
 import AdminBook from "@/components/AdminBook"
 import { ElMessage } from "element-plus"
 
@@ -175,13 +175,13 @@ export default {
   methods: {
     load() {
       this.loading = true
-      getBookByNameAndISBN(
+      getBookList(
         this.input_book_name,
         this.input_book_isbn,
         this.pageSize,
         this.pageNum
       ).then((res) => {
-        console.log(typeof res.data.bookList[0].bId)
+        // console.log(typeof res.data.bookList[0].bId)
         this.tableData = res.data.bookList
         this.total = res.data.total
         this.loading = false

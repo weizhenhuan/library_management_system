@@ -1,6 +1,14 @@
 import request from "@/utils/request"
 import qs from "qs"
 
+export function getBookList(type, info, pageSize, pageNum) {
+  return request({
+    url: "/admin/bookList",
+    method: "get",
+    params: { info, type, pageSize, pageNum }
+  })
+}
+
 export function addBookAdmin(bookItem) {
   return request({
     url: "/admin/addBook",
@@ -38,7 +46,7 @@ export function getCategory() {
 export function deleteBookAdmin(bID) {
   return request({
     url: "/admin/deleteBook",
-    method: "post",
+    method: "delete",
     data: qs.stringify(bID),
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })

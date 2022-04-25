@@ -153,6 +153,7 @@ export const asyncRoutes = [{
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  base: "/app",
   routes
 })
 
