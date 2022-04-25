@@ -1,12 +1,13 @@
 <template>
-<div>
+  <div>
     <Barcode v-for="(item,index) in codeList"
              :key="index"
              :code="item.code"
              :name="type === 'user' ? item.code : item.code + ' ' + item.location"
-             :text="type === 'user' ? item.code : item.code + ' ' + item.location"/>
-    <el-button style="display:block" @click="download">download</el-button>
-</div>
+             :text="type === 'user' ? item.code : item.code + ' ' + item.location" />
+    <el-button style="display:block"
+               @click="download">download</el-button>
+  </div>
 </template>
 
 <script>
@@ -19,8 +20,9 @@ export default {
   components: { Barcode },
   setup() {
     const route = useRoute()
-    const cList = route.query.cList
-    const lList = route.query.lList
+    console.log(typeof route.query.cList)
+    const cList = typeof route.query.cList === "string" ? [route.query.cList] : route.query.cList
+    const lList = typeof route.query.lList === "string" ? [route.query.lList] : route.query.lList
     const codeList = []
     if (lList.length === 0) {
       cList.forEach((item, index) => {

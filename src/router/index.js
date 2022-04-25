@@ -137,12 +137,23 @@ export const asyncRoutes = [{
       title: "admin Permission",
       roles: ["admin"]
     }
-  }
-  ]
+  }]
+},
+{
+  path: "/bookmanagement",
+  redirect: "/bookmanagement/index",
+  component: Layout,
+  children: [{
+    name: "bookmanagement",
+    path: "index",
+    component: () => import ("@/views/bookmanagement/index"),
+    meta: { title: "Book Management", icon: "book" }
+  }]
 }]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  base: "/app",
   routes
 })
 

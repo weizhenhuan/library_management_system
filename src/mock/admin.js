@@ -1,7 +1,7 @@
 
 module.exports = [
   {
-    url: /\/book\/booklist\/bookname\.*/,
+    url: /\/admin\/bookList\.*/,
     type: "get",
     response: () => {
       return {
@@ -105,37 +105,56 @@ module.exports = [
       }
     }
   },
-
   {
-    url: /\/user\/borrow\.*/,
-    type: "get",
+    url: "/admin/addBook",
+    type: "post",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        data: {
+          bId: 123456789
+        }
       }
     }
   },
 
   {
-    url: /\/user\/returnbook\.*/,
-    type: "get",
+    url: "/admin/updateBook",
+    type: "post",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "hhhhhh"
       }
     }
   },
 
   {
-    url: /\/user\/renewbook\.*/,
+    url: "/admin/getCategory",
     type: "get",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        data: {
+          categoryList: [
+            "nulla",
+            "labore",
+            "nulla"
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/deleteBook",
+    type: "post",
+    response: () => {
+      return {
+        code: 0,
+        message: "sed fugiat dolor irure ipsum"
       }
     }
   }
 ]
+
