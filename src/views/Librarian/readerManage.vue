@@ -40,13 +40,13 @@
         </el-table-column>
         <el-table-column label="Operation">
           <el-button type="primary"
-                     @click="showEditDialog(scope.row.username)">
+                     @click="editDialogVisible = true">
             <template v-slot:icon>
               <svg-icon icon-class="edit" />
             </template>
           </el-button>
           <el-button type="danger"
-                     @click="removeUserById(scope.row.username)">
+                     @click="_delete">
             <template v-slot:icon>
               <svg-icon icon-class="delete" />
             </template>
@@ -88,7 +88,7 @@
                 class="dialog-footer">
         <el-button @click="addDialogVisible = false">cancel</el-button>
         <el-button type="primary"
-                   @click="load1">confirm</el-button>
+                   @click="add">confirm</el-button>
       </template>
     </el-dialog>
 
@@ -111,7 +111,7 @@
                 class="dialog-footer">
         <el-button @click="editDialogVisible = false">cancel</el-button>
         <el-button type="primary"
-                   @click="load2">confirm</el-button>
+                   @click="edit">confirm</el-button>
       </template>
     </el-dialog>
   </div>
@@ -154,23 +154,18 @@ export default {
         username: "",
         password: ""
       },
-
       editForm: {
-        editFormRules: {
-          password: [
-            {
-              required: true,
-              message: "please input new password",
-              trigger: "blur"
-            }
-          ]
-        }
+        username: "",
+        password: ""
+      },
+      deleteForm: {
+        username: ""
       }
+
     }
   },
   created() {
     this.load()
-    // this.load1()
   },
   methods: {
     load() {
@@ -193,22 +188,53 @@ export default {
       })
     },
 
-    load1() {
+    add() {
       this.loading = true
       addUser(this.addForm
       ).then((res) => {
-        console.log(res)
         this.username = res.data.username
         this.password = res.data.password
         this.addDialogVisible = false
-        this.load()
         ElMessage.success({
-          message: res.message
+          message: "success"
         })
       }).catch((res) => {
-        console.log(res)
         this.loading = false
         this.addDialogVisible = false
+        ElMessage.error({
+          message: res.message
+        })
+      })
+    },
+
+    edit() {
+      this.loading = true
+      editUser(this.editForm
+      ).then((res) => {
+        this.username = res.data.username
+        this.password = res.data.password
+        this.editDialogVisible = false
+        ElMessage.success({
+          message: "success"
+        })
+      }).catch((res) => {
+        this.loading = false
+        this.editDialogVisible = false
+        ElMessage.error({
+          message: res.message
+        })
+      })
+    },
+
+    _delete() {
+      this.loading = true
+      deleteUser(this.deleteForm
+      ).then(() => {
+        ElMessage.success({
+          message: "success"
+        })
+      }).catch((res) => {
+        this.loading = false
         ElMessage.error({
           message: res.message
         })
@@ -224,58 +250,8 @@ export default {
     }, // 监听添加用户对话框关闭
     editDialogClosed() {
       this.editDialogVisible = false
-    }, // 监听编辑用户对话框关闭
+    } // 监听编辑用户对话框关闭
 
-    async showEditDialog(id) {
-      const { data: res } = await this.$http.get("users/" + id)
-      if (res.meta.status !== 200) {
-        return this.$message.error("Failed to query user's information")
-      }
-      this.editForm = res.data
-      this.editDialogVisible = true
-    }, // 展示编辑用户对话框
-
-    editUser() {
-      this.$refs.editFormRef.validate(async valid => {
-        if (!valid) return
-        // 发起修改用户信息的数据请求
-        const { data: res } = await this.$http.put(
-          "users/" + this.editForm.id,
-          {
-            password: this.editForm.password
-          }
-        )
-        if (res.meta.status !== 200) {
-          return this.$message.error("Failed to edit user information")
-        }
-        this.editDialogVisible = false
-        this.getUserList()
-        this.$message.success("The user's information was edited successfully")
-      })
-    }, // 修改用户信息并提交
-
-    async removeUserById(id) {
-      // 弹框询问用户是否删除数据
-      const confirmResult = await this.$confirm(
-        "This operation will permanently delete the user. Do you want to continue?",
-        "Hint",
-        {
-          confirmButtonText: "confirm",
-          cancelButtonText: "cancel",
-          type: "warning"
-        }
-      ).catch((err) => err)
-      // 若用户确认删除，则返回值为字符串confirm，反之为cancel
-      if (confirmResult !== "confirm") {
-        return this.$message.info("Canceled")
-      }
-      const { data: res } = await this.$http.delete("admin/delete" + id)
-      if (res.code !== 0) {
-        return this.$message.error("Failed to delete the user")
-      }
-      this.$message.success("Successfully delete the user")
-      this.load()
-    } // 根据ID删除用户
   }
 }
 </script>
