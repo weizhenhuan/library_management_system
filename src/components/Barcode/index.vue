@@ -1,5 +1,5 @@
 <template>
-  <img :class="'_'+code" />
+  <img :id="'_'+code" />
 </template>
 
 <script>
@@ -21,10 +21,8 @@ export default {
   setup(props) {
     // console.log("#" + props.code)
     nextTick(() => {
-      // const t = document.querySelectorAll("." + props.code)
-      // console.log(t, "ddd")
-      JsBarcode("._" + props.code, props.code, {
-        format: "MSI",
+      JsBarcode("#_" + props.code, props.code, {
+        format: "CODE39",
         width: 2, // 设置条之间的宽度
         height: 100, // 高度
         text: props.text
@@ -33,7 +31,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
-

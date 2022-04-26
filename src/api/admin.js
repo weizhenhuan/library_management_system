@@ -13,6 +13,28 @@ export function addUser(addForm) {
     url: "/admin/add",
     method: "post",
     data: qs.stringify(addForm),
+export function getBookList(type, info, pageSize, pageNum) {
+  return request({
+    url: "/admin/bookList",
+    method: "get",
+    params: { info, type, pageSize, pageNum }
+  })
+}
+
+export function addBookAdmin(bookItem) {
+  return request({
+    url: "/admin/addBook",
+    method: "post",
+    data: qs.stringify(bookItem),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
+export function updataBookAdmin(bookItem) {
+  return request({
+    url: "/admin/updateBook",
+    method: "post",
+    data: qs.stringify(bookItem),
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
@@ -22,6 +44,11 @@ export function editUser(editForm) {
     url: "/admin/edit",
     method: "post",
     data: qs.stringify(editForm),
+export function editBookAdmin(bookItem) {
+  return request({
+    url: "/admin/editBook",
+    method: "post",
+    data: qs.stringify(bookItem),
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
@@ -34,3 +61,19 @@ export function deleteUser(deleteForm) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+export function getCategory() {
+  return request({
+    url: "/admin/getCategory",
+    method: "get"
+  })
+}
+
+export function deleteBookAdmin(bID) {
+  return request({
+    url: "/admin/deleteBook",
+    method: "delete",
+    data: qs.stringify(bID),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
