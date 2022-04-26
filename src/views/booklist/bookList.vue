@@ -71,7 +71,11 @@
                     <span class="innner-item"
                           style="font-weight:bold">Location:</span>{{ item.bLocation }}
                     <span class="innner-item"
-                          style="font-weight:bold">status:</span>{{ bStatusMap.get(item.bStatus) }}
+                          style="font-weight:bold">status:</span>
+                    <el-tag :key="tag"
+                            :type="item.bStatus===1?'success':'info'">
+                      {{ bStatusMap.get(item.bStatus) }}
+                    </el-tag>
                   </div>
                   <span style="float: right; border-width: 2px"
                         v-if="this.$store.getters.roles[0]!='customer'">
@@ -250,6 +254,7 @@ export default {
     border-radius: 4px;
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+    justify-content: space-between;
   }
 
   .innner-item {

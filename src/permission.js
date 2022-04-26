@@ -47,7 +47,7 @@ router.beforeEach(async(to) => {
       return true
     } else {
       NProgress.done()
-      router.push("/login")
+      // router.push("/login")
       return true
     }
   }

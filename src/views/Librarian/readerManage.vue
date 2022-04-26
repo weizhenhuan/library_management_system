@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 卡片视图 -->
     <el-card>
       <el-row :gutter="20">
         <el-col :span="7">
@@ -39,13 +38,15 @@
         <el-table-column label="Name"
                          prop="rRealName"></el-table-column>
         <el-table-column label="Barcode"
+                         width="400"
                          prop="id">
           <template #default="scope">
             <Barcode :code="scope.row.rId"
-                     :text="scope.row.rName" />
+                     :text="scope.row.rId+''" />
           </template>
         </el-table-column>
-        <el-table-column label="Operation">
+        <el-table-column label="Operation"
+                         width="200">
           <template #default="scope">
             <el-button type="primary"
                        @click="showEditDialog(scope.row)">
@@ -60,7 +61,7 @@
               </template>
             </el-button>
             <el-button type="success"
-                       @click="jump">
+                       @click="jump(scope.row.rId)">
               <template v-slot:icon>
                 <svg-icon icon-class="download" />
               </template>
@@ -163,20 +164,16 @@
 <script>
 import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin"
 import { ElMessage } from "element-plus"
-import { Barcode } from "@/components/Barcode"
+import Barcode from "@/components/Barcode"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"
 
 export default {
   components: { Barcode, UploadExcelComponent },
   setup() {
-    const cList = ["123456789"] // code信息
-    const lList = [] // 位置信息 如果type是user，这里就传空数组
-    const type = "user" // 是uid还是bid
     const router = useRouter()
-
-    function jump() {
-      router.push({ path: "/download", query: { cList: cList, lList: lList, type: type }})
+    function jump(id) {
+      router.push({ path: "/download", query: { cList: id, lList: [], type: "user" }})
     }
     return { jump }
   },
@@ -347,7 +344,6 @@ export default {
 .el-table {
   margin-top: 15px;
 }
-
 .el-pagination {
   margin-top: 15px;
 }

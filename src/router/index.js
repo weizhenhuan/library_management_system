@@ -44,6 +44,26 @@ const routes = [{
   }]
 },
 {
+  path: "/book",
+  name: "Bookxzcz",
+  component: Layout,
+  redirect: "/borrow/index",
+  meta: { title: "book", icon: "home" },
+  children: [{
+    name: "borrow",
+    path: "borrow",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "borrow" }
+  },
+  {
+    name: "reture",
+    path: "return",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "return" }
+  }
+  ]
+},
+{
   path: "/test",
   name: "text",
   redirect: "/test/dashboard",

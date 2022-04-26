@@ -12,9 +12,10 @@ export default {
   name: "Dashboard",
   components: { adminDashboard, customerDashboard },
   setup() {
-    const dashboard = ref("customerDashboard")
-    if (useStore().getters.roles.includes("admin")) {
-      dashboard.value = "adminDashboard"
+    console.log(useStore().getters.roles)
+    const dashboard = ref("adminDashboard")
+    if (useStore().getters.roles.includes("customer")) {
+      dashboard.value = "customerDashboard"
     }
     return { dashboard }
   }

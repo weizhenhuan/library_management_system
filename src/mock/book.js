@@ -112,7 +112,7 @@ module.exports = [
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 "// 成功或者失败
       }
     }
   },
@@ -123,18 +123,33 @@ module.exports = [
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 " // 成功或者失败
       }
     }
   },
-
   {
     url: /\/user\/renewbook\.*/,
     type: "get",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 " // 成功或者失败
+      }
+    }
+  },
+  {
+    url: /\/book\/borrow\/bookID\.*/,
+    type: "get",
+    response: () => {
+      return {
+        "code": 0,
+        "data": {
+          "bID": 123426589,
+          "bName": "局青到只山",
+          "bAuthor": "do non dolore",
+          "bLocation": "Excepteur mollit ut eiusmod",
+          "bStatus": 1
+        }
       }
     }
   }

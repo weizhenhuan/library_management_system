@@ -37,6 +37,10 @@
           <router-link to="register"
                        class="router">Create an account.</router-link>
         </div>
+        <div class="vister text-center">
+          <router-link to="/"
+                       class="router">No Login.</router-link>
+        </div>
       </el-form>
     </div>
   </div>

@@ -3,7 +3,7 @@
     <router-view v-slot="{Component}">
       <transition name="fade-transform"
                   mode="out-in">
-        <keep-alive :exclude="['Redirect','Dashboard','BookList','Download','BookManagement']">
+        <keep-alive :include="[]">
           <component :is="Component" />
         </keep-alive>
       </transition>

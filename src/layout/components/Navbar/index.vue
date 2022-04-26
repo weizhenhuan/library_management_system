@@ -20,12 +20,15 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="loginadmin">
+            <el-dropdown-item @click="login">
+              <span style="display: block">Log In</span>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item @click="loginadmin">
               <span style="display: block">Log In|admin</span>
             </el-dropdown-item>
             <el-dropdown-item @click="logincus">
               <span style="display: block">Log In|customer</span>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <router-link to="/profile/index">
               <el-dropdown-item divided>Profile</el-dropdown-item>
             </router-link>
@@ -70,7 +73,10 @@ export default {
       })
     }
 
-    function logincus() {
+    function login() {
+      router.push("/login")
+    }
+    /* function logincus() {
       store
         .dispatch("user/login", { username: "customer", password: "sss" })
         .then(() => {
@@ -87,7 +93,7 @@ export default {
             path: "/redirect" + "/"
           })
         })
-    }
+    } */
 
     function logout() {
       store.dispatch("user/logout").then(() => {
@@ -96,7 +102,9 @@ export default {
         })
       })
     }
-    return { toggleSideBar, isCollapse, refresh, logout, loginadmin, logincus }
+    return { toggleSideBar, isCollapse, refresh, logout,
+    // loginadmin, logincus,
+      login }
   }
 }
 </script>
