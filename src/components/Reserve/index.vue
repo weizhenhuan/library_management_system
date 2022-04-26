@@ -6,11 +6,12 @@
              destroy-on-close>
     <div>
       <div>Book-Name:{{book.bookName}}</div>
-      <el-button type="text" @click="open" style="margin-top:20px" disabled>{{book.isReserved?'Are you sure to cancel the reservation?':'You need check out the book within four hours'}}</el-button>
+      <el-button type="text"
+                 style="margin-top:20px"
+                 disabled>{{book.isReserved?'Are you sure to cancel the reservation?':'You need check out the book within four hours'}}</el-button>
     </div>
     <template #footer>
       <span class="dialog-footer">
-<!--        <el-button @click="change">Cancel</el-button>-->
         <el-button type="primary"
                    @click="reserveBook">Confirm</el-button>
       </span>
@@ -22,6 +23,8 @@
 import { ref, toRef } from "@vue/reactivity"
 import { reserveBookByID, cancelBookByID } from "@/api/book"
 import { ElMessage } from "element-plus"
+import { useStore } from "vuex"
+import { useRoute, useRouter } from "vue-router"
 
 export default {
   name: "Return",
@@ -41,39 +44,41 @@ export default {
   },
   emits: ["update:showReserve"],
   setup(props, { emit }) {
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
     const isShow = toRef(props, "showReserve")
     function change() {
       emit("update:showReserve", false)
     }
     function reserveBook() {
+      console.log(props.book.isReserved)
       if (!props.book.isReserved) {
-        reserveBookByID(props.book.id, this.$store.getters.token).then((res) => {
+        reserveBookByID(props.book.id, store.getters.token).then((res) => {
           ElMessage.success({
             message: "successfully reserved!",
             type: "success"
           })
           change()
-          location.reload()
+          router.replace({
+            path: "/redirect" + route.fullPath
+          })
         }).catch((res) => {
           ElMessage.error({
-            message: "reservation failed...",
+            message: res.message,
             center: true
           })
         })
       } else {
         cancelBookByID(props.book.id, this.$store.getters.token).then((res) => {
-          if (res.isSuccess) {
-            ElMessage.success({
-              message: "successfully canceled!",
-              type: "success"
-            })
-          } else {
-            ElMessage.error({
-              message: "cancellation failed...",
-              center: true
-            })
-          }
-          location.reload()
+          ElMessage.success({
+            message: "successfully canceled!",
+            type: "success"
+          })
+
+          router.replace({
+            path: "/redirect" + route.fullPath
+          })
         }).catch((res) => {
           ElMessage.error({
             message: res.message,

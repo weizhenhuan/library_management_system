@@ -4,20 +4,20 @@
       <el-col :span="8">
         <el-input v-model="input_book_name"
                   placeholder="please input book name"
-                  class="search_input"/>
+                  class="search_input" />
       </el-col>
       <span style="display: block;line-height: 40px;text-align: center;width:10px">|</span>
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
-                  class="search_input"/>
+                  class="search_input" />
       </el-col>
       <el-col :span="3">
         <el-button type="primary"
                    @click="load"
                    :loading="loading">
           <template v-slot:icon>
-            <svg-icon icon-class="search"/>
+            <svg-icon icon-class="search" />
           </template>
         </el-button>
       </el-col>
@@ -39,38 +39,45 @@
                       :offset="2">
                 <img :src="props.row.bPhoto"
                      alt="cover"
-                     style="width:150px;height:300px">
+                     style="width: 200px; " />
                 <ul class="bookinfo">
                   <li><span style="font-weight:bold">Title:</span>{{ props.row.bName }}</li>
                   <li><span style="font-weight:bold">Author:</span>{{ props.row.bAuthor }}</li>
-                  <li><span style="font-weight:bold">Classification:</span>{{ props.row.bTypeid }}</li>
+                  <li><span style="font-weight:bold">Classification:</span>{{ props.row.bType }}</li>
                   <li><span style="font-weight:bold">ISBN:</span>{{ props.row.ISBN }}</li>
                   <li><span style="font-weight:bold">Remainder:</span>{{ props.row.bLeftNum }}</li>
                 </ul>
               </el-col>
-              <el-scrollbar height="400px" style="margin-left: 100px">
-                <div v-for="item in bookItems" :key="item" class="scrollbar-item">
+              <el-scrollbar style="margin-left: 100px">
+                <div v-for="item in bookItems"
+                     :key="item"
+                     class="scrollbar-item">
                   <div>
-                    <span class="innner-item" style="font-weight:bold">Title:</span>{{ item.bName }}
-                    <span class="innner-item" style="font-weight:bold">book id:</span>{{ item.bID }}
-                    <span class="innner-item" style="font-weight:bold">Location:</span>{{ item.bLocation }}
-                    <span class="innner-item" style="font-weight:bold">status:</span>{{ bStatusMap.get(item.bStatus) }}
+                    <span class="innner-item"
+                          style="font-weight:bold">Title:</span>{{ item.bName }}
+                    <span class="innner-item"
+                          style="font-weight:bold">book id:</span>{{ item.bID }}
+                    <span class="innner-item"
+                          style="font-weight:bold">Location:</span>{{ item.bLocation }}
+                    <span class="innner-item"
+                          style="font-weight:bold">status:</span>{{ bStatusMap.get(item.bStatus) }}
                   </div>
-                  <span style="float: right; border-style: solid; border-width: 2px" v-if="this.$store.getters.roles[0]!='customer'">
+                  <span style="float: right; border-width: 2px"
+                        v-if="this.$store.getters.roles[0]!='customer'">
                     <el-button type="primary"
                                class="innner-item"
                                :disabled="item.bStatus !== 1"
                                @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
-                    <svg-icon icon-class="book"></svg-icon>
-                    <span>reserve</span>
-                  </el-button>
+                      <svg-icon icon-class="book"></svg-icon>
+                      <span>reserve</span>
+                    </el-button>
                     <el-button type="danger"
                                class="innner-item"
                                :disabled="item.bStatus !== 0"
                                @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
-                    <svg-icon icon-class="book"></svg-icon>
-                    <span>cancel</span>
-                  </el-button>
+                      <svg-icon icon-class="book"></svg-icon>
+                      <span>cancel</span>
+                    </el-button>
                   </span>
                 </div>
               </el-scrollbar>
@@ -80,15 +87,15 @@
 
         <el-table-column prop="bName"
                          label="book name"
-                         width="350"/>
+                         width="350" />
         <el-table-column prop="ISBN"
                          label="ISBN"
-                         width="350"/>
+                         width="350" />
         <el-table-column prop="bLeftNum"
                          label="remainder"
-                         width="250"/>
+                         width="250" />
         <el-table-column prop="bAuthor"
-                         label="book author"/>
+                         label="book author" />
       </el-table>
 
       <div class="demo-pagination-block">
@@ -98,7 +105,7 @@
                        :page-sizes="[2, 5, 10, 20]"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="total"
-                       hide-on-single-page/>
+                       hide-on-single-page />
       </div>
     </div>
 
@@ -109,17 +116,13 @@
 
     <Reserve v-model:showReserve="showReserve"
              type="reserve"
-             :book='currBook'/>
-    <!--    <Buy v-model:showBuy="showBuy"-->
-    <!--         :book='currBook' />-->
+             :book='currBook' />
   </div>
 </template>
 
 <script>
 import { getBookByNameAndISBN, getBooksDetailByISBN } from "@/api/book"
-// import Borrow from "@/components/Borrow"
 import Reserve from "@/components/Reserve"
-// import Buy from "@/components/Buy"
 import { ElMessage } from "element-plus"
 export default {
   name: "BookList",
@@ -198,47 +201,47 @@ export default {
     .bookinfo {
       li {
         margin-top: 10px;
-    }
-  }
-
-  .bookinfo-wrapper {
-    border-style: solid;
-    border-width: 5px;
-
-    .library-bookinfo {
-      margin-top: 30px;
-
-      li {
-        margin-top: 10px;
       }
     }
+
+    .bookinfo-wrapper {
+      border-style: solid;
+      border-width: 5px;
+
+      .library-bookinfo {
+        margin-top: 30px;
+
+        li {
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .el-pagination {
+      margin-top: 20px;
+      justify-content: center;
+    }
   }
 
-  .el-pagination {
-    margin-top: 20px;
-    justify-content: center;
+  .recommend {
+    padding: 60px 0 0 60px;
+  }
+
+  .scrollbar-item {
+    display: flex;
+    align-items: center;
+    //justify-content: center;
+    height: 50px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 4px;
+    background: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
+  }
+
+  .innner-item {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }
-
-.recommend {
-  padding: 60px 0 0 60px;
-}
-
-.scrollbar-item {
-  display: flex;
-  align-items: center;
-  //justify-content: center;
-  height: 50px;
-  margin: 10px;
-  text-align: center;
-  border-radius: 4px;
-  background: var(--el-color-primary-light-9);
-  color: var(--el-color-primary);
-}
-
-.innner-item {
-  margin-left: 10px;
-  margin-right: 10px;
-} }
-
 </style>
