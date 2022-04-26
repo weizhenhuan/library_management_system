@@ -123,7 +123,7 @@ export const asyncRoutes = [{
   children: [{
     path: "bookManage",
     component: () =>
-      import ("@/views/Librarian/bookManage"),
+      import ("@/views/Librarian/bookmanagement/index"),
     name: "PagePermission",
     meta: {
       title: "Book Manage",
@@ -149,17 +149,6 @@ export const asyncRoutes = [{
       title: "Category Manage",
       roles: ["admin"]
     }
-  }]
-},
-{
-  path: "/bookmanagement",
-  redirect: "/bookmanagement/index",
-  component: Layout,
-  children: [{
-    name: "bookmanagement",
-    path: "index",
-    component: () => import ("@/views/bookmanagement/index"),
-    meta: { title: "Book Management", icon: "book" }
   }]
 }]
 

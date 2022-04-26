@@ -44,14 +44,21 @@
                 <img :src="props.row.bPhoto"
                      alt="cover"
                      style="width: 200px; " />
+              </el-col>
+
+              <el-col :span="6"
+                      :offset="2">
                 <ul class="bookinfo">
                   <li><span style="font-weight:bold">Title:</span>{{ props.row.bName }}</li>
                   <li><span style="font-weight:bold">Author:</span>{{ props.row.bAuthor }}</li>
                   <li><span style="font-weight:bold">Classification:</span>{{ props.row.bType }}</li>
                   <li><span style="font-weight:bold">ISBN:</span>{{ props.row.ISBN }}</li>
-                  <li><span style="font-weight:bold">Remainder:</span>{{ props.row.bLeftNum }}</li>
+                  <li><span style="font-weight:bold">Price:</span>{{ props.row.bPrice }}</li>
+                  <li><span style="font-weight:bold">Publisher:</span>{{ props.row.bPublisher }}</li>
+                  <li><span style="font-weight:bold">PublishTime:</span>{{ props.row.bPublishTime }}</li>
                 </ul>
               </el-col>
+
               <el-scrollbar style="margin-left: 100px">
                 <div v-for="item in bookItems"
                      :key="item"
@@ -95,8 +102,8 @@
         <el-table-column prop="ISBN"
                          label="ISBN"
                          width="350" />
-        <el-table-column prop="bLeftNum"
-                         label="remainder"
+        <el-table-column prop="bType"
+                         label="Type"
                          width="250" />
         <el-table-column prop="bAuthor"
                          label="book author" />

@@ -3,7 +3,7 @@ import qs from "qs"
 
 export function getUserList(query, pagenum, pagesize) {
   return request({
-    url: "/users/getUserList",
+    url: "/admin/getUserList",
     method: "get",
     params: { query, pagenum, pagesize }
   })
@@ -13,6 +13,17 @@ export function addUser(addForm) {
     url: "/admin/add",
     method: "post",
     data: qs.stringify(addForm),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+export function addUserList(addForm) {
+  return request({
+    url: "/admin/addUserList",
+    method: "post",
+    data: addForm
+  })
+}
+
 export function getBookList(type, info, pageSize, pageNum) {
   return request({
     url: "/admin/bookList",
@@ -44,6 +55,10 @@ export function editUser(editForm) {
     url: "/admin/edit",
     method: "post",
     data: qs.stringify(editForm),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
 export function editBookAdmin(bookItem) {
   return request({
     url: "/admin/editBook",
@@ -55,7 +70,7 @@ export function editBookAdmin(bookItem) {
 
 export function deleteUser(deleteForm) {
   return request({
-    url: "/admin/delete",
+    url: "/admin/deleteRead",
     method: "delete",
     data: qs.stringify(deleteForm),
     headers: { "Content-Type": "application/x-www-form-urlencoded" }

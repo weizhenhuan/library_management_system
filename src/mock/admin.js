@@ -148,13 +148,86 @@ module.exports = [
 
   {
     url: "/admin/deleteBook",
-    type: "post",
+    type: "delete",
     response: () => {
       return {
         code: 0,
         message: "sed fugiat dolor irure ipsum"
       }
     }
+  },
+
+  {
+    url: /\/admin\/getUserList\.*/,
+    type: "get",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          total: 70,
+          users: [
+            {
+              "rName": "12345678",
+              "rPwd": "ut cillum minim",
+              "rId": 223179323,
+              "rContact": "labore in ad esse officia",
+              "rPhoto": "http://dummyimage.com/400x400",
+              "rIntro": "sint esse amet Duis",
+              "rRealName": "得书布老"
+            },
+            {
+              "rName": "12345268",
+              "rPwd": "cillum",
+              "rId": 220488171,
+              "rContact": "ea commodo",
+              "rPhoto": "http://dummyimage.com/400x400",
+              "rIntro": "velit",
+              "rRealName": "得便动需号空"
+            }
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/deleteRead",
+    type: "delete",
+    response: () => {
+      return {
+        code: 0,
+        message: "sed fugiat dolor irure ipsum"
+      }
+    }
+  },
+
+  {
+    url: "/admin/edit",
+    type: "post",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          username: "崔芳",
+          password: "anim"
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/add",
+    type: "post",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          username: "崔芳",
+          password: "anim"
+        }
+      }
+    }
   }
+
 ]
 

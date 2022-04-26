@@ -207,6 +207,7 @@ export default {
   margin: 10px auto 10px;
   justify-content: center;
   .el-button {
+    color: white;
     height: 40px;
     font-size: 1.5em;
     padding-left: 15px;
