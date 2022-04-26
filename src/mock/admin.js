@@ -1,7 +1,7 @@
 
 module.exports = [
   {
-    url: /\/book\/booklist\/bookname\.*/,
+    url: /\/admin\/bookList\.*/,
     type: "get",
     response: () => {
       return {
@@ -105,37 +105,129 @@ module.exports = [
       }
     }
   },
-
   {
-    url: /\/user\/borrow\.*/,
-    type: "get",
+    url: "/admin/addBook",
+    type: "post",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        data: {
+          bId: 123456789
+        }
       }
     }
   },
 
   {
-    url: /\/user\/returnbook\.*/,
-    type: "get",
+    url: "/admin/updateBook",
+    type: "post",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "hhhhhh"
       }
     }
   },
 
   {
-    url: /\/user\/renewbook\.*/,
+    url: "/admin/getCategory",
     type: "get",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        data: {
+          categoryList: [
+            "nulla",
+            "labore",
+            "nulla"
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/deleteBook",
+    type: "delete",
+    response: () => {
+      return {
+        code: 0,
+        message: "sed fugiat dolor irure ipsum"
+      }
+    }
+  },
+
+  {
+    url: /\/admin\/getUserList\.*/,
+    type: "get",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          total: 70,
+          users: [
+            {
+              "rName": "12345678",
+              "rPwd": "ut cillum minim",
+              "rId": 223179323,
+              "rContact": "labore in ad esse officia",
+              "rPhoto": "http://dummyimage.com/400x400",
+              "rIntro": "sint esse amet Duis",
+              "rRealName": "得书布老"
+            },
+            {
+              "rName": "12345268",
+              "rPwd": "cillum",
+              "rId": 220488171,
+              "rContact": "ea commodo",
+              "rPhoto": "http://dummyimage.com/400x400",
+              "rIntro": "velit",
+              "rRealName": "得便动需号空"
+            }
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/deleteRead",
+    type: "delete",
+    response: () => {
+      return {
+        code: 0,
+        message: "sed fugiat dolor irure ipsum"
+      }
+    }
+  },
+
+  {
+    url: "/admin/edit",
+    type: "post",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          username: "崔芳",
+          password: "anim"
+        }
+      }
+    }
+  },
+
+  {
+    url: "/admin/add",
+    type: "post",
+    response: () => {
+      return {
+        code: 0,
+        data: {
+          username: "崔芳",
+          password: "anim"
+        }
       }
     }
   }
+
 ]
+

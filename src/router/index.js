@@ -8,7 +8,8 @@ const routes = [{
   children: [{
     name: "redirect",
     path: "/redirect/:path(.*)",
-    component: () => import ("@/views/redirect/index")
+    component: () =>
+      import ("@/views/redirect/index")
   }]
 },
 {
@@ -19,12 +20,14 @@ const routes = [{
   children: [{
     name: "download",
     path: "index",
-    component: () => import ("@/views/download/index")
+    component: () =>
+      import ("@/views/download/index")
   }]
 },
 {
   path: "/login",
-  component: () => import ("@/views/login/index"),
+  component: () =>
+    import ("@/views/login/index"),
   hidden: true
 },
 {
@@ -35,7 +38,8 @@ const routes = [{
   children: [{
     name: "dashboard",
     path: "dashboard",
-    component: () => import ("@/views/dashboard/index"),
+    component: () =>
+      import ("@/views/dashboard/index"),
     meta: { title: "Home", icon: "home" }
   }]
 },
@@ -68,7 +72,8 @@ const routes = [{
   children: [{
     name: "profile",
     path: "index",
-    component: () => import ("@/views//profile/index"),
+    component: () =>
+      import ("@/views//profile/index"),
     meta: { title: "个人主页" }
   }]
 },
@@ -80,7 +85,8 @@ const routes = [{
   children: [{
     name: "booklist",
     path: "index",
-    component: () => import ("@/views/booklist/bookList"),
+    component: () =>
+      import ("@/views/booklist/bookList"),
     meta: { title: "all books", icon: "book" }
   }]
 },
@@ -95,7 +101,8 @@ const routes = [{
 
 {
   path: "/register",
-  component: () => import ("@/views/register/index"),
+  component: () =>
+    import ("@/views/register/index"),
   hidden: true
 }
 ]
@@ -103,46 +110,50 @@ const routes = [{
 export const constantRoutes = routes
 
 export const asyncRoutes = [{
-  path: "/permissiontext",
+  path: "/Librarian",
   component: Layout,
-  redirect: "/permissiontext/page",
-  name: "Permissiontext",
+  redirect: "/Librarian/bookManage",
+  name: "Librarian",
   meta: {
-    title: "Permissiontext",
-    icon: "test",
+    title: "Librarian",
+    icon: "admin",
     roles: ["admin"] // you can set roles in root nav
   },
   children: [{
-    path: "page",
-    component: () => import ("@/views/permissiontext/page"),
+    path: "bookManage",
+    component: () =>
+      import ("@/views/Librarian/bookmanagement/index"),
     name: "PagePermission",
     meta: {
-      title: "Page Permission",
-      roles: ["customer"]
-    }
-  },
-  {
-    path: "text1",
-    component: () => import ("@/views/permissiontext/text1"),
-    name: "DirectivePermission",
-    meta: {
-      title: "text1 Permission"
-    }
-  },
-  {
-    path: "admin",
-    component: () => import ("@/views/permissiontext/admin"),
-    name: "RolePermission",
-    meta: {
-      title: "admin Permission",
+      title: "Book Manage",
       roles: ["admin"]
     }
-  }
-  ]
+  },
+  {
+    path: "readerManage",
+    component: () =>
+      import ("@/views/Librarian/readerManage"),
+    name: "DirectivePermission",
+    meta: {
+      title: "Reader Manage",
+      roles: ["admin"]
+    }
+  },
+  {
+    path: "categoryManage",
+    component: () =>
+      import ("@/views/Librarian/categoryManage"),
+    name: "RolePermission",
+    meta: {
+      title: "Category Manage",
+      roles: ["admin"]
+    }
+  }]
 }]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  base: "/app",
   routes
 })
 

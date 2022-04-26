@@ -3,8 +3,9 @@ const Mock = require("mockjs")
 
 const User = require("./user")
 const Book = require("./book")
+const Admin = require("./admin")
 
-const reqs = [...User, ...Book]
+const reqs = [...User, ...Book, ...Admin]
 
 // mock的两处返回形式处理：函数或者json数据模板
 function twoMockData(response) {
