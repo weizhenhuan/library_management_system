@@ -5,7 +5,7 @@
              :before-close="change"
              destroy-on-close>
     <div>
-      <span>是否确认还书？</span>
+      <span>Confirm return of the book?</span>
     </div>
     <template #footer>
       <span class="dialog-footer">

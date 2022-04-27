@@ -5,8 +5,8 @@
            type="number"
            @blur="e => e.target.focus()"
            @input="handleCode">
-    <h1>{{route.meta.title==="borrow"?"Borrow Books":"Return Books"}}</h1>
-    <h2>Please scan the code with a code scanner</h2>
+    <h1>{{route.meta.title==="borrow"?"To borrow the book,":"To return the book,"}}</h1>
+    <h2>please scan the barcode with a scanner.</h2>
     <el-row :gutter="8">
       <el-col :span="8">
         <el-input v-model="studentID"

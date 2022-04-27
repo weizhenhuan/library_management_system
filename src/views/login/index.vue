@@ -11,14 +11,14 @@
                ref="loginFormRel">
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <div class="tishi">Username:</div>
+          <div class="hint">Username:</div>
           <el-input placeholder="Username"
                     v-model="loginForm.username"
                     prefix-icon="icon-login_user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <div class="tishi">Password:</div>
+          <div class="hint">Password:</div>
           <el-input placeholder="Password"
                     v-model="loginForm.password"
                     type="password"
@@ -28,9 +28,10 @@
         <!-- 登录按钮 -->
         <el-form-item class="login_btn">
           <el-button :loading="loading"
-                     type="primary"
+                     id="log_in_button"
+                     type="success"
                      block
-                     @click="beginLogin">Login</el-button>
+                     @click="beginLogin">Sign in</el-button>
         </el-form-item>
         <div class="register">
           New to here?
@@ -39,27 +40,23 @@
         </div>
         <div class="vister text-center">
           <router-link to="/"
-                       class="router">No Login.</router-link>
+                       class="router">To use without sign in, click here</router-link>
         </div>
       </el-form>
     </div>
   </div>
-
-  <LoginFooter />
 </template>
 <script>
 import { ElMessage } from "element-plus"
-import LoginFooter from "@/components/LoginFooter"
 
 export default {
-  components: { LoginFooter },
   name: "Login",
   data() {
     return {
       loginForm: {
         // username: "customer",
         // password: "12345678",
-        username: "Alice",
+        username: "customer",
         password: "a12345678"
       },
       loading: false,
@@ -111,37 +108,39 @@ export default {
 
 <style scoped>
 .login_container {
-  background-image: linear-gradient(-180deg, #1a1454 0%, #0e81a5 100%);
-  /*background-image: url("../images/bg_login.png");*/
-  background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
 }
 .title {
-  color: #fff;
+  color: black;
   text-align: center;
-  font-size: 20px;
+  font-size: 24px;
   letter-spacing: 2px;
   margin-top: 40px;
 }
 .login_box {
-  width: 390px;
-  height: 380px;
-  /* background-color: #fff; */
-  background-color: #2e527bb3;
-  border-radius: 5px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  margin: 145px auto;
+  font-size: 14px;
+  background-color: rgb(245, 246, 249);
+  border: 1px solid rgb(219, 221, 227);
+  /* border-top: 0; */
+  border-radius: 6px;
 }
 .el-form {
-  padding: 32px;
-  top: 60px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
+  padding: 5px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-fg-default);
+  vertical-align: middle;
+  background-color: var(--color-canvas-default);
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  outline: none;
+  box-shadow: var(--color-primer-shadow-inset);
 }
 .el-button {
   margin-top: 10px;
@@ -162,20 +161,24 @@ img {
   border-radius: 3px;
 }
 .register {
-  color: #fff;
+  color: black;
   text-align: center;
   font-size: 14px;
   letter-spacing: 1px;
   margin-top: 20px;
 }
 .router {
-  color: #ffa500;
+  color: #0969da;
   text-decoration: none;
 }
-.tishi {
+.hint {
   font-size: 14px;
   letter-spacing: 1px;
-  color: #fff;
+  color: black;
   padding-left: 2px;
+}
+#log_in_button {
+  background-color: rgb(39, 151, 62) !important;
+  border-color: rgb(39, 151, 62) !important;
 }
 </style>

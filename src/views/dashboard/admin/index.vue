@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <h1>Welcome!</h1>
+  <div class="text">
+    <img src="../../../assets/admin.svg"
+         alt="user">
+    <h1>Hi, Administrator</h1>
+    <h3>Welcome</h3>
   </div>
 </template>
 
@@ -12,4 +15,15 @@ export default {
   }
 }
 </script>
+
+<style>
+.text {
+  text-align: center;
+}
+img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+</style>
 

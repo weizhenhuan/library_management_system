@@ -54,11 +54,11 @@
         </el-card>
         <el-card v-else
                  class="user-container">
-          gggggg
+
         </el-card>
       </transition>
       <div class="change-card">
-        <svg-icon icon-class='change'
+        <svg-icon icon-class='fold2'
                   @click="changePage"></svg-icon>
       </div>
     </template>
@@ -102,7 +102,7 @@ export default {
 
 <style scoped lang='less'>
 .user-container {
-  margin: 30px 0 0 10px;
+  margin: 30px 10px 0 20px;
   .user-info {
     .avatar {
       display: block;
