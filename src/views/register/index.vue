@@ -1,26 +1,32 @@
 <template>
+  <div style="text-align:center"><img src="../../assets/book.svg"
+         alt="icon"
+         id="book"></div>
+  <div class="title">
+    <h2>Sign up</h2>
+  </div>
   <div class="container">
     <div class="box">
-      <div class="title">
-        <h2>Sign up</h2>
-      </div>
       <el-form ref="formData"
                :model="formData"
                :rules="rules"
-               label-width="80px">
+               label-width="80px"
+               style="margin-top:30px">
         <el-form-item prop="userName"
                       label="Username">
           <el-input v-model="formData.userName"
                     placeholder="Username"
                     clearable></el-input>
         </el-form-item>
-        <el-form-item prop="password" label="Password">
+        <el-form-item prop="password"
+                      label="Password">
           <el-input v-model="formData.password"
                     placeholder="Password"
                     type="password"
                     show-password></el-input>
         </el-form-item>
-        <el-form-item prop="cheackPassword" label="Confirm">
+        <el-form-item prop="cheackPassword"
+                      label="Confirm">
           <el-input v-model="formData.cheackPassword"
                     placeholder="Password again"
                     type="password"
@@ -28,28 +34,27 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary"
+          <el-button type="success"
                      @click="register('formData')">sign up</el-button>
-          <el-button @click="resetForm('formData')"
+          <el-button type="primary"
+                     @click="resetForm('formData')"
                      style="margin-left: 145px">reset</el-button>
         </el-form-item>
       </el-form>
       <div class="goLogin">
-        Already having an account?
-        <router-link to="login" class="router">Login in</router-link>
+        Already got an account?
+        <router-link to="login"
+                     class="router">Login in</router-link>
       </div>
     </div>
 
   </div>
-  <LoginFooter />
 </template>
 <script>
-import LoginFooter from "../../components/LoginFooter"
 import { ElMessage } from "element-plus"
 import { register, checkUserName } from "../../api/user"
 
 export default {
-  components: { LoginFooter },
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -127,18 +132,27 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  background-color: #f7f3f3;
-  height: 100%;
-  width: 100%;
+#book {
+  width: 80px;
+  height: 80px;
+  margin-top: 50px;
+  margin-left: 0 !important;
 }
 .box {
-  width: 390px;
-  height: 390px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px;
+  margin: 0 auto;
+  background-color: #f7f3f3;
+  border: 1.5px solid rgb(219, 221, 227);
+  border-radius: 8px;
+}
+.el-form {
+  padding: 5px 12px;
+  font-size: 16px;
+  line-height: 20px;
+  vertical-align: middle;
+  border-radius: 8px;
+  outline: none;
 }
 
 .title {

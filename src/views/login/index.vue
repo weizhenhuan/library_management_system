@@ -1,9 +1,12 @@
 <template>
+  <div style="text-align:center"><img src="../../assets/book.svg"
+         alt="icon"
+         id="book"></div>
+  <div class="title">
+    <h2>Sign in</h2>
+  </div>
   <div class="login_container">
     <div class="login_box">
-      <div class="title">
-        <h2>Sign in</h2>
-      </div>
       <!-- 登录表单区域 -->
       <el-form class="login-form"
                :model="loginForm"
@@ -107,6 +110,16 @@ export default {
 </script>
 
 <style scoped>
+* {
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+#book {
+  width: 80px;
+  height: 80px;
+  margin-top: 50px;
+  margin-left: 0 !important;
+}
 .login_container {
   background-size: cover;
   height: 100%;
@@ -116,21 +129,24 @@ export default {
   text-align: center;
   font-size: 24px;
   letter-spacing: 2px;
-  margin-top: 40px;
 }
 .login_box {
   width: 400px;
-  height: 400px;
-  margin: 145px auto;
-  font-size: 14px;
+  height: 300px;
+  margin: 0 auto;
+  font-size: 16px;
   background-color: rgb(245, 246, 249);
-  border: 1px solid rgb(219, 221, 227);
-  /* border-top: 0; */
-  border-radius: 6px;
+  border: 1.5px solid rgb(219, 221, 227);
+  border-radius: 8px;
+}
+el-input {
+  padding: 5px 12px !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
 }
 .el-form {
   padding: 5px 12px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
   color: var(--color-fg-default);
   vertical-align: middle;
@@ -138,14 +154,14 @@ export default {
   background-repeat: no-repeat;
   background-position: right 8px center;
   border: 1px solid var(--color-border-default);
-  border-radius: 6px;
+  border-radius: 8px;
   outline: none;
   box-shadow: var(--color-primer-shadow-inset);
 }
 .el-button {
   margin-top: 10px;
   width: 100%;
-  font-size: 18 px;
+  font-size: 20 px;
   letter-spacing: 5px;
 }
 .code {
@@ -163,7 +179,7 @@ img {
 .register {
   color: black;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 1px;
   margin-top: 20px;
 }
@@ -172,7 +188,7 @@ img {
   text-decoration: none;
 }
 .hint {
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 1px;
   color: black;
   padding-left: 2px;
@@ -180,5 +196,6 @@ img {
 #log_in_button {
   background-color: rgb(39, 151, 62) !important;
   border-color: rgb(39, 151, 62) !important;
+  font-size: 18px;
 }
 </style>
