@@ -16,7 +16,8 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
-               class="user-avatar" />
+               class="user-avatar"
+               style="padding:0" />
         </div>
         <template #dropdown>
           <el-dropdown-menu>

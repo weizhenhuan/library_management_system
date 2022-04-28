@@ -48,41 +48,33 @@ const routes = [{
   name: "Bookxzcz",
   component: Layout,
   redirect: "/borrow/index",
-  meta: { title: "book", icon: "home" },
+  meta: { title: "Borrow｜Buy", icon: "scan" },
   children: [{
     name: "borrow",
     path: "borrow",
     component: () => import ("@/views/borrow/index"),
-    meta: { title: "borrow" }
+    meta: { title: "Borrow" }
   },
   {
     name: "reture",
     path: "return",
     component: () => import ("@/views/borrow/index"),
-    meta: { title: "return" }
+    meta: { title: "Return" }
   }
   ]
 },
 {
-  path: "/test",
-  name: "text",
-  redirect: "/test/dashboard",
+  path: "/booklist",
+  redirect: "/booklist/index",
   component: Layout,
-  meta: { title: "测试", icon: "link" },
-  children: [
-    {
-      name: "xczc",
-      path: "dashboard",
-      component: () => import("@/views/profile/index"),
-      meta: { title: "测试首页" }
-    },
-    {
-      name: "sssss",
-      path: "sssss",
-      component: () => import("@/views/borrow/index"),
-      meta: { title: "hhhh" }
-    }
-  ]
+  // hidden:true,
+  children: [{
+    name: "booklist",
+    path: "index",
+    component: () =>
+      import ("@/views/booklist/bookList"),
+    meta: { title: "Bookshelf", icon: "bookshelf" }
+  }]
 },
 {
   path: "/profile",
@@ -98,27 +90,34 @@ const routes = [{
   }]
 },
 {
-  path: "/booklist",
-  redirect: "/booklist/index",
-  component: Layout,
-  // hidden:true,
-  children: [{
-    name: "booklist",
-    path: "index",
-    component: () =>
-      import ("@/views/booklist/bookList"),
-    meta: { title: "all books", icon: "book" }
-  }]
-},
-{
   path: "/external-link",
   component: Layout,
   children: [{
     path: "https://gitee.com/violet-umberto/online-library-management-system",
-    meta: { title: "External Link", icon: "link" }
+    meta: { title: "Repository", icon: "gitee" }
   }]
 },
-
+/* {
+  path: "/test",
+  name: "text",
+  redirect: "/test/dashboard",
+  component: Layout,
+  meta: { title: "Test", icon: "test" },
+  children: [
+    {
+      name: "xczc",
+      path: "dashboard",
+      component: () => import("@/views/profile/index"),
+      meta: { title: "测试首页" }
+    },
+    {
+      name: "sssss",
+      path: "sssss",
+      component: () => import("@/views/borrow/index"),
+      meta: { title: "hhhh" }
+    }
+  ]
+}, */
 {
   path: "/register",
   component: () =>

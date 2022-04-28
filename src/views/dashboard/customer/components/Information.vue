@@ -13,6 +13,7 @@
           <div class="start">{{parseTime(book.start,'{y}-{m}-{d}')}}</div>
           <el-progress :percentage="percent(book.start,book.end)"
                        :status="book.overdue?'warning':''"
+                       :color="book.overdue?'#e22c29':'#409eff'"
                        :stroke-width="24"
                        :text-inside="true"
                        :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
@@ -141,7 +142,7 @@ export default {
 
 <style scoped lang='less'>
 .information-container {
-  margin: 30px 10px 0 0;
+  margin: 30px 20px 0 0;
   .borrow-head {
     font-weight: bold;
     font-size: 20px;

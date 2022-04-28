@@ -31,7 +31,7 @@ export default {
         (item) => item.meta && item.meta.title
       )
       if (matched.length && matched[0].path !== "/dashboard") {
-        matched = [{ path: "/dashboard", meta: { title: "首页" }}].concat(
+        matched = [{ path: "/dashboard", meta: { title: "HomePage" }}].concat(
           matched
         )
       }

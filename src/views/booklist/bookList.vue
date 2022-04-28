@@ -12,7 +12,7 @@
           line-height: 40px;
           text-align: center;
           width: 10px;
-        ">|</span>
+        ">&nbsp;&nbsp;&nbsp;</span>
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
@@ -200,7 +200,7 @@ export default {
 
 <style scoped lang="less">
 .search-container {
-  margin: 10px auto 10px;
+  margin: 20px auto;
   justify-content: center;
 
   .el-button {
@@ -213,6 +213,11 @@ export default {
   .el-input :deep(.el-input__inner) {
     height: 40px;
   }
+}
+
+.booklist-container {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .booklist-container {
@@ -262,6 +267,10 @@ export default {
   .innner-item {
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .demo-pagination-block {
+    margin-top: 20px;
   }
 }
 </style>
