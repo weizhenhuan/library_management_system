@@ -341,10 +341,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+el-card {
+  margin-left: 20px;
+}
+
 .el-table {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .el-pagination {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 </style>

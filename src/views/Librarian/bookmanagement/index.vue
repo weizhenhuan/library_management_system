@@ -25,7 +25,7 @@
                    @click="load"
                    :loading="loading">
           <template v-slot:icon>
-            <svg-icon icon-class="search" />
+            <svg-icon icon-class="search_light" />
           </template>
         </el-button>
       </el-col>
@@ -34,7 +34,7 @@
                    @click="() => {showAdminBook = true; adminBookType = 'add'}"
                    :loading="loading">
           <template v-slot:icon>
-            <svg-icon icon-class="addbook" />
+            <svg-icon icon-class="add" />
           </template>
         </el-button>
       </el-col>
@@ -101,22 +101,25 @@
         <el-table-column label="Operation">
           <template #default="props">
             <el-button-group>
-              <el-button type="primary"
+              <el-button type="success"
+                         size="small"
                          @click="jump(props.row.bId,props.row.bBookshelf)">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="download" />
                 </template>
               </el-button>
-              <el-button type="warning"
+              <el-button type="primary"
+                         size="small"
                          @click="() => {adminBookType = 'edit';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="edit" />
                 </template>
               </el-button>
               <el-button type="danger"
+                         size="small"
                          @click="() => {adminBookType = 'delete';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="delete" />
                 </template>
               </el-button>
             </el-button-group>
@@ -204,7 +207,7 @@ export default {
 
 <style scoped lang="less">
 .search-container {
-  margin: 10px auto 10px;
+  margin: 20px auto 20px;
   justify-content: center;
   .el-button {
     color: white;
