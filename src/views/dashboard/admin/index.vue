@@ -21,9 +21,13 @@ export default {
   text-align: center;
 }
 img {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
+  padding: 30px;
+  margin-top: 50px;
+  margin-bottom: 20px;
   border-radius: 50%;
+  background-color: #f6f8fa;
 }
 </style>
 

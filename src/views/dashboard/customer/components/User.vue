@@ -106,9 +106,10 @@ export default {
   .user-info {
     .avatar {
       display: block;
-      width: 100px;
+      // width: 100px;
       margin: 0 auto 10px;
-      border-radius: 50px;
+      padding: 0 !important;
+      border-radius: 50%;
     }
     .user-name {
       margin: 0 auto;
