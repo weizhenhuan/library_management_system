@@ -16,6 +16,8 @@ export default {
     const dashboard = ref("adminDashboard")
     if (useStore().getters.roles.includes("customer")) {
       dashboard.value = "customerDashboard"
+    } else if (useStore().getters.roles.includes("admin")) {
+      dashboard.value = "adminDashboard"
     }
     return { dashboard }
   }

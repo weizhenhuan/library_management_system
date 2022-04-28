@@ -34,10 +34,9 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
-    console.log(response.config.url)
     const res = response.data
     if (res.code !== 0) {
-      if (response.config.url === "/pay") return res
+      if (response.config.url === "/pay") return response
       return Promise.reject(new Error(res.message || "Error"))
     } else {
       return res

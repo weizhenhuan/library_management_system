@@ -112,7 +112,9 @@ module.exports = [
       return {
         code: 0,
         data: {
-          bId: 123456789
+          idList: [
+            100004008, 100004038, 100004009
+          ]
         }
       }
     }
@@ -220,11 +222,27 @@ module.exports = [
     type: "post",
     response: () => {
       return {
-        code: 0,
         data: {
-          username: "崔芳",
-          password: "anim"
-        }
+          userId: 900000007
+        },
+        code: 0
+      }
+    }
+  },
+  {
+    url: "/admin/addUserList",
+    type: "post",
+    response: () => {
+      return {
+        data: {
+          idList: [
+            900000007,
+            900000011,
+            900000088,
+            900000099
+          ]
+        },
+        code: 0
       }
     }
   }

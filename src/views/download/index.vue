@@ -2,7 +2,7 @@
   <div>
     <Barcode v-for="(item,index) in codeList"
              :key="index"
-             :code="item.code"
+             :code=item.code
              :name="type === 'user' ? item.code : item.code + ' ' + item.location"
              :text="type === 'user' ? item.code : item.code + ' ' + item.location" />
     <el-button style="display:block"
@@ -20,12 +20,11 @@ export default {
   components: { Barcode },
   setup() {
     const route = useRoute()
-    console.log(typeof route.query.cList)
     const cList = typeof route.query.cList === "string" ? [route.query.cList] : route.query.cList
     const lList = typeof route.query.lList === "string" ? [route.query.lList] : route.query.lList
     const codeList = []
     if (lList.length === 0) {
-      cList.forEach((item, index) => {
+      cList.forEach((item) => {
         codeList.push({ code: item })
       })
     } else {
@@ -37,7 +36,7 @@ export default {
 
     function download() {
       try {
-        const imgs = document.querySelectorAll("#barcode")
+        const imgs = document.querySelectorAll(".barcode")
         imgs.forEach((item) => {
           downloadURI(item.src, item.name)
         })

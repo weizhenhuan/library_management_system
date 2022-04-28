@@ -47,19 +47,19 @@ const routes = [{
   path: "/book",
   name: "Bookxzcz",
   component: Layout,
-  redirect: "/borrow/index",
+  redirect: "/book/borrow",
   meta: { title: "Borrow｜Buy", icon: "scan" },
   children: [{
     name: "borrow",
     path: "borrow",
     component: () => import ("@/views/borrow/index"),
-    meta: { title: "Borrow" }
+    meta: { title: "borrow" }
   },
   {
     name: "reture",
     path: "return",
     component: () => import ("@/views/borrow/index"),
-    meta: { title: "Return" }
+    meta: { title: "return" }
   }
   ]
 },

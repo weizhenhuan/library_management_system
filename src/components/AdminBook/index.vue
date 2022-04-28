@@ -240,7 +240,6 @@ export default {
           bookItem.bPublisher = data.publishing
           bookItem.bPublishTime = data.published
           bookItem.bInfo = data.description
-          console.log(res)
         })
         .catch(function(e) {
           ElMessage.error({
@@ -254,11 +253,11 @@ export default {
       if (props.type === "delete") {
         response = deleteBook()
       } else if (props.type === "add") {
-        response = addBook()
+        addBook()
+        return
       } else {
         response = editBook()
       }
-      console.log(route.fullPath)
       response.then(() => {
         change()
         router.replace({
@@ -271,17 +270,25 @@ export default {
       })
     }
 
+    function jump(id, location) {
+      const lList = []
+      id.map(() => {
+        lList.push(location)
+      })
+      router.push({ path: "/download", query: { cList: id, lList: lList, type: "book" }})
+    }
+
     function addBook() {
       bookItem.bBookshelf = bookItem.bBookshelf.join("-")
       return addBookAdmin(bookItem).then((res) => {
         ElMessage.success({
           message: "add success!"
         })
+        jump(res.data.idList, bookItem.bBookshelf)
       })
     }
 
     function deleteBook() {
-      console.log(props.book)
       return deleteBookAdmin({ bId: props.book.bId }).then(() => {
         ElMessage.success({
           message: "delete success"
@@ -298,7 +305,17 @@ export default {
       })
     }
 
-    return { isShow, change, getBookInfo, addBook, bookItem, ISBN, categoryList, locationList, manageBook }
+    return {
+      isShow,
+      change,
+      getBookInfo,
+      addBook,
+      bookItem,
+      ISBN,
+      categoryList,
+      locationList,
+      manageBook,
+      jump }
   }
 }
 </script>

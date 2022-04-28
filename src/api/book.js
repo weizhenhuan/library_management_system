@@ -44,11 +44,11 @@ export function reserveBookByID(userID, bookID) {
  * @param bookID
  * @returns {isSuccess}
  */
-export function cancelBookByID(userID, bookID) {
+export function cancelBookByID(bookID, userID) {
   return request({
     url: "/book/booklist/cancelreserve",
     method: "get",
-    params: { userID, bookID }
+    params: { bookID, userID }
   })
 }
 

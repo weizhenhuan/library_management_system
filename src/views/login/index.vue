@@ -1,7 +1,9 @@
 <template>
-  <div style="text-align:center"><img src="../../assets/book.svg"
-         alt="icon"
-         id="book"></div>
+  <div style="text-align:center">
+    <img src="../../assets/book.svg"
+         class="imgItem"
+         alt="icon">
+  </div>
   <div class="title">
     <h2>Sign in</h2>
   </div>
@@ -17,8 +19,8 @@
           <div class="hint">Username:</div>
           <el-input placeholder="Username"
                     @keyup.enter="beginLogin"
-                    v-model="loginForm.username"
-                    prefix-icon="icon-login_user"></el-input>
+                    v-model="loginForm.username">
+          </el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -27,7 +29,6 @@
                     v-model="loginForm.password"
                     type="password"
                     @keyup.enter="beginLogin"
-                    prefix-icon="icon-login_pwd"
                     show-password></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
@@ -90,7 +91,6 @@ export default {
         this.loading = true
 
         this.$store.dispatch("user/login", this.loginForm).then(() => {
-          console.dir(ElMessage)
           this.loading = false
           ElMessage.success({
             message: "Congrats, this is a success message.",
@@ -111,20 +111,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 * {
   font-family: "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji";
-}
-#book {
-  width: 80px;
-  height: 80px;
-  margin-top: 50px;
-  margin-left: 0 !important;
-}
-.login_container {
-  background-size: cover;
-  height: 100%;
 }
 .title {
   color: black;
@@ -132,69 +122,71 @@ export default {
   font-size: 24px;
   letter-spacing: 2px;
 }
-.login_box {
-  width: 400px;
-  height: 300px;
-  margin: 0 auto;
-  font-size: 16px;
-  background-color: rgb(245, 246, 249);
-  border: 1.5px solid rgb(219, 221, 227);
-  border-radius: 8px;
+.imgItem {
+  width: 80px;
+  height: 80px;
+  margin-top: 50px;
+  margin-left: 0 !important;
 }
+.login_container {
+  background-size: cover;
+  .login_box {
+    width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    font-size: 16px;
+    background-color: rgb(245, 246, 249);
+    border: 1.5px solid rgb(219, 221, 227);
+    border-radius: 8px;
+
+    .login-form {
+      padding: 5px 12px;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--color-fg-default);
+      vertical-align: middle;
+      background-color: var(--color-canvas-default);
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      border: 1px solid var(--color-border-default);
+      border-radius: 8px;
+      outline: none;
+      box-shadow: var(--color-primer-shadow-inset);
+      .hint {
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: black;
+        padding-left: 2px;
+      }
+
+      .register {
+        color: black;
+        text-align: center;
+        font-size: 16px;
+        letter-spacing: 1px;
+        margin-top: 20px;
+      }
+      .router {
+        color: #0969da;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
 el-input {
-  padding: 5px 12px !important;
+  padding: 5px 5px !important;
   font-size: 16px !important;
   line-height: 20px !important;
 }
-.el-form {
-  padding: 5px 12px;
-  font-size: 16px;
-  line-height: 20px;
-  color: var(--color-fg-default);
-  vertical-align: middle;
-  background-color: var(--color-canvas-default);
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  border: 1px solid var(--color-border-default);
-  border-radius: 8px;
-  outline: none;
-  box-shadow: var(--color-primer-shadow-inset);
-}
+
 .el-button {
   margin-top: 10px;
   width: 100%;
   font-size: 20 px;
   letter-spacing: 5px;
 }
-.code {
-  width: 45%;
-}
-img {
-  /* style="width: 100px; height: 30px; margin-left:5px;vertical-align: middle;" */
-  display: line-inline;
-  width: 45%;
-  height: 28px;
-  margin-left: 10px;
-  vertical-align: middle;
-  border-radius: 3px;
-}
-.register {
-  color: black;
-  text-align: center;
-  font-size: 16px;
-  letter-spacing: 1px;
-  margin-top: 20px;
-}
-.router {
-  color: #0969da;
-  text-decoration: none;
-}
-.hint {
-  font-size: 16px;
-  letter-spacing: 1px;
-  color: black;
-  padding-left: 2px;
-}
+
 #log_in_button {
   background-color: rgb(39, 151, 62) !important;
   border-color: rgb(39, 151, 62) !important;

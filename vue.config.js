@@ -33,7 +33,7 @@ module.exports = {
     },
     plugins: [
       require("unplugin-auto-import/webpack")({
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver({ importStyle: false })]
       }),
       require("unplugin-vue-components/webpack")({
         resolvers: [ElementPlusResolver()]

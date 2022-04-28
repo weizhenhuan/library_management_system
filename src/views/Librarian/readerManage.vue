@@ -7,6 +7,7 @@
           <el-input placeholder="please input"
                     v-model="query"
                     clearable
+                    @keyup.enter="load"
                     @clear="load">
             <template #append>
               <el-button @click="load"
@@ -28,22 +29,20 @@
       <!-- 用户列表区 -->
       <el-table :data="userlist"
                 border
+                v-loading="loading"
                 stripe>
         <el-table-column label="Number"
                          prop="rName"></el-table-column>
         <el-table-column label="Password"
-                         prop="rPwd"></el-table-column>
+                         prop="rPwd">
+          *******
+        </el-table-column>
         <el-table-column label="Contact"
                          prop="rContact"></el-table-column>
         <el-table-column label="Name"
                          prop="rRealName"></el-table-column>
-        <el-table-column label="Barcode"
-                         width="400"
-                         prop="id">
-          <template #default="scope">
-            <Barcode :code="scope.row.rId"
-                     :text="scope.row.rId+''" />
-          </template>
+        <el-table-column label="ID"
+                         prop="rId">
         </el-table-column>
         <el-table-column label="Operation"
                          width="200">
@@ -164,12 +163,11 @@
 <script>
 import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin"
 import { ElMessage } from "element-plus"
-import Barcode from "@/components/Barcode"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"
 
 export default {
-  components: { Barcode, UploadExcelComponent },
+  components: { UploadExcelComponent },
   setup() {
     const router = useRouter()
     function jump(id) {
@@ -218,14 +216,17 @@ export default {
     this.load()
   },
   methods: {
+    refresh() {
+      this.$router.replace({
+        path: "/redirect" + this.$route.fullPath
+      })
+    },
     load() {
-      console.log(this.query, this.pagenum, this.pagesize)
       this.loading = true
       getUserList(
         this.query,
         this.pagenum,
-        this.pagesize
-      ).then((res) => {
+        this.pagesize).then((res) => {
         this.userlist = res.data.users
         this.total = res.data.total
         this.loading = false
@@ -239,8 +240,7 @@ export default {
 
     add() {
       this.loading = true
-      addUser(this.addForm
-      ).then((res) => {
+      addUser(this.addForm).then((res) => {
         this.rName = res.data.rName
         this.rPwd = res.data.rPwd
         this.addDialogVisible = false
@@ -248,6 +248,7 @@ export default {
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         this.addDialogVisible = false
@@ -268,6 +269,7 @@ export default {
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         this.editDialogVisible = false
@@ -284,6 +286,7 @@ export default {
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         ElMessage.error({
@@ -315,12 +318,12 @@ export default {
       return false
     },
     handleSuccess({ results, header }) {
-      console.log(results)
-      addUserList(results).then(() => {
+      addUserList(results).then((res) => {
         ElMessage.success({
           message: "upload success"
         })
         this.loading = false
+        this.jump(res.data.idList)
       }).catch((res) => {
         this.loading = false
         ElMessage.error({

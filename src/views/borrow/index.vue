@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="borrow-container">
     <input ref="uploadInput"
            class="upload-input"
            type="number"
@@ -29,6 +29,7 @@
       </el-col>
     </el-row>
     <el-table :data=current_book
+              v-loading="loading"
               v-if="current_book.length"
               class="bookInfo">
       <el-table-column prop="bID"
@@ -60,6 +61,7 @@ import { onBeforeRouteLeave, useRoute } from "vue-router"
 export default {
   name: "Borrrow",
   setup() {
+    const loading = ref(false)
     const bStatusMap = ["borrowed", "reserved", "available"]
     const route = useRoute()
     const store = useStore()
@@ -68,28 +70,30 @@ export default {
     })
 
     const current_book = reactive([])
-    const studentID = ref(store.getters.token)
+    const studentID = store.getters.token > 900000000 ? ref(store.getters.token) : ref()
     const bookID = ref("")
     function borrow() {
+      loading.value = true
       if (route.meta.title === "borrow") {
         for (let i = 0; i < current_book.length; i++) {
-          if (current_book[i].bStatus !== -1 && studentID.value.length && i !== current_book.length) {
+          if (current_book[i].bStatus !== -1 && studentID.value.length && i + 1 !== current_book.length) {
             borrowBookByID(current_book[i].bID, studentID.value).catch((res) => {
               ElMessage.error(res.message)
             })
           } else if (i + 1 === current_book.length) {
-            console.log(current_book)
             borrowBookByID(current_book[i].bID, studentID.value).then(() => {
-              current_book.length = 0
               ElMessage.success("borrow success")
+              current_book.length = 0
+              loading.value = false
             }).catch((res) => {
               ElMessage.error(res.message)
+              loading.value = false
             })
           }
         }
       } else {
         for (let i = 0; i < current_book.length; i++) {
-          if (current_book[i].bStatus !== -1 && studentID.value.length && i !== current_book.length) {
+          if (current_book[i].bStatus === -1 && studentID.value.length && i + 1 !== current_book.length) {
             returnBookByID(current_book[i].bID, studentID.value).catch((res) => {
               ElMessage.error(res.message)
             })
@@ -97,8 +101,10 @@ export default {
             returnBookByID(current_book[i].bID, studentID.value).then(() => {
               ElMessage.success("return success")
               current_book.length = 0
+              loading.value = false
             }).catch((res) => {
               ElMessage.error(res.message)
+              loading.value = false
             })
           }
         }
@@ -108,21 +114,24 @@ export default {
 
     function handleCode() {
       if (uploadInput.value.value.length === 9) {
+        loading.value = true
         if (uploadInput.value.value[0] !== "9") {
           getBookByID(uploadInput.value.valueAsNumber).then(res => {
             bookID.value = res.data.bID
-            console.log(current_book)
             current_book.push(res.data)
+            loading.value = false
           }).catch((res) => {
             ElMessage.error(res.message)
+            loading.value = false
           })
         } else {
-          if (store.getters.roles.length) {
+          if (studentID.value) {
             ElMessage.error("login already")
           } else {
             ElMessage.success("add rId success")
             studentID.value = uploadInput.value.valueAsNumber
           }
+          loading.value = false
         }
         uploadInput.value.value = ""
       }
@@ -138,7 +147,8 @@ export default {
       uploadInput,
       handleCode,
       route,
-      bStatusMap
+      bStatusMap,
+      loading
     }
   }
 
@@ -146,6 +156,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.borrow-container {
+  padding-left: 30px;
+}
 .upload-input {
   //display: none;
   //visibility: hidden;

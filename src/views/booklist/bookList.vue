@@ -7,12 +7,7 @@
                   @keyup.enter="load"
                   class="search_input" />
       </el-col>
-      <span style="
-          display: block;
-          line-height: 40px;
-          text-align: center;
-          width: 10px;
-        ">&nbsp;&nbsp;&nbsp;</span>
+      &nbsp;&nbsp;&nbsp;
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
@@ -21,8 +16,7 @@
       </el-col>
       <el-col :span="3">
         <el-button type="primary"
-                   @click="load"
-                   :loading="loading">
+                   @click="load">
           <template v-slot:icon>
             <svg-icon icon-class="search_light" />
           </template>
@@ -33,10 +27,13 @@
     <div class="booklist-container"
          v-if="tableData.length">
       <el-table :data="tableData"
+                v-loading="loading"
                 border
                 stripe
                 size="large"
                 :header-cell-style="{color:'#606266'}"
+                :expand-row-keys="expands"
+                :row-key="getRowKeys"
                 @expand-change="expandChange">
         <el-table-column type="expand">
           <template #default="props">
@@ -89,13 +86,6 @@
                       <svg-icon icon-class="book"></svg-icon>
                       <span>reserve</span>
                     </el-button>
-                    <el-button type="danger"
-                               class="innner-item"
-                               :disabled="item.bStatus !== 0"
-                               @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
-                      <svg-icon icon-class="book"></svg-icon>
-                      <span>cancel</span>
-                    </el-button>
                   </span>
                 </div>
               </el-scrollbar>
@@ -135,17 +125,19 @@
 
     <Reserve v-model:showReserve="showReserve"
              type="reserve"
+             v-if="showReserve"
              :book='currBook' />
   </div>
 </template>
 
 <script>
 import { getBookByNameAndISBN, getBooksDetailByISBN } from "@/api/book"
-import Reserve from "@/components/Reserve"
 import { ElMessage } from "element-plus"
 export default {
   name: "BookList",
-  components: { Reserve },
+  components: {
+    Reserve: () => import("@/components/Reserve")
+  },
   data() {
     return {
       bStatusMap: null,
@@ -158,12 +150,12 @@ export default {
       pageNum: 1,
       showReserve: false,
       currBook: {},
-      loading: false
+      loading: false,
+      expands: [1]
     }
   },
   created() {
     this.load()
-    console.log(this.$store.getters.roles)
   },
   methods: {
     load() {
@@ -183,8 +175,14 @@ export default {
     handleCurrentChange() {
       this.load()
     },
+
+    getRowKeys(row) {
+      return row.ISBN
+    },
     expandChange(row, expandedRows) {
       if (expandedRows.length > 0) {
+        this.expands = [row.ISBN]
+
         getBooksDetailByISBN(row.ISBN).then((res) => {
           this.bookItems = res.bookItems
         }).catch((res) => {

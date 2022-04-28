@@ -4,9 +4,10 @@
              :model-value="isShow"
              :before-close="change"
              destroy-on-close>
-    <div ref="htmlcon"></div>
-    <div>
-      <span>{{book}}</span>
+    <div ref="htmlcon">
+      <div>
+        <span>{{book}}</span>
+      </div>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -20,7 +21,7 @@
 
 <script>
 import { ref, toRef } from "@vue/reactivity"
-import { payFine } from "@/api/user"
+import { payFine, payStatus } from "@/api/user"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 
@@ -50,14 +51,23 @@ export default {
     function returnBook() {
       if (props.book.overdue) {
         payFine({ bookID: props.book.id, userID: store.getters.token }).then((res) => {
-          console.dir(htmlcon.value)
-          htmlcon.value.innerHTML = res
-          /* change()
-          router.replace({
-            path: "/redirect" + route.fullPath
-          }) */
+          htmlcon.value.innerHTML = res.data
+          polling({ fid: res.headers.fid })
         })
       }
+    }
+
+    function polling(fid) {
+      setTimeout(() => {
+        payStatus(fid).then(() => {
+          change()
+          router.replace({
+            path: "/redirect" + route.fullPath
+          })
+        }).catch(() => {
+          polling(fid)
+        })
+      }, 2000)
     }
     return { isShow, change, returnBook, htmlcon }
   }

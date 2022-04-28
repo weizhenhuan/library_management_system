@@ -12,13 +12,13 @@ const users = {
   "admin-token": {
     roles: ["admin"],
     introduction: "I am a super administrator",
-    avatar: "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+    avatar: "https://pan.bilnn.cn/api/v3/file/sourcejump/KlbkGAiQ/8bJVGYwb_rgg6xV4RRziLnYVJEUciVnkYL6cLlF9E-k*",
     name: "Super Admin"
   },
   "customer-token": {
     roles: ["customer"],
     introduction: "I am an customer",
-    avatar: "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+    avatar: "https://pan.bilnn.cn/api/v3/file/sourcejump/KlbkGAiQ/8bJVGYwb_rgg6xV4RRziLnYVJEUciVnkYL6cLlF9E-k*",
     name: "Normal customer"
   }
 }
@@ -123,29 +123,50 @@ module.exports = [
             start: new Date("2021-3-2"),
             end: new Date("2022-5-15"),
             bookName: "算法从入门到入土",
-            id: "xcdfa1324",
+            id: 425421324,
             overdue: false
           },
           {
             start: new Date("2022-4-1"),
             end: new Date("2022-4-3"),
             bookName: "计网从入门到入土",
-            id: "xcdfac1324",
+            id: 425421325,
             overdue: true
           },
           {
             start: new Date("2022-4-1"),
             end: new Date("2022-5-19"),
             bookName: "前端从入门到入土",
-            id: "xcdfa13s24",
+            id: 425421344,
             overdue: false
           },
           {
             start: new Date("2022-3-1"),
             end: new Date("2022-5-18"),
             bookName: "后端从入门到入土",
-            id: "xcdfaz1324",
+            id: 425421389,
             overdue: false
+          }
+        ]
+      }
+    }
+  },
+  {
+    url: /\/user\/reserving\.*/,
+    type: "get",
+    response: () => {
+      return {
+        code: 0,
+        data: [
+          {
+            bookName: "算法从入门到入土",
+            id: 100000145,
+            leftTime: 200
+          },
+          {
+            bookName: "计网从入门到入土",
+            id: 100000147,
+            leftTime: 120
           }
         ]
       }
@@ -159,13 +180,13 @@ module.exports = [
         code: 0,
         data: [
           {
-            time: "2018-02-19 12:00:00",
+            time: "2018-02-30 12:00:00",
             bookName: "前端从入门到入土",
             action: "borrow",
             days: "10"
           },
           {
-            time: "2018-02-19 12:00:00",
+            time: "2018-02-21 12:00:00",
             bookName: "前端从入门到入土",
             action: "renew",
             days: "10"
@@ -174,12 +195,16 @@ module.exports = [
             time: "2018-02-19 12:00:00",
             bookName: "前端从入门到入土",
             action: "return"
-
           },
           {
-            time: "2018-02-19 12:00:00",
+            time: "2018-02-17 12:00:00",
             bookName: "前端从入门到入土",
-            action: "buy"
+            action: "reserve"
+          },
+          {
+            time: "2018-02-16 12:00:00",
+            bookName: "前端从入门到入土",
+            action: "pay"
           }]
       }
     }

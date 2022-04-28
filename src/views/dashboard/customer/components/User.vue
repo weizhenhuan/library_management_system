@@ -102,14 +102,13 @@ export default {
 
 <style scoped lang='less'>
 .user-container {
-  margin: 30px 10px 0 20px;
+  margin: 30px 0 0 10px;
   .user-info {
     .avatar {
       display: block;
-      // width: 100px;
+      width: 100px;
       margin: 0 auto 10px;
-      padding: 0 !important;
-      border-radius: 50%;
+      border-radius: 50px;
     }
     .user-name {
       margin: 0 auto;

@@ -4,17 +4,18 @@
       <el-col :span="8">
         <el-input v-model="input_book"
                   placeholder="please input book message"
+                  @keyup.enter="load"
                   class="search_input">
           <template #append>
             <el-select v-model="searchTag"
                        :placeholder="searchTag"
                        style="width: 110px">
-              <el-option label="bookId"
-                         value="1" />
+              <el-option label="booId"
+                         value="0" />
               <el-option label="bookName"
-                         value="2" />
+                         value="1" />
               <el-option label="ISBN"
-                         value="3" />
+                         value="2" />
             </el-select>
           </template>
         </el-input>
@@ -22,8 +23,7 @@
       <el-col :span="2"
               :offset="1">
         <el-button type="primary"
-                   @click="load"
-                   :loading="loading">
+                   @click="load">
           <template v-slot:icon>
             <svg-icon icon-class="search_light" />
           </template>
@@ -31,8 +31,7 @@
       </el-col>
       <el-col :span="2">
         <el-button type="primary"
-                   @click="() => {showAdminBook = true; adminBookType = 'add'}"
-                   :loading="loading">
+                   @click="() => {showAdminBook = true; adminBookType = 'add'}">
           <template v-slot:icon>
             <svg-icon icon-class="add" />
           </template>
@@ -46,6 +45,7 @@
                 border
                 stripe
                 size="large"
+                v-loading="loading"
                 :header-cell-style="{ color: '#606266' }">
         <el-table-column type="expand">
           <template #default="props">
@@ -146,15 +146,16 @@
 
 <script>
 import { getBookList } from "@/api/admin"
-import AdminBook from "@/components/AdminBook"
+
 import { ElMessage } from "element-plus"
 
 export default {
   name: "BookManagement",
-  components: { AdminBook },
+  components: { AdminBook: () => import("@/components/AdminBook")
+  },
   data() {
     return {
-      searchTag: "bookName",
+      searchTag: "",
       tableData: [],
       input_book: "",
       total: 100,
@@ -178,7 +179,6 @@ export default {
         this.pageSize,
         this.pageNum
       ).then((res) => {
-        // console.log(typeof res.data.bookList[0].bId)
         this.tableData = res.data.bookList
         this.total = res.data.total
         this.loading = false
