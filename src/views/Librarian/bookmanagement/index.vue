@@ -2,7 +2,7 @@
   <div>
     <el-row class="search-container">
       <el-col :span="8">
-        <el-input v-model="input_book_isbn"
+        <el-input v-model="input_book"
                   placeholder="please input book message"
                   class="search_input">
           <template #append>
@@ -56,18 +56,13 @@
                      alt="cover"
                      style="width: 200px; " />
                 <ul class="bookinfo">
-                  <li>
-                    <span style="font-weight: bold">Title:</span>{{ props.row.bName }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">Author:</span>{{ props.row.bAuthor }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">Classification:</span>{{ props.row.bType }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">ISBN:</span>{{ props.row.ISBN }}
-                  </li>
+                  <li><span style="font-weight:bold">Title:</span>{{ props.row.bName }}</li>
+                  <li><span style="font-weight:bold">Author:</span>{{ props.row.bAuthor }}</li>
+                  <li><span style="font-weight:bold">Classification:</span>{{ props.row.bType }}</li>
+                  <li><span style="font-weight:bold">ISBN:</span>{{ props.row.ISBN }}</li>
+                  <li><span style="font-weight:bold">Price:</span>{{ props.row.bPrice }}</li>
+                  <li><span style="font-weight:bold">Publisher:</span>{{ props.row.bPublisher }}</li>
+                  <li><span style="font-weight:bold">PublishTime:</span>{{ props.row.bPublishTime }}</li>
                 </ul>
               </el-col>
               <el-col :span="12"
@@ -158,8 +153,7 @@ export default {
     return {
       searchTag: "bookName",
       tableData: [],
-      input_book_name: "",
-      input_book_isbn: "",
+      input_book: "",
       total: 100,
       pageSize: 10,
       pageNum: 1,
@@ -176,8 +170,8 @@ export default {
     load() {
       this.loading = true
       getBookList(
-        this.input_book_name,
-        this.input_book_isbn,
+        this.searchTag,
+        this.input_book,
         this.pageSize,
         this.pageNum
       ).then((res) => {

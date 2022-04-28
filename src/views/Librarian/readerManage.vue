@@ -55,7 +55,7 @@
               </template>
             </el-button>
             <el-button type="danger"
-                       @click="_delete">
+                       @click="_delete(scope.row.rName)">
               <template v-slot:icon>
                 <svg-icon icon-class="delete" />
               </template>
@@ -72,7 +72,7 @@
       </el-table>
       <!-- 分页 -->
       <el-pagination @current-change="handleCurrentChange"
-                     :currentPage="pagenum"
+                     v-model:currentPage="pagenum"
                      :page-size="pagesize"
                      layout="total, prev, pager, next, jumper"
                      :total="total">
@@ -94,7 +94,7 @@
                       prop="rPwd">
           <el-input v-model="addForm.rPwd"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
+        <el-form-item label="Name"
                       prop="rRealName">
           <el-input v-model="addForm.rRealName"></el-input>
         </el-form-item>
@@ -134,7 +134,7 @@
                       prop="rPwd">
           <el-input v-model="editForm.rPwd"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
+        <el-form-item label="Name"
                       prop="rRealName">
           <el-input v-model="editForm.rRealName"></el-input>
         </el-form-item>
@@ -219,6 +219,7 @@ export default {
   },
   methods: {
     load() {
+      console.log(this.query, this.pagenum, this.pagesize)
       this.loading = true
       getUserList(
         this.query,
@@ -276,10 +277,9 @@ export default {
       })
     },
 
-    _delete() {
+    _delete(item) {
       this.loading = true
-      deleteUser(this.deleteForm
-      ).then(() => {
+      deleteUser({ username: item }).then(() => {
         ElMessage.success({
           message: "success"
         })

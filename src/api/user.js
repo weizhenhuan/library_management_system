@@ -37,7 +37,7 @@ export function getInfo(token) {
   return request({
     url: "/user/getInfo",
     method: "get",
-    params: { userToken: token }
+    params: { token: token }
   })
   /* return new Promise((res,rej)=>{
     res({
@@ -75,5 +75,14 @@ export function dynamic(token) {
     url: "/user/dynamic",
     method: "get",
     params: { userToken: token }
+  })
+}
+
+export function payFine(data) {
+  return request({
+    url: "/pay",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }

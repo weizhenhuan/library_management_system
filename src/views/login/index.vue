@@ -13,6 +13,7 @@
         <el-form-item prop="username">
           <div class="tishi">Username:</div>
           <el-input placeholder="Username"
+                    @keyup.enter="beginLogin"
                     v-model="loginForm.username"
                     prefix-icon="icon-login_user"></el-input>
         </el-form-item>
@@ -22,6 +23,7 @@
           <el-input placeholder="Password"
                     v-model="loginForm.password"
                     type="password"
+                    @keyup.enter="beginLogin"
                     prefix-icon="icon-login_pwd"
                     show-password></el-input>
         </el-form-item>
@@ -59,8 +61,8 @@ export default {
       loginForm: {
         // username: "customer",
         // password: "12345678",
-        username: "Alice",
-        password: "a12345678"
+        username: "19030500666",
+        password: "123456"
       },
       loading: false,
       rules: {

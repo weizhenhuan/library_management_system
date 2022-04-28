@@ -58,11 +58,11 @@ export function cancelBookByID(userID, bookID) {
  * @param userToken
  * @returns {isSuccess}
  */
-export function borrowBookByID(bookID, userToken, days) {
+export function borrowBookByID(bookID, userToken) {
   return request({
     url: "/user/borrow",
     method: "get",
-    params: { bookID, userToken, days }
+    params: { bookID, userToken }
   })
 }
 

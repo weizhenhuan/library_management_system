@@ -39,8 +39,11 @@
                        label="Author" />
       <el-table-column prop="bLocation"
                        label="Location" />
-      <el-table-column prop="bStatus"
-                       label="Status" />
+      <el-table-column label="Status">
+        <template #default="scope">
+          {{bStatusMap[scope.row.bStatus+1]}}
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -57,6 +60,7 @@ import { onBeforeRouteLeave, useRoute } from "vue-router"
 export default {
   name: "Borrrow",
   setup() {
+    const bStatusMap = ["borrowed", "reserved", "available"]
     const route = useRoute()
     const store = useStore()
     onBeforeRouteLeave(async(to, from) => {
@@ -68,33 +72,37 @@ export default {
     const bookID = ref("")
     function borrow() {
       if (route.meta.title === "borrow") {
-        try {
-          for (let i = 0; i < current_book.length; i++) {
-            if (current_book[i].bStatus !== -1) {
-              borrowBookByID(current_book[i].bID, studentID.value).catch((res) => {
-                throw (new Error("error"))
-              })
-            }
+        for (let i = 0; i < current_book.length; i++) {
+          if (current_book[i].bStatus !== -1 && studentID.value.length && i !== current_book.length) {
+            borrowBookByID(current_book[i].bID, studentID.value).catch((res) => {
+              ElMessage.error(res.message)
+            })
+          } else if (i + 1 === current_book.length) {
+            console.log(current_book)
+            borrowBookByID(current_book[i].bID, studentID.value).then(() => {
+              current_book.length = 0
+              ElMessage.success("borrow success")
+            }).catch((res) => {
+              ElMessage.error(res.message)
+            })
           }
-          ElMessage.success("borrow success")
-        } catch {
-          ElMessage.error("borrow failed")
         }
       } else {
-        try {
-          for (let i = 0; i < current_book.length; i++) {
-            if (current_book[i].bStatus === -1) {
-              returnBookByID(current_book[i].bID, studentID.value).catch((res) => {
-                throw (new Error("error"))
-              })
-            }
+        for (let i = 0; i < current_book.length; i++) {
+          if (current_book[i].bStatus !== -1 && studentID.value.length && i !== current_book.length) {
+            returnBookByID(current_book[i].bID, studentID.value).catch((res) => {
+              ElMessage.error(res.message)
+            })
+          } else if (i + 1 === current_book.length) {
+            returnBookByID(current_book[i].bID, studentID.value).then(() => {
+              ElMessage.success("return success")
+              current_book.length = 0
+            }).catch((res) => {
+              ElMessage.error(res.message)
+            })
           }
-          ElMessage.success("borrow success")
-        } catch {
-          ElMessage.error("borrow failed")
         }
       }
-      current_book.length = 0
     }
     const uploadInput = ref(null)
 
@@ -102,19 +110,21 @@ export default {
       if (uploadInput.value.value.length === 9) {
         if (uploadInput.value.value[0] !== "9") {
           getBookByID(uploadInput.value.valueAsNumber).then(res => {
-            uploadInput.value.value = ""
             bookID.value = res.data.bID
+            console.log(current_book)
             current_book.push(res.data)
           }).catch((res) => {
-            ElMessage.error(res.msg)
+            ElMessage.error(res.message)
           })
         } else {
           if (store.getters.roles.length) {
             ElMessage.error("login already")
           } else {
+            ElMessage.success("add rId success")
             studentID.value = uploadInput.value.valueAsNumber
           }
         }
+        uploadInput.value.value = ""
       }
     }
     // 配合@blur实现input自动聚焦
@@ -127,7 +137,8 @@ export default {
       bookID,
       uploadInput,
       handleCode,
-      route
+      route,
+      bStatusMap
     }
   }
 

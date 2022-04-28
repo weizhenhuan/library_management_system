@@ -128,7 +128,7 @@ export default {
   setup(props, { emit }) {
     const bookItem = reactive({
       bPrice: 0,
-      bType: "",
+      bType: "jkl",
       bBookshelf: "",
       bCount: 0
     })
@@ -281,7 +281,8 @@ export default {
     }
 
     function deleteBook() {
-      return deleteBookAdmin(props.book.bId).then(() => {
+      console.log(props.book)
+      return deleteBookAdmin({ bId: props.book.bId }).then(() => {
         ElMessage.success({
           message: "delete success"
         })

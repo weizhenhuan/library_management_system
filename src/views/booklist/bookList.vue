@@ -4,6 +4,7 @@
       <el-col :span="8">
         <el-input v-model="input_book_name"
                   placeholder="please input book name"
+                  @keyup.enter="load"
                   class="search_input" />
       </el-col>
       <span style="
@@ -15,6 +16,7 @@
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
+                  @keyup.enter="load"
                   class="search_input" />
       </el-col>
       <el-col :span="3">
@@ -59,7 +61,7 @@
                 </ul>
               </el-col>
 
-              <el-scrollbar style="margin-left: 100px">
+              <el-scrollbar style="margin-left: 100px;">
                 <div v-for="item in bookItems"
                      :key="item"
                      class="scrollbar-item">
@@ -71,14 +73,15 @@
                     <span class="innner-item"
                           style="font-weight:bold">Location:</span>{{ item.bLocation }}
                     <span class="innner-item"
-                          style="font-weight:bold">status:</span>
-                    <el-tag :key="tag"
-                            :type="item.bStatus===1?'success':'info'">
-                      {{ bStatusMap.get(item.bStatus) }}
-                    </el-tag>
+                          style="font-weight:bold">status:
+                      <el-tag :type="item.bStatus===1?'success':'info'">
+                        {{ bStatusMap.get(item.bStatus) }}
+                      </el-tag>
+                    </span>
+
                   </div>
-                  <span style="float: right; border-width: 2px"
-                        v-if="this.$store.getters.roles[0]!='customer'">
+                  <span style="float: right;"
+                        v-if="this.$store.getters.roles[0]==='customer'">
                     <el-button type="primary"
                                class="innner-item"
                                :disabled="item.bStatus !== 1"
@@ -168,7 +171,6 @@ export default {
       this.bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"]])
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
-        console.log(this.tableData)
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {

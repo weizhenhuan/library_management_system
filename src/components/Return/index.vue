@@ -1,11 +1,12 @@
 <template>
   <el-dialog title="Return Book"
-             width="30%"
+             width="70%"
              :model-value="isShow"
              :before-close="change"
              destroy-on-close>
+    <div ref="htmlcon"></div>
     <div>
-      <span>是否确认还书？</span>
+      <span>{{book}}</span>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -18,8 +19,8 @@
 </template>
 
 <script>
-import { toRef } from "@vue/reactivity"
-import { returnBookByID } from "@/api/book"
+import { ref, toRef } from "@vue/reactivity"
+import { payFine } from "@/api/user"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 
@@ -44,17 +45,21 @@ export default {
     function change() {
       emit("update:showReturn", false)
     }
+
+    const htmlcon = ref(null)
     function returnBook() {
-      if (!props.book.overdue) {
-        returnBookByID(props.book.id, store.getters.token).then(() => {
-          change()
+      if (props.book.overdue) {
+        payFine({ bookID: props.book.id, userID: store.getters.token }).then((res) => {
+          console.dir(htmlcon.value)
+          htmlcon.value.innerHTML = res
+          /* change()
           router.replace({
             path: "/redirect" + route.fullPath
-          })
+          }) */
         })
       }
     }
-    return { isShow, change, returnBook }
+    return { isShow, change, returnBook, htmlcon }
   }
 }
 </script>

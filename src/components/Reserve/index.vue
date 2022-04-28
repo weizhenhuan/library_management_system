@@ -54,7 +54,7 @@ export default {
     function reserveBook() {
       console.log(props.book.isReserved)
       if (!props.book.isReserved) {
-        reserveBookByID(props.book.id, store.getters.token).then((res) => {
+        reserveBookByID(store.getters.token, props.book.id).then((res) => {
           ElMessage.success({
             message: "successfully reserved!",
             type: "success"

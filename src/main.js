@@ -5,7 +5,7 @@ import store from "./store"
 
 import "@/less/index.less"
 
-import "@/mock"
+// import "@/mock"
 
 import SvgIcon from "@/components/SvgIcon"
 import "./icons"
