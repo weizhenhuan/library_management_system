@@ -13,6 +13,9 @@
       <svg-icon icon-class="refresh"
                 class="refresh"
                 @click="refresh" />
+      <svg-icon icon-class="back"
+                class="refresh"
+                @click="back" />
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
@@ -29,10 +32,10 @@
             </el-dropdown-item>
             <el-dropdown-item @click="logincus">
               <span style="display: block">Log In|customer</span>
-            </el-dropdown-item> -->
+            </el-dropdown-item>
             <router-link to="/profile/index">
               <el-dropdown-item divided>Profile</el-dropdown-item>
-            </router-link>
+            </router-link> -->
             <router-link to="/">
               <el-dropdown-item>Dashboard</el-dropdown-item>
             </router-link>
@@ -66,6 +69,10 @@ export default {
 
     function toggleSideBar() {
       store.dispatch("app/toggleSideBar")
+    }
+
+    function back() {
+      router.back()
     }
 
     function refresh() {
@@ -105,7 +112,8 @@ export default {
     }
     return { toggleSideBar, isCollapse, refresh, logout,
     // loginadmin, logincus,
-      login }
+      login,
+      back }
   }
 }
 </script>

@@ -48,7 +48,7 @@ const routes = [{
   name: "Bookxzcz",
   component: Layout,
   redirect: "/book/borrow",
-  meta: { title: "Borrow｜Buy", icon: "scan" },
+  meta: { title: "Borrow｜Return", icon: "scan" },
   children: [{
     name: "borrow",
     path: "borrow",
@@ -155,16 +155,6 @@ export const asyncRoutes = [{
     name: "DirectivePermission",
     meta: {
       title: "Reader Manage",
-      roles: ["admin"]
-    }
-  },
-  {
-    path: "categoryManage",
-    component: () =>
-      import ("@/views/Librarian/categoryManage"),
-    name: "RolePermission",
-    meta: {
-      title: "Category Manage",
       roles: ["admin"]
     }
   }]

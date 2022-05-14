@@ -7,7 +7,8 @@ const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: '/',
   // baseURL: "http://127.0.0.1:4523/mock/841301",
-  baseURL: "http://124.221.124.132:8080",
+  // baseURL: "http://124.221.124.132:8080",
+  baseURL: process.env.NODE_ENV === "development" ? "http://124.221.124.132:8080" : "https://violet-umberto.com/app/api",
   // baseURL: "http://10.181.217.183:8080",
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout

@@ -9,7 +9,7 @@
            class="reserve-item clearfix"
            :key="book.id">
         <div class="reserve-info">
-          您预约的《{{book.bookName}}》还剩{{book.leftTime}}分
+          《{{book.bookName}}》has{{parseM2Time(book.leftTime)}}left
         </div>
 
         <el-button type="danger"
@@ -94,7 +94,7 @@
           </div>
           <div v-else>
             <span>
-              pay《{{ activity.bookName }}》pine
+              reserve《{{ activity.bookName }}》
             </span>
           </div>
         </el-timeline-item>
@@ -139,8 +139,15 @@ export default {
     const borrowBooks = reactive([])
     const dynamics = reactive([])
 
+    function parseM2Time(lefttime) {
+      var lefth = Math.floor(lefttime / (60 * 60) % 24)
+      var leftm = Math.floor(lefttime / (60) % 60)
+      return " " + lefth + " hours " + leftm + " minutes "
+    }
+
     getReserving(store.getters.token).then(res => {
       res.data.forEach((item) => {
+        item.leftTime *= 60
         reserveBooks.push(item)
       })
     })
@@ -185,7 +192,8 @@ export default {
       dynamics,
       icon,
       bookState,
-      reserveBooks }
+      reserveBooks,
+      parseM2Time }
   }
 }
 </script>

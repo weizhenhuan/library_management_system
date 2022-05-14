@@ -86,24 +86,18 @@
       <el-form :model="addForm"
                label-width="100px">
         <el-form-item label="User Name"
+                      :rules="[{ required: true, message: 'User Name is required' },]"
                       prop="rName">
           <el-input v-model="addForm.rName"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
-                      prop="rPwd">
-          <el-input v-model="addForm.rPwd"></el-input>
-        </el-form-item>
         <el-form-item label="Name"
+                      :rules="[{ required: true, message: 'User Name is required' },]"
                       prop="rRealName">
           <el-input v-model="addForm.rRealName"></el-input>
         </el-form-item>
         <el-form-item label="Contact"
                       prop="rContact">
           <el-input v-model="addForm.rContact"></el-input>
-        </el-form-item>
-        <el-form-item label="Photo"
-                      prop="rPhoto">
-          <el-input v-model="addForm.rPhoto"></el-input>
         </el-form-item>
         <el-form-item label="Intro"
                       prop="rIntro">
@@ -192,7 +186,7 @@ export default {
 
       addForm: {
         rName: "",
-        rPwd: "",
+        rPwd: "123456",
         rContact: "",
         rRealName: "",
         rPhoto: "",
@@ -242,7 +236,7 @@ export default {
       this.loading = true
       addUser(this.addForm).then((res) => {
         this.rName = res.data.rName
-        this.rPwd = res.data.rPwd
+        this.rPwd
         this.addDialogVisible = false
         ElMessage.success({
           message: "success"

@@ -30,7 +30,7 @@ export function throttle(fn, delay) {
 }
 // 防抖函数
 export function debounce(func, delay) {
-  let timeout
+  let timeout = null
   return function() {
     const context = this
     const args = arguments

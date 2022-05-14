@@ -6,7 +6,7 @@
              destroy-on-close>
     <div ref="htmlcon">
       <div>
-        <span>{{book}}</span>
+        <span>《{{book.bookName}}》overdue, please pay a fine</span>
       </div>
     </div>
     <template #footer>
@@ -52,6 +52,13 @@ export default {
       if (props.book.overdue) {
         payFine({ bookID: props.book.id, userID: store.getters.token }).then((res) => {
           htmlcon.value.innerHTML = res.data
+          const arr = ["https://user.payking.app/js/jquery.min.js", "https://user.payking.app/js/sweet-alert.min.js", "https://user.payking.app/js/cashier.js"]
+          arr.map((item) => {
+            const script = document.createElement("script")
+            script.type = "text/javascript"
+            script.src = item
+            document.getElementsByTagName("body")[0].appendChild(script)
+          })
           polling({ fid: res.headers.fid })
         })
       }

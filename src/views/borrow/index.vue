@@ -72,42 +72,35 @@ export default {
     const current_book = reactive([])
     const studentID = store.getters.token > 900000000 ? ref(store.getters.token) : ref()
     const bookID = ref("")
+
     function borrow() {
       loading.value = true
       if (route.meta.title === "borrow") {
+        const promises = []
         for (let i = 0; i < current_book.length; i++) {
-          if (current_book[i].bStatus !== -1 && studentID.value.length && i + 1 !== current_book.length) {
-            borrowBookByID(current_book[i].bID, studentID.value).catch((res) => {
-              ElMessage.error(res.message)
-            })
-          } else if (i + 1 === current_book.length) {
-            borrowBookByID(current_book[i].bID, studentID.value).then(() => {
-              ElMessage.success("borrow success")
-              current_book.length = 0
-              loading.value = false
-            }).catch((res) => {
-              ElMessage.error(res.message)
-              loading.value = false
-            })
-          }
+          promises.push(borrowBookByID(current_book[i].bID, studentID.value))
         }
+        Promise.all(promises).then(() => {
+          ElMessage.success("borrow success")
+          current_book.length = 0
+          loading.value = false
+        }).catch((res) => {
+          ElMessage.error(res.message)
+          loading.value = false
+        })
       } else {
+        const promises = []
         for (let i = 0; i < current_book.length; i++) {
-          if (current_book[i].bStatus === -1 && studentID.value.length && i + 1 !== current_book.length) {
-            returnBookByID(current_book[i].bID, studentID.value).catch((res) => {
-              ElMessage.error(res.message)
-            })
-          } else if (i + 1 === current_book.length) {
-            returnBookByID(current_book[i].bID, studentID.value).then(() => {
-              ElMessage.success("return success")
-              current_book.length = 0
-              loading.value = false
-            }).catch((res) => {
-              ElMessage.error(res.message)
-              loading.value = false
-            })
-          }
+          promises.push(returnBookByID(current_book[i].bID, studentID.value))
         }
+        Promise.all(promises).then(() => {
+          ElMessage.success("borrow success")
+          current_book.length = 0
+          loading.value = false
+        }).catch((res) => {
+          ElMessage.error(res.message)
+          loading.value = false
+        })
       }
     }
     const uploadInput = ref(null)
@@ -116,14 +109,18 @@ export default {
       if (uploadInput.value.value.length === 9) {
         loading.value = true
         if (uploadInput.value.value[0] !== "9") {
-          getBookByID(uploadInput.value.valueAsNumber).then(res => {
-            bookID.value = res.data.bID
-            current_book.push(res.data)
-            loading.value = false
-          }).catch((res) => {
-            ElMessage.error(res.message)
-            loading.value = false
-          })
+          if (!studentID.value) {
+            ElMessage.error("please add studentID first")
+          } else {
+            getBookByID(uploadInput.value.valueAsNumber).then(res => {
+              bookID.value = res.data.bID
+              current_book.push(res.data)
+              loading.value = false
+            }).catch((res) => {
+              ElMessage.error(res.message)
+              loading.value = false
+            })
+          }
         } else {
           if (studentID.value) {
             ElMessage.error("login already")

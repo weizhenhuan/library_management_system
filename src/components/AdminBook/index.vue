@@ -8,7 +8,8 @@
       <el-form :inline="true"
                label-width="120px"
                :model="bookItem">
-        <el-form-item label="ISBN">
+        <el-form-item label="ISBN"
+                      :rules="[{ required: true, message: 'User Name is required' },]">
           <el-input v-model="ISBN"
                     placeholder="Input ISBN"
                     :disabled="type==='edit'" />
@@ -48,6 +49,20 @@
                     type="textarea"
                     disabled />
         </el-form-item>
+
+        <el-form-item label="Status">
+          <el-select v-model="bookItem.bStatus"
+                     placeholder="Status"
+                     style="width: 110px">
+            <el-option label="booId"
+                       value="-1" />
+            <el-option label="bookName"
+                       value="1" />
+            <el-option label="ISBN"
+                       value="2" />
+          </el-select>
+        </el-form-item>
+
       </el-form>
 
       <el-form :inline="true"
@@ -128,7 +143,7 @@ export default {
   setup(props, { emit }) {
     const bookItem = reactive({
       bPrice: 0,
-      bType: "jkl",
+      bType: "",
       bBookshelf: "",
       bCount: 0
     })
@@ -140,7 +155,7 @@ export default {
       emit("update:showAdminBook", false)
     }
 
-    const ISBN = ref("9787513333863")
+    const ISBN = ref("")
     const categoryList = reactive([])
     const locationList = reactive([
       {
@@ -215,6 +230,7 @@ export default {
         bookItem.bPrice = props.book.bPrice
         bookItem.bBookshelf = props.book.bBookshelf
         bookItem.bType = props.book.bType
+        bookItem.bStatus = props.book.bStatus
       }
       getCategory().then((res) => {
         res.data.categoryList.forEach((item) => {

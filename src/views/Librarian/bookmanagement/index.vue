@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card>
     <el-row class="search-container">
       <el-col :span="8">
         <el-input v-model="input_book"
@@ -8,7 +8,7 @@
                   class="search_input">
           <template #append>
             <el-select v-model="searchTag"
-                       :placeholder="searchTag"
+                       placeholder="bookName"
                        style="width: 110px">
               <el-option label="booId"
                          value="0" />
@@ -141,7 +141,7 @@
                :type="adminBookType"
                v-if="showAdminBook"
                :book="currBook" />
-  </div>
+  </el-card>
 </template>
 
 <script>
@@ -174,7 +174,7 @@ export default {
     load() {
       this.loading = true
       getBookList(
-        this.searchTag,
+        this.searchTag === "" ? 1 : this.searchTag,
         this.input_book,
         this.pageSize,
         this.pageNum

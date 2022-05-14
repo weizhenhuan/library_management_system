@@ -63,7 +63,6 @@ module.exports = {
 
     config
       .when(process.env.NODE_ENV !== "development",
-
         config => {
           config
             .plugin("webpack-bundle-analyzer")
@@ -97,5 +96,4 @@ module.exports = {
         }
       )
   }
-
 }

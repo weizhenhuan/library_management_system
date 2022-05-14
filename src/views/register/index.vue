@@ -104,19 +104,17 @@ export default {
     register(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          ElMessage.success("Successful registration!")
           register(this.formData).then((res) => {
-            if (res.code === 0) {
-              this.$store.dispatch("user/login", {
-                username: this.formData.userName,
-                password: this.formData.password
-              }).then(() => {
-                ElMessage.success("Login successfully")
-                this.$router.push("/dashboard")
-              })
-            } else {
-              ElMessage.error(res.data.msg)
-            }
+            ElMessage.success("Successful registration!")
+            this.$store.dispatch("user/login", {
+              username: this.formData.userName,
+              password: this.formData.password
+            }).then(() => {
+              ElMessage.success("Login successfully")
+              this.$router.push("/dashboard")
+            })
+          }).catch((res) => {
+            ElMessage.error(res.message)
           })
         } else {
           console.log("error submit!!")
