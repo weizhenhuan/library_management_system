@@ -82,6 +82,35 @@ export function getCategory() {
     method: "get"
   })
 }
+export function getCategoryListByName(categoryName, pageSize, pageNum) {
+  return request({
+    url: "/admin/categorylistByName",
+    method: "get",
+    params: { categoryName, pageSize, pageNum }
+  })
+}
+export function addCategory(categoryName) {
+  return request({
+    url: "/admin/addCategory",
+    method: "get",
+    params: { categoryName }
+  })
+}
+export function updateCategory(oldCategoryName, newCategoryName) {
+  return request({
+    url: "/admin/updateCategory",
+    method: "get",
+    params: { oldCategoryName, newCategoryName }
+  })
+}
+
+export function deleteCategory(categoryName) {
+  return request({
+    url: "/admin/deleteCategory",
+    method: "get",
+    params: { categoryName }
+  })
+}
 
 export function deleteBookAdmin(bID) {
   return request({

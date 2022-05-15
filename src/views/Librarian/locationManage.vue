@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="2">
         <el-button type="primary"
-                   @click="() => {categoryType = 'add';curCategory={category:input_category}; showAddCategory = true}">
+                   @click="() => {showAdminBook = true; adminBookType = 'add'}">
           <template v-slot:icon>
             <svg-icon icon-class="add" />
           </template>
@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
 
-    <div class="categorylist-container"
+    <div class="booklist-container"
          v-if="tableData.length">
       <el-table :data="tableData"
                 border
@@ -35,21 +35,33 @@
                 size="large"
                 v-loading="loading"
                 :header-cell-style="{ color: '#606266' }">
-        <el-table-column prop="category"
+        <el-table-column prop="bId"
+                         label="Book ID" />
+        <el-table-column prop="bName"
+                         label="Book Name"
+                         width="250" />
+        <el-table-column prop="ISBN"
+                         label="ISBN"
+                         width="150" />
+        <el-table-column prop="bAuthor"
+                         label="Book Author" />
+        <el-table-column prop="bPublisher"
+                         label="Publisher" />
+        <el-table-column prop="bType"
                          label="Category" />
         <el-table-column label="Operation">
           <template #default="props">
             <el-button-group>
               <el-button type="primary"
                          size="small"
-                         @click="() => {categoryType = 'edit';showAddCategory = true;curCategory=props.row }">
+                         @click="() => {adminBookType = 'edit';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
                   <svg-icon icon-class="edit" />
                 </template>
               </el-button>
               <el-button type="danger"
                          size="small"
-                         @click="() => {categoryType = 'delete';showAddCategory = true;curCategory=props.row }">
+                         @click="() => {adminBookType = 'delete';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
                   <svg-icon icon-class="delete" />
                 </template>
@@ -69,10 +81,10 @@
       </div>
     </div>
 
-    <Category v-model:showAddCategory="showAddCategory"
-               :type="categoryType"
-               v-if="showAddCategory"
-               :category="curCategory" />
+    <AdminBook v-model:showAdminBook="showAdminBook"
+               :type="adminBookType"
+               v-if="showAdminBook"
+               :book="currBook" />
   </el-card>
 </template>
 
@@ -82,19 +94,20 @@ import { getCategoryListByName } from "@/api/admin"
 import { ElMessage } from "element-plus"
 
 export default {
-  name: "CategoryManagement",
-  components: { Category: () => import("@/components/Category")
+  name: "LocationManagement",
+  components: { AdminBook: () => import("@/components/AdminBook")
   },
   data() {
     return {
+      searchTag: "",
       tableData: [],
       input_category: "",
       total: 100,
       pageSize: 10,
       pageNum: 1,
-      showAddCategory: false,
-      categoryType: "add",
-      curCategory: {},
+      showAdminBook: false,
+      adminBookType: "add",
+      currBook: {},
       loading: false
     }
   },
@@ -141,7 +154,24 @@ export default {
     height: 40px;
   }
 }
-.categorylist-container {
+.booklist-container {
+  .bookitem-wrapper {
+    .bookinfo {
+      li {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .bookinfo-wrapper {
+    .library-bookinfo {
+      margin-top: 30px;
+      li {
+        margin-top: 10px;
+      }
+    }
+  }
+
   .el-pagination {
     margin-top: 20px;
     justify-content: center;
