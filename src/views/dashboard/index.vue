@@ -5,15 +5,18 @@
 <script>
 import { ref } from "@vue/reactivity"
 import { useStore } from "vuex"
-import adminDashboard from "./admin"
-import customerDashboard from "./customer"
+import { defineAsyncComponent } from "@vue/runtime-core"
 
 export default {
   name: "Dashboard",
-  components: { adminDashboard, customerDashboard },
+  components: {
+    adminDashboard: defineAsyncComponent(() => import("./admin")),
+    customerDashboard: defineAsyncComponent(() => import("./customer")),
+    visitorDashboard: defineAsyncComponent(() => import("./visitor"))
+  },
   setup() {
     console.log(useStore().getters.roles)
-    const dashboard = ref("adminDashboard")
+    const dashboard = ref("visitorDashboard")
     if (useStore().getters.roles.includes("customer")) {
       dashboard.value = "customerDashboard"
     } else if (useStore().getters.roles.includes("admin")) {
