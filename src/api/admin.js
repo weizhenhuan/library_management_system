@@ -89,17 +89,24 @@ export function getCategoryListByName(categoryName, pageSize, pageNum) {
     params: { categoryName, pageSize, pageNum }
   })
 }
+export function getLocationListByName(locationName, pageSize, pageNum) {
+  return request({
+    url: "/admin/locationlistByName",
+    method: "get",
+    params: { locationName, pageSize, pageNum }
+  })
+}
 export function addCategory(categoryName) {
   return request({
     url: "/admin/addCategory",
-    method: "get",
+    method: "post",
     params: { categoryName }
   })
 }
 export function updateCategory(oldCategoryName, newCategoryName) {
   return request({
     url: "/admin/updateCategory",
-    method: "get",
+    method: "post",
     params: { oldCategoryName, newCategoryName }
   })
 }
@@ -107,11 +114,31 @@ export function updateCategory(oldCategoryName, newCategoryName) {
 export function deleteCategory(categoryName) {
   return request({
     url: "/admin/deleteCategory",
-    method: "get",
+    method: "delete",
     params: { categoryName }
   })
 }
-
+export function addLocation(locationName) {
+  return request({
+    url: "/admin/addLocation",
+    method: "post",
+    params: { locationName }
+  })
+}
+export function updateLocation(oldLocationName, newLocationName) {
+  return request({
+    url: "/admin/updateLocation",
+    method: "post",
+    params: { oldLocationName, newLocationName }
+  })
+}
+export function deleteLocation(locationName) {
+  return request({
+    url: "/admin/deleteLocation",
+    method: "delete",
+    params: { locationName }
+  })
+}
 export function deleteBookAdmin(bID) {
   return request({
     url: "/admin/deleteBook",

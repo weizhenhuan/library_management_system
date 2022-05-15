@@ -5,22 +5,31 @@
              :before-close="change"
              destroy-on-close>
     <div>
-      <el-input v-model="categoryName"
-                v-if="props.type!=='delete'"
-                placeholder="Input new category"/>
+      <el-row>
+        <el-col :span="10">
+          <el-input v-model="locationArea"
+                          v-if="props.type!=='delete'"
+                          placeholder="Input new location area"/>
+        </el-col>
+        <el-col :span="10">
+          <el-input v-model="locationFloor"
+                    v-if="props.type!=='delete'"
+                    placeholder="Input new location floor"/>
+        </el-col>
+      </el-row>
     </div>
     <div>
       <el-button type="text"
       v-if="props.type==='delete'"
       diabled>
-        Are you sure to delete the category?
+        Are you sure to delete the location?
       </el-button>
     </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="change">Cancel</el-button>
         <el-button type="primary"
-                   @click="addcategory">Confirm</el-button>
+                   @click="addlocation">Confirm</el-button>
       </span>
     </template>
   </el-dialog>
@@ -28,18 +37,18 @@
 
 <script>
 import { ref, toRef } from "@vue/reactivity"
-import { addCategory, updateCategory, deleteCategory } from "@/api/admin"
+import { addLocation, updateLocation, deleteLocation } from "@/api/admin"
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 
 export default {
-  name: "Category",
+  name: "Location",
   props: {
-    curCategory: {
+    curLocation: {
       type: Object,
       required: true
     },
-    showAddCategory: {
+    showAddLocation: {
       type: Boolean,
       required: true
     },
@@ -48,20 +57,22 @@ export default {
       default: "add"
     }
   },
-  emits: ["update:showAddCategory"],
+  emits: ["update:showAddLocation"],
   setup(props, { emit }) {
-    const isShow = toRef(props, "showAddCategory")
-    const curCategory = toRef(props, "curCategory")
+    const isShow = toRef(props, "showAddLocation")
+    const curLocation = toRef(props, "curLocation")
     const route = useRoute()
     const router = useRouter()
-    const categoryName = ref("")
+    const locationArea = ref("")
+    const locationFloor = ref("")
     function change() {
-      emit("update:showAddCategory", false)
+      emit("update:showAddLocation", false)
     }
-    function addcategory() {
-      console.log(curCategory)
+    function addlocation() {
+      console.log("hehe")
+      console.log(curLocation)
       if (props.type === "add") {
-        addCategory(categoryName).then(() => {
+        addLocation(locationArea + "-" + locationFloor).then(() => {
           ElMessage.success({
             message: "add success!.",
             type: "success"
@@ -77,7 +88,7 @@ export default {
           })
         })
       } else if (props.type === "edit") {
-        updateCategory(curCategory.category, categoryName).then(() => {
+        updateLocation(curLocation.location, locationArea + "-" + locationFloor).then(() => {
           ElMessage.success({
             message: "update success.",
             type: "success"
@@ -93,7 +104,7 @@ export default {
           })
         })
       } else {
-        deleteCategory(curCategory.category).then(() => {
+        deleteLocation(curLocation.location).then(() => {
           ElMessage.success({
             message: "delete success.",
             type: "success"
@@ -110,7 +121,7 @@ export default {
         })
       }
     }
-    return { props, isShow, change, categoryName, addcategory }
+    return { props, isShow, change, locationArea, locationFloor, addlocation }
   }
 }
 </script>
