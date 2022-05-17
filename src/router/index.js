@@ -157,6 +157,16 @@ export const asyncRoutes = [{
       title: "Reader Manage",
       roles: ["admin"]
     }
+  },
+  {
+    path: "PenaltyManage",
+    component: () =>
+      import ("@/views/Librarian/penaltyManage"),
+    name: "DirectivePermission",
+    meta: {
+      title: "Penalty Manage",
+      roles: ["admin"]
+    }
   }]
 }]
 

@@ -103,3 +103,11 @@ export function payStatus(data) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+
+export function getPenaltyInfo(token) {
+  return request({
+    url: "user/penalty",
+    method: "get",
+    params: { "token": token }
+  })
+}
