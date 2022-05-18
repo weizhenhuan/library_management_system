@@ -19,7 +19,7 @@
                    @click="query">Query</el-button>
         <el-button type="primary"
                    v-if="current_penalty.length"
-                   @click="borrow">pay</el-button>
+                   @click="payFine">pay</el-button>
       </el-col>
     </el-row>
     <div v-if="current_penalty.length">
@@ -36,9 +36,6 @@
                         label="Fine" />
       </el-table>
       <h2>You owe a total of {{sum_penalty}}$ !</h2>
-      <el-button type="primary"
-                 class="pay-button"
-                 @click="pay">Pay</el-button>
     </div>
   </div>
 </template>
@@ -47,7 +44,8 @@
 import { reactive, ref } from "@vue/reactivity"
 import { ElMessage } from "element-plus"
 import { onMounted } from "@vue/runtime-core"
-import { onBeforeRouteLeave, useRoute } from "vue-router"
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
+import { payAllFine, payStatus } from "@/api/user"
 import { getPenaltyInfo } from "../../api/user"
 
 export default {
@@ -93,6 +91,35 @@ export default {
       uploadInput.value.focus()
     })
 
+    const htmlcon = ref(null)
+    const router = useRouter()
+    function payFine() {
+      payAllFine(studentID.value, sum_penalty).then((res) => {
+        htmlcon.value.innerHTML = res.data
+        const arr = ["https://user.payking.app/js/jquery.min.js", "https://user.payking.app/js/sweet-alert.min.js", "https://user.payking.app/js/cashier.js"]
+        arr.map((item) => {
+          const script = document.createElement("script")
+          script.type = "text/javascript"
+          script.src = item
+          document.getElementsByTagName("body")[0].appendChild(script)
+        })
+        polling({ fid: res.headers.fid })
+      })
+    }
+
+    function polling(fid) {
+      setTimeout(() => {
+        payStatus(fid).then(() => {
+          query()
+          router.replace({
+            path: "/redirect" + route.fullPath
+          })
+        }).catch(() => {
+          polling(fid)
+        })
+      }, 2000)
+    }
+
     return { current_penalty,
       sum_penalty,
       studentID,
@@ -101,7 +128,8 @@ export default {
       handleCode,
       route,
       loading,
-      query
+      query,
+      payFine
     }
   }
 
@@ -118,9 +146,5 @@ export default {
   position: relative;
   top: -100px;
   z-index: -9999;
-}
-
-.pay-button {
-  margin-top: 10px;
 }
 </style>
