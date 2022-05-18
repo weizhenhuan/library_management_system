@@ -91,4 +91,3 @@ export function deleteBookAdmin(bID) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
-

@@ -16,6 +16,9 @@
       <svg-icon icon-class="back"
                 class="refresh"
                 @click="back" />
+      <svg-icon icon-class="bell"
+                class="refresh"
+                @click="notification" />
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
