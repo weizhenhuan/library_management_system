@@ -111,3 +111,12 @@ export function getPenaltyInfo(token) {
     params: { "token": token }
   })
 }
+
+export function payAllFine(token, sum_penalty) {
+  return request({
+    url: "user/payAllFine",
+    method: "post",
+    params: { "token": token, "sum_penalty": sum_penalty },
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
