@@ -16,9 +16,27 @@
       <svg-icon icon-class="back"
                 class="refresh"
                 @click="back" />
-      <svg-icon icon-class="bell"
-                class="refresh"
-                @click="notification" />
+      <el-popover :width="150" title="Notification:">
+        <template #reference>
+          <svg-icon icon-class="bell" class="refresh"/>
+        </template>
+        <div v-if="messages.length">
+                <div v-for="(event,index) in messages"
+                    :key="index">
+                </div>
+            <div v-if="event.type==='reserve_cancel'">
+                <span>Reservation《{{ event.bookname }}》has been cancelled over time.</span>
+            </div>
+            <div v-else-if="event.type==='borrow_overdue'">
+                <span>Borrow《{{ event.bookname }}》has expired, please return in time.</span>
+            </div>
+            <div v-else-if="event.type==='fine'">
+                <span>You have unpaid fines, please handle it promptly.</span>
+            </div>
+            <!--<span style="float:right" @click="removeUnread">Remove unread</span>-->
+        </div>
+        <div v-else>No message yet.</div>
+    </el-popover>
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
@@ -58,6 +76,8 @@ import { computed } from "@vue/runtime-core"
 import { useStore } from "vuex"
 import Breadcrumb from "./Breadcrumb"
 import { useRoute, useRouter } from "vue-router"
+import { reactive } from "@vue/reactivity"
+import { getMessage } from "@/api/user"
 
 export default {
   name: "Navbar",
@@ -69,6 +89,17 @@ export default {
     const isCollapse = computed(() => {
       return store.getters.isCollapse
     })
+    const messages = reactive([])
+
+    getMessage(store.getters.token).then((res) => {
+      res.data.forEach((item) => {
+        messages.push(item)
+      })
+    })
+
+    /* function removeUnread(){
+        一键已读
+    } */
 
     function toggleSideBar() {
       store.dispatch("app/toggleSideBar")
@@ -113,10 +144,11 @@ export default {
         })
       })
     }
+
     return { toggleSideBar, isCollapse, refresh, logout,
     // loginadmin, logincus,
       login,
-      back }
+      back, messages }
   }
 }
 </script>
