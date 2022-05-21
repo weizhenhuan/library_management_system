@@ -8,12 +8,6 @@ export function login(data) {
     data: qs.stringify(data),
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
-  /* return new Promise((res,rej)=>{
-    res({
-      code: 0,
-      data: {'admin-token':'admin-token'}
-    })
-  }) */
 }
 
 export function register(data) {
@@ -39,12 +33,6 @@ export function getInfo(token) {
     method: "get",
     params: { token: token }
   })
-  /* return new Promise((res,rej)=>{
-    res({
-      code: 0,
-      data: {'admin-token':'admin-token'}
-    })
-  }) */
 }
 
 export function logout() {
@@ -103,3 +91,21 @@ export function payStatus(data) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+
+export function editInfo(data) {
+  return request({
+    url: "/user/editInfo",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
+export function uploadImg(forms) {
+  return request({
+    url: "/user/upload",
+    method: "post",
+    data: forms
+  })
+}
+

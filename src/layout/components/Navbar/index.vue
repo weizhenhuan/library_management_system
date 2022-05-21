@@ -36,8 +36,8 @@
             <router-link to="/profile/index">
               <el-dropdown-item divided>Profile</el-dropdown-item>
             </router-link> -->
-            <router-link to="/">
-              <el-dropdown-item>Dashboard</el-dropdown-item>
+            <router-link to="/profile/index">
+              <el-dropdown-item>Profile</el-dropdown-item>
             </router-link>
             <el-dropdown-item divided
                               @click="logout">

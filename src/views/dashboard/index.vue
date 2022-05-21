@@ -15,7 +15,6 @@ export default {
     visitorDashboard: defineAsyncComponent(() => import("./visitor"))
   },
   setup() {
-    console.log(useStore().getters.roles)
     const dashboard = ref("visitorDashboard")
     if (useStore().getters.roles.includes("customer")) {
       dashboard.value = "customerDashboard"
