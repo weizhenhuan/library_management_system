@@ -2,8 +2,15 @@
   <el-card>
     <el-row class="search-container">
       <el-col :span="8">
-        <el-input v-model="input_category"
-                  placeholder="please input category message"
+        <el-input v-model="input_location_area"
+                  placeholder="please input book location area"
+                  @keyup.enter="load"
+                  class="search_input">
+        </el-input>
+      </el-col>
+      <el-col :span="8">
+        <el-input v-model="input_location_floor"
+                  placeholder="please input book location floor"
                   @keyup.enter="load"
                   class="search_input">
         </el-input>
@@ -19,7 +26,7 @@
       </el-col>
       <el-col :span="2">
         <el-button type="primary"
-                   @click="() => {categoryType = 'add';curCategory={category:input_category}; showAddCategory = true}">
+                   @click="() => {locationType = 'add';curLocation={location:input_location_area+'-'+input_location_floor}; showAddLocation = true}">
           <template v-slot:icon>
             <svg-icon icon-class="add" />
           </template>
@@ -27,7 +34,7 @@
       </el-col>
     </el-row>
 
-    <div class="categorylist-container"
+    <div class="locationlist-container"
          v-if="tableData.length">
       <el-table :data="tableData"
                 border
@@ -35,21 +42,21 @@
                 size="large"
                 v-loading="loading"
                 :header-cell-style="{ color: '#606266' }">
-        <el-table-column prop="category"
-                         label="Category" />
+        <el-table-column prop="location"
+                         label="Location" />
         <el-table-column label="Operation">
           <template #default="props">
             <el-button-group>
               <el-button type="primary"
                          size="small"
-                         @click="() => {categoryType = 'edit';showAddCategory = true;curCategory=props.row }">
+                         @click="() => {locationType = 'edit';showAddLocation = true;curLocation=props.row }">
                 <template v-slot:icon>
                   <svg-icon icon-class="edit" />
                 </template>
               </el-button>
               <el-button type="danger"
                          size="small"
-                         @click="() => {categoryType = 'delete';showAddCategory = true;curCategory=props.row }">
+                         @click="() => {locationType = 'delete';showAddLocation = true;curLocation=props.row }">
                 <template v-slot:icon>
                   <svg-icon icon-class="delete" />
                 </template>
@@ -69,32 +76,33 @@
       </div>
     </div>
 
-    <Category v-model:showAddCategory="showAddCategory"
-              :type="categoryType"
-              v-if="showAddCategory"
-              :category="curCategory" />
+    <Location v-model:showAddLocation="showAddLocation"
+              :type="locationType"
+              v-if="showAddLocation"
+              :location="curLocation" />
   </el-card>
 </template>
 
 <script>
-import { getCategoryListByName } from "@/api/admin"
+import { getLocationListByName } from "@/api/admin"
 
 import { ElMessage } from "element-plus"
 
 export default {
-  name: "CategoryManagement",
-  components: { Category: () => import("@/components/Category")
+  name: "LocationManagement",
+  components: { Location: () => import("@/components/Location")
   },
   data() {
     return {
       tableData: [],
-      input_category: "",
+      input_location_area: "",
+      input_location_floor: "",
       total: 100,
       pageSize: 10,
       pageNum: 1,
-      showAddCategory: false,
-      categoryType: "add",
-      curCategory: {},
+      showAddLocation: false,
+      locationType: "add",
+      curLocation: {},
       loading: false
     }
   },
@@ -104,12 +112,12 @@ export default {
   methods: {
     load() {
       this.loading = true
-      getCategoryListByName(
-        this.input_category,
+      getLocationListByName(
+        this.input_location,
         this.pageSize,
         this.pageNum
       ).then((res) => {
-        this.tableData = res.data.categoryList
+        this.tableData = res.data.locationList
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {
@@ -141,7 +149,7 @@ export default {
     height: 40px;
   }
 }
-.categorylist-container {
+.locationlist-container {
   .el-pagination {
     margin-top: 20px;
     justify-content: center;
