@@ -3,6 +3,10 @@
                :loading="loading"
                animated>
     <template #template>
+      <div style="text-align: center;">
+        <el-skeleton-item variant="circle"
+                          style="width: 140px; height: 140px" />
+      </div>
       <div style="padding: 14px">
         <el-skeleton-item variant="h3"
                           style="width: 50%" />
@@ -54,6 +58,43 @@
         </el-card>
         <el-card v-else
                  class="user-container">
+          <template #header>
+            <div class="card-header">
+              <span>Edit</span>
+            </div>
+          </template>
+
+          <el-upload class="avatar-uploader"
+                     ref="upload"
+                     action="123"
+                     :http-request="()=>{}"
+                     :show-file-list="false"
+                     :limit="1"
+                     :on-exceed="handleExceed"
+                     :on-change="uploadChange">
+            <img :src="imgUrl"
+                 class="upload-avatar" />
+          </el-upload>
+
+          <el-form :model="user"
+                   label-width="120px">
+            <el-form-item label="Activity name">
+              <el-input v-model="user.name" />
+            </el-form-item>
+            <el-form-item label="Instant delivery">
+              <el-input v-model="user.introduction" />
+            </el-form-item>
+            <el-form-item label="Phone">
+              <el-input v-model="user.phone" />
+            </el-form-item>
+            <el-form-item label="Password">
+              <el-input v-model="user.password" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         @click="Submit">Edit</el-button>
+            </el-form-item>
+          </el-form>
 
         </el-card>
       </transition>
@@ -70,22 +111,27 @@
 import { reactive, ref } from "@vue/reactivity"
 import { mapGetters, useStore } from "vuex"
 import { computed } from "@vue/runtime-core"
-import { getExinfo } from "@/api/user.js"
+import { getExinfo, editInfo, uploadImg } from "@/api/user.js"
+import { ElMessage } from "element-plus"
 
 export default {
   setup() {
     const page = ref(true)
-    const user = reactive({})
+    const user = reactive({
+      password: "****"
+    })
     const store = useStore()
     const loading = ref(true)
 
-    const mapget = mapGetters(["name", "introduction", "avatar"])
+    const mapget = mapGetters(["name", "introduction", "avatar", "phone"])
     Object.keys(mapget).forEach((itemfn) => {
       const item = computed(mapget[itemfn].bind({ $store: store }))
       user[itemfn] = item
     })
+    const imgUrl = ref("")
+    const files = reactive([])
+    imgUrl.value = user.avatar
 
-    // user.statistics = [{ title: 'days', number: 256 }, { title: 'books', number: 123 }, { title: 'likes', number: 10 }]
     function changePage() {
       page.value = !page.value
     }
@@ -95,12 +141,79 @@ export default {
       loading.value = false
     })
 
-    return { loading, page, changePage, user }
+    function Submit() {
+      if (imgUrl.value !== user.avatar) {
+        const formData = new FormData()
+        files.forEach((item) => {
+          // console.log(item)
+          formData.append("image", item.raw)
+        })
+        uploadImg(formData).then((res) => {
+          user.avatar = res.data.url
+          // console.log(user.avatar)
+          /* editInfo(user).then(() => {
+            ElMessage.success("edit success")
+          }).catch((res) => {
+            ElMessage.error(res.message)
+          }) */
+        })
+      } else {
+        editInfo(user).then(() => {
+          ElMessage.success("edit success")
+        }).catch((res) => {
+          ElMessage.error(res.message)
+        })
+      }
+    }
+
+    const uploadChange = (file, fileList) => {
+      console.log(file, fileList)
+
+      if (file.raw.type !== "image/jpeg") {
+        ElMessage.error("Avatar picture must be JPG format!")
+        return false
+      } else if (file.raw.type.size / 1024 / 1024 > 2) {
+        ElMessage.error("Avatar picture size can not exceed 2MB!")
+        return false
+      }
+
+      imgUrl.value = URL.createObjectURL(file.raw)
+      while (files.length) files.pop()
+      files.push(file)
+    }
+
+    const upload = ref(null)
+    function handleExceed(files) {
+      upload.value.clearFiles()
+      const file = files[0]
+      upload.value.handleStart(file)
+    }
+
+    return {
+      loading,
+      page,
+      changePage,
+      user,
+      imgUrl,
+      upload,
+      uploadChange,
+      Submit,
+      handleExceed }
   }
 }
 </script>
 
 <style scoped lang='less'>
+.avatar-uploader {
+  text-align: center;
+  .upload-avatar {
+    display: block;
+    width: 100px;
+    margin: 0 auto 10px;
+    border-radius: 50px;
+  }
+}
+
 .user-container {
   margin: 30px 0 0 10px;
   .user-info {

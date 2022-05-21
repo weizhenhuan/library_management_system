@@ -92,6 +92,23 @@ export function payStatus(data) {
   })
 }
 
+export function editInfo(data) {
+  return request({
+    url: "/user/editInfo",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
+export function uploadImg(forms) {
+  return request({
+    url: "/user/upload",
+    method: "post",
+    data: forms
+  })
+}
+
 export function getMessage(token) {
   return request({
     url: "/user/message",
@@ -99,6 +116,7 @@ export function getMessage(token) {
     params: { userToken: token }
   })
 }
+
 export function getPenaltyInfo(token) {
   return request({
     url: "user/penalty",
@@ -115,3 +133,4 @@ export function payAllFine(token, sum_penalty) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+
