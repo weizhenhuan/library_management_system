@@ -23,8 +23,9 @@
         <div v-if="messages.length">
                 <div v-for="(event,index) in messages"
                     :key="index">
+                    <span>{{event.info}}</span>
                 </div>
-            <div v-if="event.type==='reserve_cancel'">
+            <!-- <div v-if="event.type==='reserve_cancel'">
                 <span>Reservation《{{ event.bookname }}》has been cancelled over time.</span>
             </div>
             <div v-else-if="event.type==='borrow_overdue'">
@@ -32,7 +33,7 @@
             </div>
             <div v-else-if="event.type==='fine'">
                 <span>You have unpaid fines, please handle it promptly.</span>
-            </div>
+            </div> -->
             <!--<span style="float:right" @click="removeUnread">Remove unread</span>-->
         </div>
         <div v-else>No message yet.</div>
