@@ -44,6 +44,58 @@
         <el-table-column label="ID"
                          prop="rId">
         </el-table-column>
+        <el-table-column label="Record">
+            <el-popover placement="bottom"
+                        title="History"
+                        :width="400"
+                        trigger="click">
+                <template #reference>
+                    <el-button>
+                        <template v-slot:icon>
+                            <svg-icon icon-class="detail" />
+                        </template>
+                    </el-button>
+                </template>
+                <el-timeline class="timeline"
+                       v-if="dynamics.length">
+                    <el-timeline-item v-for="(activity, index) in dynamics"
+                                    :key="index"
+                                    :timestamp="parseTime(activity.time)"
+                                    :icon="icon(activity.action)"
+                                    placement='top'>
+                    <div v-if="activity.action==='borrow'">
+                        <span>
+                        borrow《{{ activity.bookName }}》{{activity.days}}days
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='renew'">
+                        <span>
+                        renew《{{ activity.bookName }}》{{activity.days}}days
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='return'">
+                        <span>
+                        return《{{ activity.bookName }}》
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='pay'">
+                        <span>
+                        pay《{{ activity.bookName }}》pine
+                        </span>
+                    </div>
+                    <div v-else>
+                        <span>
+                        reserve《{{ activity.bookName }}》
+                        </span>
+                    </div>
+                    </el-timeline-item>
+                </el-timeline>
+                <div v-else
+                    class="prompt-wrapper">
+                    Haven't do anything yet.
+                </div>
+            </el-popover>
+        </el-table-column>
         <el-table-column label="Operation"
                          width="200">
           <template #default="scope">
@@ -160,14 +212,48 @@ import { ElMessage } from "element-plus"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"
 
+import { reactive } from "@vue/reactivity"
+import { parseTime } from "@/utils/index.js"
+import { dynamic } from "@/api/user"
+import { useStore } from "vuex"
+// import { ref } from "vue"
+
 export default {
   components: { UploadExcelComponent },
   setup() {
+    // const visible = ref(false)
+    const store = useStore()
+    const dynamics = reactive([])
     const router = useRouter()
     function jump(id) {
       router.push({ path: "/download", query: { cList: id, lList: [], type: "user" }})
     }
-    return { jump }
+
+    function icon(action) {
+      if (action === "borrow") {
+        return <svg-icon icon-class='borrow' />
+      } else if (action === "pay") {
+        return <svg-icon icon-class='buy' />
+      } else if (action === "renew") {
+        return <svg-icon icon-class='renew' />
+      } else if (action === "return") {
+        return <svg-icon icon-class='return' />
+      } else if (action === "reserve") {
+        return <svg-icon icon-class='reserve' />
+      }
+    }
+
+    dynamic(store.getters.token).then((res) => {
+      res.data.forEach((item) => {
+        item.time = new Date(item.time)
+        dynamics.push(item)
+      })
+    })
+
+    return { jump,
+      parseTime,
+      dynamics,
+      icon }
   },
 
   data() {

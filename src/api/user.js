@@ -103,3 +103,11 @@ export function payStatus(data) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+
+export function getMessage(token) {
+  return request({
+    url: "/user/message",
+    method: "get",
+    params: { userToken: token }
+  })
+}
