@@ -174,7 +174,16 @@ export const asyncRoutes = [{
       import ("@/views/Librarian/locationManage"),
     name: "locationManage",
     meta: {
-      title: "Location Manage",
+      title: "Location Manage"
+    }
+  },
+  {
+    path: "PenaltyManage",
+    component: () =>
+      import ("@/views/Librarian/penaltyManage"),
+    name: "PenaltyManage",
+    meta: {
+      title: "Penalty Manage",
       roles: ["admin"]
     }
   }]
