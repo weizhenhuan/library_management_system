@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 卡片视图 -->
     <el-card>
       <el-row :gutter="20">
         <el-col :span="7">
@@ -8,6 +7,7 @@
           <el-input placeholder="please input"
                     v-model="query"
                     clearable
+                    @keyup.enter="load"
                     @clear="load">
             <template #append>
               <el-button @click="load"
@@ -29,23 +29,75 @@
       <!-- 用户列表区 -->
       <el-table :data="userlist"
                 border
+                v-loading="loading"
                 stripe>
         <el-table-column label="Number"
                          prop="rName"></el-table-column>
         <el-table-column label="Password"
-                         prop="rPwd"></el-table-column>
+                         prop="rPwd">
+          *******
+        </el-table-column>
         <el-table-column label="Contact"
                          prop="rContact"></el-table-column>
         <el-table-column label="Name"
                          prop="rRealName"></el-table-column>
-        <el-table-column label="Barcode"
-                         prop="id">
-          <template #default="scope">
-            <Barcode :code="scope.row.rId"
-                     :text="scope.row.rName" />
-          </template>
+        <el-table-column label="ID"
+                         prop="rId">
         </el-table-column>
-        <el-table-column label="Operation">
+        <el-table-column label="Record">
+            <el-popover placement="bottom"
+                        title="History"
+                        :width="400"
+                        trigger="click">
+                <template #reference>
+                    <el-button>
+                        <template v-slot:icon>
+                            <svg-icon icon-class="detail" />
+                        </template>
+                    </el-button>
+                </template>
+                <el-timeline class="timeline"
+                       v-if="dynamics.length">
+                    <el-timeline-item v-for="(activity, index) in dynamics"
+                                    :key="index"
+                                    :timestamp="parseTime(activity.time)"
+                                    :icon="icon(activity.action)"
+                                    placement='top'>
+                    <div v-if="activity.action==='borrow'">
+                        <span>
+                        borrow《{{ activity.bookName }}》{{activity.days}}days
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='renew'">
+                        <span>
+                        renew《{{ activity.bookName }}》{{activity.days}}days
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='return'">
+                        <span>
+                        return《{{ activity.bookName }}》
+                        </span>
+                    </div>
+                    <div v-else-if="activity.action==='pay'">
+                        <span>
+                        pay《{{ activity.bookName }}》pine
+                        </span>
+                    </div>
+                    <div v-else>
+                        <span>
+                        reserve《{{ activity.bookName }}》
+                        </span>
+                    </div>
+                    </el-timeline-item>
+                </el-timeline>
+                <div v-else
+                    class="prompt-wrapper">
+                    Haven't do anything yet.
+                </div>
+            </el-popover>
+        </el-table-column>
+        <el-table-column label="Operation"
+                         width="200">
           <template #default="scope">
             <el-button type="primary"
                        @click="showEditDialog(scope.row)">
@@ -54,13 +106,13 @@
               </template>
             </el-button>
             <el-button type="danger"
-                       @click="_delete">
+                       @click="_delete(scope.row.rName)">
               <template v-slot:icon>
                 <svg-icon icon-class="delete" />
               </template>
             </el-button>
             <el-button type="success"
-                       @click="jump">
+                       @click="jump(scope.row.rId)">
               <template v-slot:icon>
                 <svg-icon icon-class="download" />
               </template>
@@ -71,7 +123,7 @@
       </el-table>
       <!-- 分页 -->
       <el-pagination @current-change="handleCurrentChange"
-                     :currentPage="pagenum"
+                     v-model:currentPage="pagenum"
                      :page-size="pagesize"
                      layout="total, prev, pager, next, jumper"
                      :total="total">
@@ -86,24 +138,18 @@
       <el-form :model="addForm"
                label-width="100px">
         <el-form-item label="User Name"
+                      :rules="[{ required: true, message: 'User Name is required' },]"
                       prop="rName">
           <el-input v-model="addForm.rName"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
-                      prop="rPwd">
-          <el-input v-model="addForm.rPwd"></el-input>
-        </el-form-item>
-        <el-form-item label="Password"
+        <el-form-item label="Name"
+                      :rules="[{ required: true, message: 'User Name is required' },]"
                       prop="rRealName">
           <el-input v-model="addForm.rRealName"></el-input>
         </el-form-item>
         <el-form-item label="Contact"
                       prop="rContact">
           <el-input v-model="addForm.rContact"></el-input>
-        </el-form-item>
-        <el-form-item label="Photo"
-                      prop="rPhoto">
-          <el-input v-model="addForm.rPhoto"></el-input>
         </el-form-item>
         <el-form-item label="Intro"
                       prop="rIntro">
@@ -133,7 +179,7 @@
                       prop="rPwd">
           <el-input v-model="editForm.rPwd"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
+        <el-form-item label="Name"
                       prop="rRealName">
           <el-input v-model="editForm.rRealName"></el-input>
         </el-form-item>
@@ -163,22 +209,51 @@
 <script>
 import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin"
 import { ElMessage } from "element-plus"
-import { Barcode } from "@/components/Barcode"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"
 
-export default {
-  components: { Barcode, UploadExcelComponent },
-  setup() {
-    const cList = ["123456789"] // code信息
-    const lList = [] // 位置信息 如果type是user，这里就传空数组
-    const type = "user" // 是uid还是bid
-    const router = useRouter()
+import { reactive } from "@vue/reactivity"
+import { parseTime } from "@/utils/index.js"
+import { dynamic } from "@/api/user"
+import { useStore } from "vuex"
+// import { ref } from "vue"
 
-    function jump() {
-      router.push({ path: "/download", query: { cList: cList, lList: lList, type: type }})
+export default {
+  components: { UploadExcelComponent },
+  setup() {
+    // const visible = ref(false)
+    const store = useStore()
+    const dynamics = reactive([])
+    const router = useRouter()
+    function jump(id) {
+      router.push({ path: "/download", query: { cList: id, lList: [], type: "user" }})
     }
-    return { jump }
+
+    function icon(action) {
+      if (action === "borrow") {
+        return <svg-icon icon-class='borrow' />
+      } else if (action === "pay") {
+        return <svg-icon icon-class='buy' />
+      } else if (action === "renew") {
+        return <svg-icon icon-class='renew' />
+      } else if (action === "return") {
+        return <svg-icon icon-class='return' />
+      } else if (action === "reserve") {
+        return <svg-icon icon-class='reserve' />
+      }
+    }
+
+    dynamic(store.getters.token).then((res) => {
+      res.data.forEach((item) => {
+        item.time = new Date(item.time)
+        dynamics.push(item)
+      })
+    })
+
+    return { jump,
+      parseTime,
+      dynamics,
+      icon }
   },
 
   data() {
@@ -197,7 +272,7 @@ export default {
 
       addForm: {
         rName: "",
-        rPwd: "",
+        rPwd: "123456",
         rContact: "",
         rRealName: "",
         rPhoto: "",
@@ -221,13 +296,17 @@ export default {
     this.load()
   },
   methods: {
+    refresh() {
+      this.$router.replace({
+        path: "/redirect" + this.$route.fullPath
+      })
+    },
     load() {
       this.loading = true
       getUserList(
         this.query,
         this.pagenum,
-        this.pagesize
-      ).then((res) => {
+        this.pagesize).then((res) => {
         this.userlist = res.data.users
         this.total = res.data.total
         this.loading = false
@@ -241,15 +320,15 @@ export default {
 
     add() {
       this.loading = true
-      addUser(this.addForm
-      ).then((res) => {
+      addUser(this.addForm).then((res) => {
         this.rName = res.data.rName
-        this.rPwd = res.data.rPwd
+        this.rPwd
         this.addDialogVisible = false
         ElMessage.success({
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         this.addDialogVisible = false
@@ -270,6 +349,7 @@ export default {
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         this.editDialogVisible = false
@@ -279,14 +359,14 @@ export default {
       })
     },
 
-    _delete() {
+    _delete(item) {
       this.loading = true
-      deleteUser(this.deleteForm
-      ).then(() => {
+      deleteUser({ username: item }).then(() => {
         ElMessage.success({
           message: "success"
         })
         this.loading = false
+        this.refresh()
       }).catch((res) => {
         this.loading = false
         ElMessage.error({
@@ -318,12 +398,12 @@ export default {
       return false
     },
     handleSuccess({ results, header }) {
-      console.log(results)
-      addUserList(results).then(() => {
+      addUserList(results).then((res) => {
         ElMessage.success({
           message: "upload success"
         })
         this.loading = false
+        this.jump(res.data.idList)
       }).catch((res) => {
         this.loading = false
         ElMessage.error({
@@ -344,11 +424,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-table {
-  margin-top: 15px;
+el-card {
+  margin-left: 20px;
 }
 
+.el-table {
+  margin-top: 20px;
+}
 .el-pagination {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 </style>

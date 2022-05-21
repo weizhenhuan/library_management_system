@@ -13,14 +13,43 @@
       <svg-icon icon-class="refresh"
                 class="refresh"
                 @click="refresh" />
+      <svg-icon icon-class="back"
+                class="refresh"
+                @click="back" />
+      <el-popover :width="150" title="Notification:">
+        <template #reference>
+          <svg-icon icon-class="bell" class="refresh"/>
+        </template>
+        <div v-if="messages.length">
+                <div v-for="(event,index) in messages"
+                    :key="index">
+                    <span>{{event.info}}</span>
+                </div>
+            <!-- <div v-if="event.type==='reserve_cancel'">
+                <span>Reservation《{{ event.bookname }}》has been cancelled over time.</span>
+            </div>
+            <div v-else-if="event.type==='borrow_overdue'">
+                <span>Borrow《{{ event.bookname }}》has expired, please return in time.</span>
+            </div>
+            <div v-else-if="event.type==='fine'">
+                <span>You have unpaid fines, please handle it promptly.</span>
+            </div> -->
+            <!--<span style="float:right" @click="removeUnread">Remove unread</span>-->
+        </div>
+        <div v-else>No message yet.</div>
+    </el-popover>
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
-               class="user-avatar" />
+               class="user-avatar"
+               style="padding:0" />
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="loginadmin">
+            <el-dropdown-item @click="login">
+              <span style="display: block">Log In</span>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item @click="loginadmin">
               <span style="display: block">Log In|admin</span>
             </el-dropdown-item>
             <el-dropdown-item @click="logincus">
@@ -28,7 +57,7 @@
             </el-dropdown-item>
             <router-link to="/profile/index">
               <el-dropdown-item divided>Profile</el-dropdown-item>
-            </router-link>
+            </router-link> -->
             <router-link to="/">
               <el-dropdown-item>Dashboard</el-dropdown-item>
             </router-link>
@@ -48,6 +77,8 @@ import { computed } from "@vue/runtime-core"
 import { useStore } from "vuex"
 import Breadcrumb from "./Breadcrumb"
 import { useRoute, useRouter } from "vue-router"
+import { reactive } from "@vue/reactivity"
+import { getMessage } from "@/api/user"
 
 export default {
   name: "Navbar",
@@ -59,9 +90,24 @@ export default {
     const isCollapse = computed(() => {
       return store.getters.isCollapse
     })
+    const messages = reactive([])
+
+    getMessage(store.getters.token).then((res) => {
+      res.data.forEach((item) => {
+        messages.push(item)
+      })
+    })
+
+    /* function removeUnread(){
+        一键已读
+    } */
 
     function toggleSideBar() {
       store.dispatch("app/toggleSideBar")
+    }
+
+    function back() {
+      router.back()
     }
 
     function refresh() {
@@ -70,7 +116,10 @@ export default {
       })
     }
 
-    function logincus() {
+    function login() {
+      router.push("/login")
+    }
+    /* function logincus() {
       store
         .dispatch("user/login", { username: "customer", password: "sss" })
         .then(() => {
@@ -87,7 +136,7 @@ export default {
             path: "/redirect" + "/"
           })
         })
-    }
+    } */
 
     function logout() {
       store.dispatch("user/logout").then(() => {
@@ -96,7 +145,11 @@ export default {
         })
       })
     }
-    return { toggleSideBar, isCollapse, refresh, logout, loginadmin, logincus }
+
+    return { toggleSideBar, isCollapse, refresh, logout,
+    // loginadmin, logincus,
+      login,
+      back, messages }
   }
 }
 </script>

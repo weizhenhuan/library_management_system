@@ -1,6 +1,5 @@
 <template>
-  <svg
-class="svg-icon"
+  <svg class="svg-icon"
        aria-hidden="true">
     <use :xlink:href="iconName"></use>
   </svg>
@@ -25,7 +24,9 @@ export default {
 
 <style scoped>
 .svg-icon {
+  /* px-to-viewport-ignore-next */
   width: 1em;
+  /* px-to-viewport-ignore-next */
   height: 1em;
   vertical-align: -0.15em;
   fill: currentColor;

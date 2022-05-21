@@ -1,5 +1,6 @@
 <template>
-  <img :id="'_'+code" />
+  <img :id="'_'+code"
+       class="barcode" />
 </template>
 
 <script>
@@ -19,7 +20,6 @@ export default {
     }
   },
   setup(props) {
-    // console.log("#" + props.code)
     nextTick(() => {
       JsBarcode("#_" + props.code, props.code, {
         format: "CODE39",

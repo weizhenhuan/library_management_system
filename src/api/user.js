@@ -37,7 +37,7 @@ export function getInfo(token) {
   return request({
     url: "/user/getInfo",
     method: "get",
-    params: { userToken: token }
+    params: { token: token }
   })
   /* return new Promise((res,rej)=>{
     res({
@@ -62,7 +62,7 @@ export function getExinfo(token) {
   })
 }
 
-export function borrowing(token) {
+export function getBorrowing(token) {
   return request({
     url: "/user/borrowing",
     method: "get",
@@ -70,9 +70,43 @@ export function borrowing(token) {
   })
 }
 
+export function getReserving(token) {
+  return request({
+    url: "/user/reserving",
+    method: "get",
+    params: { token: token }
+  })
+}
+
 export function dynamic(token) {
   return request({
     url: "/user/dynamic",
+    method: "get",
+    params: { userToken: token }
+  })
+}
+
+export function payFine(data) {
+  return request({
+    url: "/pay",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
+export function payStatus(data) {
+  return request({
+    url: "/pay/status",
+    method: "post",
+    data: qs.stringify(data),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+}
+
+export function getMessage(token) {
+  return request({
+    url: "/user/message",
     method: "get",
     params: { userToken: token }
   })

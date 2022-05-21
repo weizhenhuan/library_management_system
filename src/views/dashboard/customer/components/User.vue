@@ -32,7 +32,7 @@
             </div>
           </template>
           <div class="user-info">
-            <img src="../../../../assets/avatar.jpg"
+            <img :src="user.avatar?user.avatar:'https://pan.bilnn.cn/api/v3/file/sourcejump/MdKBx4cv/Ev_lgefYmENkIFXkGpDkNgw8BLcKgtxyf2Ky_0gBCMM*'"
                  alt="user"
                  class="avatar">
             <div class="user-name text-center">
@@ -54,11 +54,11 @@
         </el-card>
         <el-card v-else
                  class="user-container">
-          gggggg
+
         </el-card>
       </transition>
       <div class="change-card">
-        <svg-icon icon-class='change'
+        <svg-icon icon-class='fold2'
                   @click="changePage"></svg-icon>
       </div>
     </template>
@@ -79,7 +79,7 @@ export default {
     const store = useStore()
     const loading = ref(true)
 
-    const mapget = mapGetters(["name", "introduction"])
+    const mapget = mapGetters(["name", "introduction", "avatar"])
     Object.keys(mapget).forEach((itemfn) => {
       const item = computed(mapget[itemfn].bind({ $store: store }))
       user[itemfn] = item

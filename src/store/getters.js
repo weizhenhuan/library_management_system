@@ -1,5 +1,6 @@
 const getters = {
   isCollapse: state => state.app.sidebarOpened,
+  device: state => state.app.device,
   token: state => state.user.token, // 用户token
   avatar: state => state.user.avatar, // 用户头像
   name: state => state.user.name, // 用户名字

@@ -52,13 +52,9 @@ export default {
       emit("update:showReserve", false)
     }
     function reserveBook() {
-      console.log(props.book.isReserved)
-      if (!props.book.isReserved) {
-        reserveBookByID(props.book.id, store.getters.token).then((res) => {
-          ElMessage.success({
-            message: "successfully reserved!",
-            type: "success"
-          })
+      if (props.type === "reserve") {
+        reserveBookByID(store.getters.token, props.book.id).then((res) => {
+          ElMessage.success("successfully reserved!")
           change()
           router.replace({
             path: "/redirect" + route.fullPath
@@ -70,12 +66,8 @@ export default {
           })
         })
       } else {
-        cancelBookByID(props.book.id, this.$store.getters.token).then((res) => {
-          ElMessage.success({
-            message: "successfully canceled!",
-            type: "success"
-          })
-
+        cancelBookByID(props.book.id, store.getters.token).then((res) => {
+          ElMessage.success("successfully canceled!")
           router.replace({
             path: "/redirect" + route.fullPath
           })

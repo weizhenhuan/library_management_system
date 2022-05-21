@@ -4,23 +4,19 @@
       <el-col :span="8">
         <el-input v-model="input_book_name"
                   placeholder="please input book name"
+                  @keyup.enter="load"
                   class="search_input" />
       </el-col>
-      <span style="
-          display: block;
-          line-height: 40px;
-          text-align: center;
-          width: 10px;
-        ">|</span>
+      &nbsp;&nbsp;&nbsp;
       <el-col :span="8">
         <el-input v-model="input_book_isbn"
                   placeholder="please input book ISBN"
+                  @keyup.enter="load"
                   class="search_input" />
       </el-col>
       <el-col :span="3">
         <el-button type="primary"
-                   @click="load"
-                   :loading="loading">
+                   @click="load">
           <template v-slot:icon>
             <svg-icon icon-class="search_light" />
           </template>
@@ -31,10 +27,13 @@
     <div class="booklist-container"
          v-if="tableData.length">
       <el-table :data="tableData"
+                v-loading="loading"
                 border
                 stripe
                 size="large"
                 :header-cell-style="{color:'#606266'}"
+                :expand-row-keys="expands"
+                :row-key="getRowKeys"
                 @expand-change="expandChange">
         <el-table-column type="expand">
           <template #default="props">
@@ -59,7 +58,7 @@
                 </ul>
               </el-col>
 
-              <el-scrollbar style="margin-left: 100px">
+              <el-scrollbar style="margin-left: 100px;">
                 <div v-for="item in bookItems"
                      :key="item"
                      class="scrollbar-item">
@@ -71,23 +70,21 @@
                     <span class="innner-item"
                           style="font-weight:bold">Location:</span>{{ item.bLocation }}
                     <span class="innner-item"
-                          style="font-weight:bold">status:</span>{{ bStatusMap.get(item.bStatus) }}
+                          style="font-weight:bold">status:
+                      <el-tag :type="item.bStatus===1?'success':'info'">
+                        {{ bStatusMap.get(item.bStatus) }}
+                      </el-tag>
+                    </span>
+
                   </div>
-                  <span style="float: right; border-width: 2px"
-                        v-if="this.$store.getters.roles[0]!='customer'">
+                  <span style="float: right;"
+                        v-if="this.$store.getters.roles[0]==='customer'">
                     <el-button type="primary"
                                class="innner-item"
                                :disabled="item.bStatus !== 1"
                                @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
                       <svg-icon icon-class="book"></svg-icon>
                       <span>reserve</span>
-                    </el-button>
-                    <el-button type="danger"
-                               class="innner-item"
-                               :disabled="item.bStatus !== 0"
-                               @click="()=>{showReserve=true;currBook={'bookName':item.bName,'id':item.bID,'isReserved':(item.bStatus === 0)}}">
-                      <svg-icon icon-class="book"></svg-icon>
-                      <span>cancel</span>
                     </el-button>
                   </span>
                 </div>
@@ -128,17 +125,19 @@
 
     <Reserve v-model:showReserve="showReserve"
              type="reserve"
+             v-if="showReserve"
              :book='currBook' />
   </div>
 </template>
 
 <script>
 import { getBookByNameAndISBN, getBooksDetailByISBN } from "@/api/book"
-import Reserve from "@/components/Reserve"
 import { ElMessage } from "element-plus"
 export default {
   name: "BookList",
-  components: { Reserve },
+  components: {
+    Reserve: () => import("@/components/Reserve")
+  },
   data() {
     return {
       bStatusMap: null,
@@ -151,12 +150,12 @@ export default {
       pageNum: 1,
       showReserve: false,
       currBook: {},
-      loading: false
+      loading: false,
+      expands: [1]
     }
   },
   created() {
     this.load()
-    console.log(this.$store.getters.roles)
   },
   methods: {
     load() {
@@ -164,7 +163,6 @@ export default {
       this.bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"]])
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
-        console.log(this.tableData)
         this.total = res.data.total
         this.loading = false
       }).catch((res) => {
@@ -177,8 +175,14 @@ export default {
     handleCurrentChange() {
       this.load()
     },
+
+    getRowKeys(row) {
+      return row.ISBN
+    },
     expandChange(row, expandedRows) {
       if (expandedRows.length > 0) {
+        this.expands = [row.ISBN]
+
         getBooksDetailByISBN(row.ISBN).then((res) => {
           this.bookItems = res.bookItems
         }).catch((res) => {
@@ -194,7 +198,7 @@ export default {
 
 <style scoped lang="less">
 .search-container {
-  margin: 10px auto 10px;
+  margin: 20px auto;
   justify-content: center;
 
   .el-button {
@@ -207,6 +211,11 @@ export default {
   .el-input :deep(.el-input__inner) {
     height: 40px;
   }
+}
+
+.booklist-container {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .booklist-container {
@@ -250,11 +259,16 @@ export default {
     border-radius: 4px;
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+    justify-content: space-between;
   }
 
   .innner-item {
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .demo-pagination-block {
+    margin-top: 20px;
   }
 }
 </style>

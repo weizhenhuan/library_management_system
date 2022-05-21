@@ -8,7 +8,8 @@
       <el-form :inline="true"
                label-width="120px"
                :model="bookItem">
-        <el-form-item label="ISBN">
+        <el-form-item label="ISBN"
+                      :rules="[{ required: true, message: 'User Name is required' },]">
           <el-input v-model="ISBN"
                     placeholder="Input ISBN"
                     :disabled="type==='edit'" />
@@ -48,6 +49,20 @@
                     type="textarea"
                     disabled />
         </el-form-item>
+
+        <el-form-item label="Status">
+          <el-select v-model="bookItem.bStatus"
+                     placeholder="Status"
+                     style="width: 110px">
+            <el-option label="booId"
+                       value="-1" />
+            <el-option label="bookName"
+                       value="1" />
+            <el-option label="ISBN"
+                       value="2" />
+          </el-select>
+        </el-form-item>
+
       </el-form>
 
       <el-form :inline="true"
@@ -140,7 +155,7 @@ export default {
       emit("update:showAdminBook", false)
     }
 
-    const ISBN = ref("9787513333863")
+    const ISBN = ref("")
     const categoryList = reactive([])
     const locationList = reactive([
       {
@@ -215,6 +230,7 @@ export default {
         bookItem.bPrice = props.book.bPrice
         bookItem.bBookshelf = props.book.bBookshelf
         bookItem.bType = props.book.bType
+        bookItem.bStatus = props.book.bStatus
       }
       getCategory().then((res) => {
         res.data.categoryList.forEach((item) => {
@@ -240,7 +256,6 @@ export default {
           bookItem.bPublisher = data.publishing
           bookItem.bPublishTime = data.published
           bookItem.bInfo = data.description
-          console.log(res)
         })
         .catch(function(e) {
           ElMessage.error({
@@ -254,11 +269,11 @@ export default {
       if (props.type === "delete") {
         response = deleteBook()
       } else if (props.type === "add") {
-        response = addBook()
+        addBook()
+        return
       } else {
         response = editBook()
       }
-      console.log(route.fullPath)
       response.then(() => {
         change()
         router.replace({
@@ -271,17 +286,26 @@ export default {
       })
     }
 
+    function jump(id, location) {
+      const lList = []
+      id.map(() => {
+        lList.push(location)
+      })
+      router.push({ path: "/download", query: { cList: id, lList: lList, type: "book" }})
+    }
+
     function addBook() {
       bookItem.bBookshelf = bookItem.bBookshelf.join("-")
       return addBookAdmin(bookItem).then((res) => {
         ElMessage.success({
           message: "add success!"
         })
+        jump(res.data.idList, bookItem.bBookshelf)
       })
     }
 
     function deleteBook() {
-      return deleteBookAdmin(props.book.bId).then(() => {
+      return deleteBookAdmin({ bId: props.book.bId }).then(() => {
         ElMessage.success({
           message: "delete success"
         })
@@ -297,7 +321,17 @@ export default {
       })
     }
 
-    return { isShow, change, getBookInfo, addBook, bookItem, ISBN, categoryList, locationList, manageBook }
+    return {
+      isShow,
+      change,
+      getBookInfo,
+      addBook,
+      bookItem,
+      ISBN,
+      categoryList,
+      locationList,
+      manageBook,
+      jump }
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="jump">跳转</el-button>
+  <el-button @click="jump">jump</el-button>
 </template>
 
 <script>

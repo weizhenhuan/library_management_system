@@ -44,26 +44,37 @@ const routes = [{
   }]
 },
 {
-  path: "/test",
-  name: "text",
-  redirect: "/test/dashboard",
+  path: "/book",
+  name: "Bookxzcz",
   component: Layout,
-  meta: { title: "测试", icon: "test" },
+  redirect: "/book/borrow",
+  meta: { title: "Borrow｜Return", icon: "scan" },
   children: [{
-    name: "xczc",
-    path: "dashboard",
-    component: () =>
-      import ("@/views/profile/index"),
-    meta: { title: "测试首页" }
+    name: "borrow",
+    path: "borrow",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "borrow" }
   },
   {
-    name: "sssss",
-    path: "sssss",
-    component: () =>
-      import ("@/views/dashboard/index"),
-    meta: { title: "hhhh" }
+    name: "reture",
+    path: "return",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "return" }
   }
   ]
+},
+{
+  path: "/booklist",
+  redirect: "/booklist/index",
+  component: Layout,
+  // hidden:true,
+  children: [{
+    name: "booklist",
+    path: "index",
+    component: () =>
+      import ("@/views/booklist/bookList"),
+    meta: { title: "Bookshelf", icon: "bookshelf" }
+  }]
 },
 {
   path: "/profile",
@@ -79,27 +90,34 @@ const routes = [{
   }]
 },
 {
-  path: "/booklist",
-  redirect: "/booklist/index",
-  component: Layout,
-  // hidden:true,
-  children: [{
-    name: "booklist",
-    path: "index",
-    component: () =>
-      import ("@/views/booklist/bookList"),
-    meta: { title: "all books", icon: "book" }
-  }]
-},
-{
   path: "/external-link",
   component: Layout,
   children: [{
     path: "https://gitee.com/violet-umberto/online-library-management-system",
-    meta: { title: "External Link", icon: "link" }
+    meta: { title: "Repository", icon: "gitee" }
   }]
 },
-
+/* {
+  path: "/test",
+  name: "text",
+  redirect: "/test/dashboard",
+  component: Layout,
+  meta: { title: "Test", icon: "test" },
+  children: [
+    {
+      name: "xczc",
+      path: "dashboard",
+      component: () => import("@/views/profile/index"),
+      meta: { title: "测试首页" }
+    },
+    {
+      name: "sssss",
+      path: "sssss",
+      component: () => import("@/views/borrow/index"),
+      meta: { title: "hhhh" }
+    }
+  ]
+}, */
 {
   path: "/register",
   component: () =>
@@ -137,16 +155,6 @@ export const asyncRoutes = [{
     name: "DirectivePermission",
     meta: {
       title: "Reader Manage",
-      roles: ["admin"]
-    }
-  },
-  {
-    path: "categoryManage",
-    component: () =>
-      import ("@/views/Librarian/categoryManage"),
-    name: "RolePermission",
-    meta: {
-      title: "Category Manage",
       roles: ["admin"]
     }
   }]

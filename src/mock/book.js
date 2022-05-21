@@ -112,7 +112,7 @@ module.exports = [
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 "// 成功或者失败
       }
     }
   },
@@ -123,19 +123,100 @@ module.exports = [
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 " // 成功或者失败
       }
     }
   },
-
   {
     url: /\/user\/renewbook\.*/,
     type: "get",
     response: () => {
       return {
         code: 0,
-        data: 1 // 成功或者失败
+        message: "1 " // 成功或者失败
+      }
+    }
+  },
+  {
+    url: /\/book\/borrow\/bookID\.*/,
+    type: "get",
+    response: () => {
+      return {
+        "code": 0,
+        "data": {
+          "bID": 123426589,
+          "bName": "局青到只山",
+          "bAuthor": "do non dolore",
+          "bLocation": "Excepteur mollit ut eiusmod",
+          "bStatus": 1
+        }
+      }
+    }
+  },
+  {
+    url: /\/book\/booklist\/bookdetail\.*/,
+    type: "get",
+    response: () => {
+      return {
+        "code": 0,
+        "bookItems": [
+          {
+            "bName": "zxczc",
+            "bID": 5381333,
+            "bLocation": "武侯区",
+            "bStatus": 1
+          },
+          {
+            "bName": "zxczc",
+            "bID": 80824768,
+            "bLocation": "-",
+            "bStatus": -1
+          },
+          {
+            "bName": "zxczc",
+            "bID": 5734326599,
+            "bLocation": "庆城县",
+            "bStatus": 0
+          },
+          {
+            "bName": "zxczc",
+            "bID": 43168056,
+            "bLocation": "长宁区",
+            "bStatus": 1
+          },
+          {
+            "bName": "zxczc",
+            "bID": 4287174,
+            "bLocation": "米脂县",
+            "bStatus": 0
+          },
+          {
+            "bName": "zxczc",
+            "bID": 482465982,
+            "bLocation": "兰溪市",
+            "bStatus": 1
+          },
+          {
+            "bName": "zxczc",
+            "bID": 8443910525,
+            "bLocation": "-",
+            "bStatus": -1
+          },
+          {
+            "bName": "zxczc",
+            "bID": 769852747,
+            "bLocation": "宁县",
+            "bStatus": 0
+          },
+          {
+            "bName": "zxczc",
+            "bID": 51277,
+            "bLocation": "措勤县",
+            "bStatus": 0
+          }
+        ]
       }
     }
   }
+
 ]

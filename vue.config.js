@@ -33,7 +33,7 @@ module.exports = {
     },
     plugins: [
       require("unplugin-auto-import/webpack")({
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver({ importStyle: false })]
       }),
       require("unplugin-vue-components/webpack")({
         resolvers: [ElementPlusResolver()]
@@ -63,7 +63,6 @@ module.exports = {
 
     config
       .when(process.env.NODE_ENV !== "development",
-
         config => {
           config
             .plugin("webpack-bundle-analyzer")
@@ -97,5 +96,4 @@ module.exports = {
         }
       )
   }
-
 }

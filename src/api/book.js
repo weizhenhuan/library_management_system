@@ -44,11 +44,11 @@ export function reserveBookByID(userID, bookID) {
  * @param bookID
  * @returns {isSuccess}
  */
-export function cancelBookByID(userID, bookID) {
+export function cancelBookByID(bookID, userID) {
   return request({
     url: "/book/booklist/cancelreserve",
     method: "get",
-    params: { userID, bookID }
+    params: { bookID, userID }
   })
 }
 
@@ -58,11 +58,11 @@ export function cancelBookByID(userID, bookID) {
  * @param userToken
  * @returns {isSuccess}
  */
-export function borrowBookByID(bookID, userToken, days) {
+export function borrowBookByID(bookID, userToken) {
   return request({
     url: "/user/borrow",
     method: "get",
-    params: { bookID, userToken, days }
+    params: { bookID, userToken }
   })
 }
 
@@ -79,5 +79,13 @@ export function renewBookByID(bookID, userToken, days) {
     url: "/user/renewbook",
     method: "get",
     params: { bookID, userToken, days }
+  })
+}
+
+export function getBookByID(bookID) {
+  return request({
+    url: "/book/borrow/bookID",
+    method: "get",
+    params: { bookID }
   })
 }

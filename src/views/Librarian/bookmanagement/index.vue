@@ -1,20 +1,21 @@
 <template>
-  <div>
+  <el-card>
     <el-row class="search-container">
       <el-col :span="8">
-        <el-input v-model="input_book_isbn"
+        <el-input v-model="input_book"
                   placeholder="please input book message"
+                  @keyup.enter="load"
                   class="search_input">
           <template #append>
             <el-select v-model="searchTag"
-                       :placeholder="searchTag"
+                       placeholder="bookName"
                        style="width: 110px">
-              <el-option label="bookId"
-                         value="1" />
+              <el-option label="booId"
+                         value="0" />
               <el-option label="bookName"
-                         value="2" />
+                         value="1" />
               <el-option label="ISBN"
-                         value="3" />
+                         value="2" />
             </el-select>
           </template>
         </el-input>
@@ -22,19 +23,17 @@
       <el-col :span="2"
               :offset="1">
         <el-button type="primary"
-                   @click="load"
-                   :loading="loading">
+                   @click="load">
           <template v-slot:icon>
-            <svg-icon icon-class="search" />
+            <svg-icon icon-class="search_light" />
           </template>
         </el-button>
       </el-col>
       <el-col :span="2">
         <el-button type="primary"
-                   @click="() => {showAdminBook = true; adminBookType = 'add'}"
-                   :loading="loading">
+                   @click="() => {showAdminBook = true; adminBookType = 'add'}">
           <template v-slot:icon>
-            <svg-icon icon-class="addbook" />
+            <svg-icon icon-class="add" />
           </template>
         </el-button>
       </el-col>
@@ -46,6 +45,7 @@
                 border
                 stripe
                 size="large"
+                v-loading="loading"
                 :header-cell-style="{ color: '#606266' }">
         <el-table-column type="expand">
           <template #default="props">
@@ -56,18 +56,13 @@
                      alt="cover"
                      style="width: 200px; " />
                 <ul class="bookinfo">
-                  <li>
-                    <span style="font-weight: bold">Title:</span>{{ props.row.bName }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">Author:</span>{{ props.row.bAuthor }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">Classification:</span>{{ props.row.bType }}
-                  </li>
-                  <li>
-                    <span style="font-weight: bold">ISBN:</span>{{ props.row.ISBN }}
-                  </li>
+                  <li><span style="font-weight:bold">Title:</span>{{ props.row.bName }}</li>
+                  <li><span style="font-weight:bold">Author:</span>{{ props.row.bAuthor }}</li>
+                  <li><span style="font-weight:bold">Classification:</span>{{ props.row.bType }}</li>
+                  <li><span style="font-weight:bold">ISBN:</span>{{ props.row.ISBN }}</li>
+                  <li><span style="font-weight:bold">Price:</span>{{ props.row.bPrice }}</li>
+                  <li><span style="font-weight:bold">Publisher:</span>{{ props.row.bPublisher }}</li>
+                  <li><span style="font-weight:bold">PublishTime:</span>{{ props.row.bPublishTime }}</li>
                 </ul>
               </el-col>
               <el-col :span="12"
@@ -101,22 +96,25 @@
         <el-table-column label="Operation">
           <template #default="props">
             <el-button-group>
-              <el-button type="primary"
+              <el-button type="success"
+                         size="small"
                          @click="jump(props.row.bId,props.row.bBookshelf)">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="download" />
                 </template>
               </el-button>
-              <el-button type="warning"
+              <el-button type="primary"
+                         size="small"
                          @click="() => {adminBookType = 'edit';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="edit" />
                 </template>
               </el-button>
               <el-button type="danger"
+                         size="small"
                          @click="() => {adminBookType = 'delete';showAdminBook = true;currBook=props.row }">
                 <template v-slot:icon>
-                  <svg-icon icon-class="search" />
+                  <svg-icon icon-class="delete" />
                 </template>
               </el-button>
             </el-button-group>
@@ -143,23 +141,23 @@
                :type="adminBookType"
                v-if="showAdminBook"
                :book="currBook" />
-  </div>
+  </el-card>
 </template>
 
 <script>
 import { getBookList } from "@/api/admin"
-import AdminBook from "@/components/AdminBook"
+
 import { ElMessage } from "element-plus"
 
 export default {
   name: "BookManagement",
-  components: { AdminBook },
+  components: { AdminBook: () => import("@/components/AdminBook")
+  },
   data() {
     return {
-      searchTag: "bookName",
+      searchTag: "",
       tableData: [],
-      input_book_name: "",
-      input_book_isbn: "",
+      input_book: "",
       total: 100,
       pageSize: 10,
       pageNum: 1,
@@ -176,12 +174,11 @@ export default {
     load() {
       this.loading = true
       getBookList(
-        this.input_book_name,
-        this.input_book_isbn,
+        this.searchTag === "" ? 1 : this.searchTag,
+        this.input_book,
         this.pageSize,
         this.pageNum
       ).then((res) => {
-        // console.log(typeof res.data.bookList[0].bId)
         this.tableData = res.data.bookList
         this.total = res.data.total
         this.loading = false
@@ -204,7 +201,7 @@ export default {
 
 <style scoped lang="less">
 .search-container {
-  margin: 10px auto 10px;
+  margin: 20px auto 20px;
   justify-content: center;
   .el-button {
     color: white;

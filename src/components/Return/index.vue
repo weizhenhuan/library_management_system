@@ -1,11 +1,13 @@
 <template>
   <el-dialog title="Return Book"
-             width="30%"
+             width="70%"
              :model-value="isShow"
              :before-close="change"
              destroy-on-close>
-    <div>
-      <span>是否确认还书？</span>
+    <div ref="htmlcon">
+      <div>
+        <span>《{{book.bookName}}》overdue, please pay a fine</span>
+      </div>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -18,8 +20,8 @@
 </template>
 
 <script>
-import { toRef } from "@vue/reactivity"
-import { returnBookByID } from "@/api/book"
+import { ref, toRef } from "@vue/reactivity"
+import { payFine, payStatus } from "@/api/user"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 
@@ -44,17 +46,37 @@ export default {
     function change() {
       emit("update:showReturn", false)
     }
+
+    const htmlcon = ref(null)
     function returnBook() {
-      if (!props.book.overdue) {
-        returnBookByID(props.book.id, store.getters.token).then(() => {
+      if (props.book.overdue) {
+        payFine({ bookID: props.book.id, userID: store.getters.token }).then((res) => {
+          htmlcon.value.innerHTML = res.data
+          const arr = ["https://user.payking.app/js/jquery.min.js", "https://user.payking.app/js/sweet-alert.min.js", "https://user.payking.app/js/cashier.js"]
+          arr.map((item) => {
+            const script = document.createElement("script")
+            script.type = "text/javascript"
+            script.src = item
+            document.getElementsByTagName("body")[0].appendChild(script)
+          })
+          polling({ fid: res.headers.fid })
+        })
+      }
+    }
+
+    function polling(fid) {
+      setTimeout(() => {
+        payStatus(fid).then(() => {
           change()
           router.replace({
             path: "/redirect" + route.fullPath
           })
+        }).catch(() => {
+          polling(fid)
         })
-      }
+      }, 2000)
     }
-    return { isShow, change, returnBook }
+    return { isShow, change, returnBook, htmlcon }
   }
 }
 </script>
