@@ -92,6 +92,7 @@ export function payStatus(data) {
   })
 }
 
+<<<<<<< HEAD
 export function editInfo(data) {
   return request({
     url: "/user/editInfo",
@@ -109,3 +110,12 @@ export function uploadImg(forms) {
   })
 }
 
+=======
+export function getMessage(token) {
+  return request({
+    url: "/user/message",
+    method: "get",
+    params: { userToken: token }
+  })
+}
+>>>>>>> ba616337a9a370630d3bab94ea57fb7a75d7994c
