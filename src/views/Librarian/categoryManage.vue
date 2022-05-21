@@ -1,13 +1,6 @@
 <template>
   <el-card>
     <el-row class="search-container">
-      <el-col :span="8">
-        <el-input v-model="input_category"
-                  placeholder="please input category message"
-                  @keyup.enter="load"
-                  class="search_input">
-        </el-input>
-      </el-col>
       <el-col :span="2"
               :offset="1">
         <el-button type="primary"
@@ -77,7 +70,7 @@
 </template>
 
 <script>
-import { getCategoryListByName } from "@/api/admin"
+import { getCategory } from "@/api/admin/Category"
 
 import { ElMessage } from "element-plus"
 
@@ -104,7 +97,7 @@ export default {
   methods: {
     load() {
       this.loading = true
-      getCategoryListByName(
+      getCategory(
         this.input_category,
         this.pageSize,
         this.pageNum

@@ -16,28 +16,20 @@
       <svg-icon icon-class="back"
                 class="refresh"
                 @click="back" />
-      <el-popover :width="150" title="Notification:">
+      <el-popover :width="150"
+                  title="Notification:">
         <template #reference>
-          <svg-icon icon-class="bell" class="refresh"/>
+          <svg-icon icon-class="bell"
+                    class="refresh" />
         </template>
         <div v-if="messages.length">
-                <div v-for="(event,index) in messages"
-                    :key="index">
-                    <span>{{event.info}}</span>
-                </div>
-            <!-- <div v-if="event.type==='reserve_cancel'">
-                <span>Reservation《{{ event.bookname }}》has been cancelled over time.</span>
-            </div>
-            <div v-else-if="event.type==='borrow_overdue'">
-                <span>Borrow《{{ event.bookname }}》has expired, please return in time.</span>
-            </div>
-            <div v-else-if="event.type==='fine'">
-                <span>You have unpaid fines, please handle it promptly.</span>
-            </div> -->
-            <!--<span style="float:right" @click="removeUnread">Remove unread</span>-->
+          <div v-for="(event,index) in messages"
+               :key="index">
+            <span>{{event.info}}</span>
+          </div>
         </div>
         <div v-else>No message yet.</div>
-    </el-popover>
+      </el-popover>
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"

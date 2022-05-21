@@ -45,56 +45,56 @@
                          prop="rId">
         </el-table-column>
         <el-table-column label="Record">
-            <el-popover placement="bottom"
-                        title="History"
-                        :width="400"
-                        trigger="click">
-                <template #reference>
-                    <el-button>
-                        <template v-slot:icon>
-                            <svg-icon icon-class="detail" />
-                        </template>
-                    </el-button>
+          <el-popover placement="bottom"
+                      title="History"
+                      :width="400"
+                      trigger="click">
+            <template #reference>
+              <el-button>
+                <template v-slot:icon>
+                  <svg-icon icon-class="detail" />
                 </template>
-                <el-timeline class="timeline"
-                       v-if="dynamics.length">
-                    <el-timeline-item v-for="(activity, index) in dynamics"
-                                    :key="index"
-                                    :timestamp="parseTime(activity.time)"
-                                    :icon="icon(activity.action)"
-                                    placement='top'>
-                    <div v-if="activity.action==='borrow'">
-                        <span>
-                        borrow《{{ activity.bookName }}》{{activity.days}}days
-                        </span>
-                    </div>
-                    <div v-else-if="activity.action==='renew'">
-                        <span>
-                        renew《{{ activity.bookName }}》{{activity.days}}days
-                        </span>
-                    </div>
-                    <div v-else-if="activity.action==='return'">
-                        <span>
-                        return《{{ activity.bookName }}》
-                        </span>
-                    </div>
-                    <div v-else-if="activity.action==='pay'">
-                        <span>
-                        pay《{{ activity.bookName }}》pine
-                        </span>
-                    </div>
-                    <div v-else>
-                        <span>
-                        reserve《{{ activity.bookName }}》
-                        </span>
-                    </div>
-                    </el-timeline-item>
-                </el-timeline>
-                <div v-else
-                    class="prompt-wrapper">
-                    Haven't do anything yet.
+              </el-button>
+            </template>
+            <el-timeline class="timeline"
+                         v-if="dynamics.length">
+              <el-timeline-item v-for="(activity, index) in dynamics"
+                                :key="index"
+                                :timestamp="parseTime(activity.time)"
+                                :icon="icon(activity.action)"
+                                placement='top'>
+                <div v-if="activity.action==='borrow'">
+                  <span>
+                    borrow《{{ activity.bookName }}》{{activity.days}}days
+                  </span>
                 </div>
-            </el-popover>
+                <div v-else-if="activity.action==='renew'">
+                  <span>
+                    renew《{{ activity.bookName }}》{{activity.days}}days
+                  </span>
+                </div>
+                <div v-else-if="activity.action==='return'">
+                  <span>
+                    return《{{ activity.bookName }}》
+                  </span>
+                </div>
+                <div v-else-if="activity.action==='pay'">
+                  <span>
+                    pay《{{ activity.bookName }}》pine
+                  </span>
+                </div>
+                <div v-else>
+                  <span>
+                    reserve《{{ activity.bookName }}》
+                  </span>
+                </div>
+              </el-timeline-item>
+            </el-timeline>
+            <div v-else
+                 class="prompt-wrapper">
+              Haven't do anything yet.
+            </div>
+          </el-popover>
         </el-table-column>
         <el-table-column label="Operation"
                          width="200">
@@ -207,7 +207,7 @@
 </template>
 
 <script>
-import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin"
+import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin/User"
 import { ElMessage } from "element-plus"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"

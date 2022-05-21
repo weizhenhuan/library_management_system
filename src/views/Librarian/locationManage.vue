@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { getLocationListByName } from "@/api/admin"
+import { getLocationListByName } from "@/api/admin/Location"
 
 import { ElMessage } from "element-plus"
 

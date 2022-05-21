@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { getBookList } from "@/api/admin"
+import { getBookList } from "@/api/admin/Book"
 
 import { ElMessage } from "element-plus"
 

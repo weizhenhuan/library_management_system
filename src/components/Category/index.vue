@@ -7,12 +7,12 @@
     <div>
       <el-input v-model="categoryName"
                 v-if="props.type!=='delete'"
-                placeholder="Input new category"/>
+                placeholder="Input new category" />
     </div>
     <div>
       <el-button type="text"
-      v-if="props.type==='delete'"
-      diabled>
+                 v-if="props.type==='delete'"
+                 diabled>
         Are you sure to delete the category?
       </el-button>
     </div>
@@ -28,7 +28,7 @@
 
 <script>
 import { ref, toRef } from "@vue/reactivity"
-import { addCategory, updateCategory, deleteCategory } from "@/api/admin"
+import { addCategory, updateCategory, deleteCategory } from "@/api/admin/Category"
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 

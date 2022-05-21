@@ -8,20 +8,20 @@
       <el-row>
         <el-col :span="10">
           <el-input v-model="locationArea"
-                          v-if="props.type!=='delete'"
-                          placeholder="Input new location area"/>
+                    v-if="props.type!=='delete'"
+                    placeholder="Input new location area" />
         </el-col>
         <el-col :span="10">
           <el-input v-model="locationFloor"
                     v-if="props.type!=='delete'"
-                    placeholder="Input new location floor"/>
+                    placeholder="Input new location floor" />
         </el-col>
       </el-row>
     </div>
     <div>
       <el-button type="text"
-      v-if="props.type==='delete'"
-      diabled>
+                 v-if="props.type==='delete'"
+                 diabled>
         Are you sure to delete the location?
       </el-button>
     </div>
@@ -37,7 +37,7 @@
 
 <script>
 import { ref, toRef } from "@vue/reactivity"
-import { addLocation, updateLocation, deleteLocation } from "@/api/admin"
+import { addLocation, updateLocation, deleteLocation } from "@/api/admin/Location"
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 

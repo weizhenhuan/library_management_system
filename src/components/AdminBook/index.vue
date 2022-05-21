@@ -117,7 +117,8 @@
 
 <script>
 import { reactive, ref, toRef } from "@vue/reactivity"
-import { addBookAdmin, getCategory, deleteBookAdmin, updataBookAdmin } from "@/api/admin"
+import { addBookAdmin, deleteBookAdmin, updataBookAdmin } from "@/api/admin/Book"
+import { getCategory } from "@/api/admin/Category"
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 import axios from "axios"
