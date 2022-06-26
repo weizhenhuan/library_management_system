@@ -1,4 +1,5 @@
-import { login, logout, getInfo } from "@/api/user"
+import { login, logout } from "@/api/user/login"
+import { getInfo } from "@/api/user/info"
 import { getToken, setToken, removeToken } from "@/utils/auth"
 import { resetRouter } from "@/router"
 
@@ -8,7 +9,7 @@ const state = {
   avatar: "",
   introduction: "",
   roles: [],
-  phone: ""
+  email: ""
 }
 
 const mutations = {
@@ -27,8 +28,8 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
-  SET_PHONE: (state, phone) => {
-    state.phone = phone
+  SET_EMAIL: (state, email) => {
+    state.email = email
   }
 }
 
@@ -52,7 +53,7 @@ const actions = {
         if (!data) {
           reject("Verification failed, please Login again.")
         }
-        commit("SET_PHONE", data.phone)
+        commit("SET_EMAIL", data.contact)
         commit("SET_ROLES", data.roles)
         commit("SET_NAME", data.name)
         commit("SET_AVATAR", data.avatar)

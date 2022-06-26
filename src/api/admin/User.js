@@ -41,3 +41,11 @@ export function deleteUser(deleteForm) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }
+
+export function getPenaltyInfo(rId) {
+  return request({
+    url: "/user/penalty",
+    method: "get",
+    params: { rId }
+  })
+}

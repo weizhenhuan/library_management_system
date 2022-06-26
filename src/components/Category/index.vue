@@ -51,17 +51,15 @@ export default {
   emits: ["update:showAddCategory"],
   setup(props, { emit }) {
     const isShow = toRef(props, "showAddCategory")
-    const curCategory = toRef(props, "curCategory")
-    const route = useRoute()
     const router = useRouter()
+    const route = useRoute()
     const categoryName = ref("")
     function change() {
       emit("update:showAddCategory", false)
     }
     function addcategory() {
-      console.log(curCategory)
       if (props.type === "add") {
-        addCategory(categoryName).then(() => {
+        addCategory(categoryName.value).then(() => {
           ElMessage.success({
             message: "add success!.",
             type: "success"
@@ -77,7 +75,7 @@ export default {
           })
         })
       } else if (props.type === "edit") {
-        updateCategory(curCategory.category, categoryName).then(() => {
+        updateCategory(props.curCategory.category, categoryName.value).then(() => {
           ElMessage.success({
             message: "update success.",
             type: "success"
@@ -93,7 +91,7 @@ export default {
           })
         })
       } else {
-        deleteCategory(curCategory.category).then(() => {
+        deleteCategory(props.curCategory.category).then(() => {
           ElMessage.success({
             message: "delete success.",
             type: "success"

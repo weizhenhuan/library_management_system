@@ -60,7 +60,6 @@ export default {
   emits: ["update:showAddLocation"],
   setup(props, { emit }) {
     const isShow = toRef(props, "showAddLocation")
-    const curLocation = toRef(props, "curLocation")
     const route = useRoute()
     const router = useRouter()
     const locationArea = ref("")
@@ -69,10 +68,8 @@ export default {
       emit("update:showAddLocation", false)
     }
     function addlocation() {
-      console.log("hehe")
-      console.log(curLocation)
       if (props.type === "add") {
-        addLocation(locationArea + "-" + locationFloor).then(() => {
+        addLocation(locationArea.value + "-" + locationFloor.value).then(() => {
           ElMessage.success({
             message: "add success!.",
             type: "success"
@@ -88,7 +85,7 @@ export default {
           })
         })
       } else if (props.type === "edit") {
-        updateLocation(curLocation.location, locationArea + "-" + locationFloor).then(() => {
+        updateLocation(props.curLocation.location, locationArea.value + "-" + locationFloor.value).then(() => {
           ElMessage.success({
             message: "update success.",
             type: "success"
@@ -104,7 +101,7 @@ export default {
           })
         })
       } else {
-        deleteLocation(curLocation.location).then(() => {
+        deleteLocation(props.curLocation.location).then(() => {
           ElMessage.success({
             message: "delete success.",
             type: "success"

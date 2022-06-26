@@ -3,72 +3,112 @@
           class="panel-group">
     <el-col :xs="12"
             :sm="12"
-            :lg="6"
+            :lg="4"
             class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="add" />
+          <svg-icon icon-class="admin" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            totalRegistered
+            Registered
           </div>
           <div class="card-panel-num">
-            1000
+            {{dateList[0]}}
+            <span style="font-size:5px">readers</span>
           </div>
         </div>
       </div>
     </el-col>
     <el-col :xs="12"
             :sm="12"
-            :lg="6"
+            :lg="4"
             class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="add" />
+          <svg-icon icon-class="admin" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            totalBorrowed
+            Borrowed
           </div>
           <div class="card-panel-num">
-            8200
+            {{dateList[1]}}
+            <span style="font-size:5px">books</span>
           </div>
         </div>
       </div>
     </el-col>
     <el-col :xs="12"
             :sm="12"
-            :lg="6"
+            :lg="4"
             class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="add" />
+          <svg-icon icon-class="admin" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            totalLost
+            Lost
           </div>
           <div class="card-panel-num">
-            9280
+            {{dateList[2]}}
+            <span style="font-size:5px">books</span>
           </div>
         </div>
       </div>
     </el-col>
     <el-col :xs="12"
             :sm="12"
-            :lg="6"
+            :lg="4"
             class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="add" />
+          <svg-icon icon-class="admin" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            totalDamage
+            Damage
           </div>
           <div class="card-panel-num">
-            13600
+            {{dateList[3]}}
+            <span style="font-size:5px">books</span>
+          </div>
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12"
+            :sm="12"
+            :lg="4"
+            class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="admin" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            Unpaid
+          </div>
+          <div class="card-panel-num">
+            {{dateList[4]}}￥
+          </div>
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12"
+            :sm="12"
+            :lg="4"
+            class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="admin" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            Fine
+          </div>
+          <div class="card-panel-num">
+            {{dateList[5]}}￥
           </div>
         </div>
       </div>
@@ -81,6 +121,20 @@
 export default {
   components: {
 
+  },
+  props: {
+    width: {
+      type: String,
+      default: "800px"
+    },
+    height: {
+      type: String,
+      default: "300px"
+    },
+    dateList: {
+      type: Array,
+      required: true
+    }
   }
 }
 </script>
@@ -144,7 +198,7 @@ export default {
 
     .card-panel-icon-wrapper {
       float: left;
-      margin: 14px 0 0 14px;
+      margin: 25px 0 0 14px;
       padding: 16px;
       transition: all 0.38s ease-out;
       border-radius: 6px;
@@ -152,7 +206,7 @@ export default {
 
     .card-panel-icon {
       float: left;
-      font-size: 48px;
+      font-size: 40px;
     }
 
     .card-panel-description {

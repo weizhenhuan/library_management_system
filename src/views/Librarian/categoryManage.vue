@@ -1,15 +1,6 @@
 <template>
   <el-card>
     <el-row class="search-container">
-      <el-col :span="2"
-              :offset="1">
-        <el-button type="primary"
-                   @click="load">
-          <template v-slot:icon>
-            <svg-icon icon-class="search_light" />
-          </template>
-        </el-button>
-      </el-col>
       <el-col :span="2">
         <el-button type="primary"
                    @click="() => {categoryType = 'add';curCategory={category:input_category}; showAddCategory = true}">
@@ -52,20 +43,12 @@
 
         </el-table-column>
       </el-table>
-      <div class="demo-pagination-block">
-        <el-pagination v-model:currentPage="pageNum"
-                       :page-size="pageSize"
-                       @current-change="handleCurrentChange"
-                       layout="total, prev, pager, next, jumper"
-                       :total="total"
-                       hide-on-single-page />
-      </div>
     </div>
 
     <Category v-model:showAddCategory="showAddCategory"
               :type="categoryType"
               v-if="showAddCategory"
-              :category="curCategory" />
+              :curCategory="curCategory" />
   </el-card>
 </template>
 
@@ -82,9 +65,6 @@ export default {
     return {
       tableData: [],
       input_category: "",
-      total: 100,
-      pageSize: 10,
-      pageNum: 1,
       showAddCategory: false,
       categoryType: "add",
       curCategory: {},
@@ -97,13 +77,10 @@ export default {
   methods: {
     load() {
       this.loading = true
-      getCategory(
-        this.input_category,
-        this.pageSize,
-        this.pageNum
-      ).then((res) => {
-        this.tableData = res.data.categoryList
-        this.total = res.data.total
+      getCategory().then((res) => {
+        res.data.categoryList.forEach((item) => {
+          this.tableData.push({ category: item })
+        })
         this.loading = false
       }).catch((res) => {
         this.loading = false
@@ -132,12 +109,6 @@ export default {
   }
   .el-input :deep(.el-input__inner) {
     height: 40px;
-  }
-}
-.categorylist-container {
-  .el-pagination {
-    margin-top: 20px;
-    justify-content: center;
   }
 }
 

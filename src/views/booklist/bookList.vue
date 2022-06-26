@@ -160,7 +160,7 @@ export default {
   methods: {
     load() {
       this.loading = true
-      this.bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"]])
+      this.bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"], [-2, "lost"], [-3, "damaged"]])
       getBookByNameAndISBN(this.input_book_name, this.input_book_isbn, this.pageSize, this.pageNum).then((res) => {
         this.tableData = res.data.bookList
         this.total = res.data.total

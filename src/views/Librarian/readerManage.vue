@@ -39,62 +39,51 @@
         </el-table-column>
         <el-table-column label="Contact"
                          prop="rContact"></el-table-column>
+        <el-table-column label="Graduation Year"
+                         prop="rYear"></el-table-column>
         <el-table-column label="Name"
                          prop="rRealName"></el-table-column>
         <el-table-column label="ID"
                          prop="rId">
         </el-table-column>
-        <el-table-column label="Record">
-          <el-popover placement="bottom"
-                      title="History"
-                      :width="400"
-                      trigger="click">
-            <template #reference>
-              <el-button>
-                <template v-slot:icon>
-                  <svg-icon icon-class="detail" />
-                </template>
-              </el-button>
-            </template>
-            <el-timeline class="timeline"
-                         v-if="dynamics.length">
-              <el-timeline-item v-for="(activity, index) in dynamics"
-                                :key="index"
-                                :timestamp="parseTime(activity.time)"
-                                :icon="icon(activity.action)"
-                                placement='top'>
-                <div v-if="activity.action==='borrow'">
-                  <span>
-                    borrow《{{ activity.bookName }}》{{activity.days}}days
-                  </span>
+        <el-table-column label="Record"
+                         width="80px">
+          <template #default="props">
+            <el-popover placement="bottom"
+                        title="History"
+                        :width="400"
+                        trigger="click">
+              <template #reference>
+                <el-button @click="confirmEvent(props.row.rId)">
+                  <template v-slot:icon>
+                    <svg-icon icon-class="detail" />
+                  </template>
+                </el-button>
+              </template>
+              <div class="timeline"
+                   v-if="dynamics.bookInfo">
+                <span v-if="dynamics.total">you have {{dynamics.total}}￥ need to pay</span>
+                <div v-for="(item,index) in dynamics.bookInfo"
+                     style="margin-top:10px"
+                     :key="index">
+                  <div v-if="item.overDue"
+                       style="color:red">
+                    {{item.bName}}
+                    <span style="float:right">Arrears:{{item.penalty}}￥</span>
+                  </div>
+                  <div v-else>
+                    {{item.bName}}
+                    <span style="float:right">{{item.entTime.slice(0,10)}}</span>
+                  </div>
                 </div>
-                <div v-else-if="activity.action==='renew'">
-                  <span>
-                    renew《{{ activity.bookName }}》{{activity.days}}days
-                  </span>
-                </div>
-                <div v-else-if="activity.action==='return'">
-                  <span>
-                    return《{{ activity.bookName }}》
-                  </span>
-                </div>
-                <div v-else-if="activity.action==='pay'">
-                  <span>
-                    pay《{{ activity.bookName }}》pine
-                  </span>
-                </div>
-                <div v-else>
-                  <span>
-                    reserve《{{ activity.bookName }}》
-                  </span>
-                </div>
-              </el-timeline-item>
-            </el-timeline>
-            <div v-else
-                 class="prompt-wrapper">
-              Haven't do anything yet.
-            </div>
-          </el-popover>
+              </div>
+              <div v-else
+                   class="prompt-wrapper">
+                Haven't do anything yet.
+              </div>
+            </el-popover>
+
+          </template>
         </el-table-column>
         <el-table-column label="Operation"
                          width="200">
@@ -187,10 +176,6 @@
                       prop="rContact">
           <el-input v-model="editForm.rContact"></el-input>
         </el-form-item>
-        <el-form-item label="Photo"
-                      prop="rPhoto">
-          <el-input v-model="editForm.rPhoto"></el-input>
-        </el-form-item>
         <el-form-item label="Intro"
                       prop="rIntro">
           <el-input v-model="editForm.rIntro"></el-input>
@@ -207,53 +192,42 @@
 </template>
 
 <script>
-import { getUserList, addUser, editUser, deleteUser, addUserList } from "@/api/admin/User"
+import { getUserList, addUser, editUser, deleteUser, addUserList, getPenaltyInfo } from "@/api/admin/User"
 import { ElMessage } from "element-plus"
 import { useRouter } from "vue-router"
 import UploadExcelComponent from "@/components/UploadExcel/index.vue"
 
 import { reactive } from "@vue/reactivity"
 import { parseTime } from "@/utils/index.js"
-import { dynamic } from "@/api/user"
-import { useStore } from "vuex"
 // import { ref } from "vue"
 
 export default {
   components: { UploadExcelComponent },
   setup() {
-    // const visible = ref(false)
-    const store = useStore()
-    const dynamics = reactive([])
     const router = useRouter()
     function jump(id) {
       router.push({ path: "/download", query: { cList: id, lList: [], type: "user" }})
     }
 
-    function icon(action) {
-      if (action === "borrow") {
-        return <svg-icon icon-class='borrow' />
-      } else if (action === "pay") {
-        return <svg-icon icon-class='buy' />
-      } else if (action === "renew") {
-        return <svg-icon icon-class='renew' />
-      } else if (action === "return") {
-        return <svg-icon icon-class='return' />
-      } else if (action === "reserve") {
-        return <svg-icon icon-class='reserve' />
-      }
+    function confirmEvent(rId) {
+      getPenaltyInfo(rId).then((res) => {
+        let total = 0
+        Object.keys(res.data).forEach((key) => {
+          dynamics[key] = res.data[key]
+        })
+        dynamics.bookInfo.forEach((item) => {
+          if (item.overDue) total += item.penalty
+        })
+        dynamics.total = total
+      })
     }
 
-    dynamic(store.getters.token).then((res) => {
-      res.data.forEach((item) => {
-        item.time = new Date(item.time)
-        dynamics.push(item)
-      })
-    })
+    const dynamics = reactive({})
 
     return { jump,
       parseTime,
-      dynamics,
-      icon }
+      confirmEvent,
+      dynamics }
   },
 
   data() {
@@ -340,8 +314,7 @@ export default {
 
     edit() {
       this.loading = true
-      editUser(this.editForm
-      ).then((res) => {
+      editUser(this.editForm).then((res) => {
         this.rName = res.data.rName
         this.rPwd = res.data.rPwd
         this.editDialogVisible = false

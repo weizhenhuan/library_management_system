@@ -76,19 +76,24 @@
                  class="upload-avatar" />
           </el-upload>
 
-          <el-form :model="user"
+          <el-form :model="userForm"
                    label-width="120px">
             <el-form-item label="Activity name">
-              <el-input v-model="user.name" />
+              <el-input v-model="userForm.name" />
             </el-form-item>
-            <el-form-item label="Instant delivery">
-              <el-input v-model="user.introduction" />
+            <el-form-item label="Introduction">
+              <el-input v-model="userForm.introduction" />
             </el-form-item>
-            <el-form-item label="Phone">
-              <el-input v-model="user.phone" />
+            <el-form-item label="Email">
+              <el-input v-model="userForm.email" />
+            </el-form-item>
+            <el-form-item label="OldPassword">
+              <el-input v-model="userForm.oldPassword"
+                        @blur="confirm" />
             </el-form-item>
             <el-form-item label="Password">
-              <el-input v-model="user.password" />
+              <el-input v-model="userForm.password"
+                        :disabled="!userForm.confirm" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
@@ -111,19 +116,22 @@
 import { reactive, ref } from "@vue/reactivity"
 import { mapGetters, useStore } from "vuex"
 import { computed } from "@vue/runtime-core"
-import { getExinfo, editInfo, uploadImg } from "@/api/user.js"
+import { getExinfo } from "@/api/user/info"
+import { editInfo, uploadImg, confirmPassword } from "@/api/user/operation"
 import { ElMessage } from "element-plus"
 
 export default {
   setup() {
     const page = ref(true)
     const user = reactive({
-      password: "****"
+      oldPassword: "",
+      password: "",
+      confirm: false
     })
     const store = useStore()
     const loading = ref(true)
 
-    const mapget = mapGetters(["name", "introduction", "avatar", "phone"])
+    const mapget = mapGetters(["name", "introduction", "avatar", "email"])
     Object.keys(mapget).forEach((itemfn) => {
       const item = computed(mapget[itemfn].bind({ $store: store }))
       user[itemfn] = item
@@ -141,24 +149,42 @@ export default {
       loading.value = false
     })
 
+    function confirm() {
+      console.log(userForm.oldPassword)
+      confirmPassword(userForm.oldPassword).then(() => {
+        userForm.confirm = true
+      }).catch((res) => {
+        ElMessage.error(res.message)
+      })
+    }
+
+    const userForm = reactive({
+      oldPassword: "",
+      password: "",
+      confirm: false,
+      name: user.name,
+      introduction: user.introduction,
+      avatar: user.avatar,
+      email: user.email
+    })
     function Submit() {
-      if (imgUrl.value !== user.avatar) {
+      if (imgUrl.value !== userForm.avatar) {
         const formData = new FormData()
         files.forEach((item) => {
           // console.log(item)
           formData.append("image", item.raw)
         })
         uploadImg(formData).then((res) => {
-          user.avatar = res.data.url
+          userForm.avatar = res.data.url
           // console.log(user.avatar)
-          /* editInfo(user).then(() => {
+          editInfo(userForm).then(() => {
             ElMessage.success("edit success")
           }).catch((res) => {
             ElMessage.error(res.message)
-          }) */
+          })
         })
       } else {
-        editInfo(user).then(() => {
+        editInfo(userForm).then(() => {
           ElMessage.success("edit success")
         }).catch((res) => {
           ElMessage.error(res.message)
@@ -167,8 +193,6 @@ export default {
     }
 
     const uploadChange = (file, fileList) => {
-      console.log(file, fileList)
-
       if (file.raw.type !== "image/jpeg") {
         ElMessage.error("Avatar picture must be JPG format!")
         return false
@@ -194,11 +218,13 @@ export default {
       page,
       changePage,
       user,
+      userForm,
       imgUrl,
       upload,
       uploadChange,
       Submit,
-      handleExceed }
+      handleExceed,
+      confirm }
   }
 }
 </script>

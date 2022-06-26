@@ -10,13 +10,12 @@
     <breadcrumb />
 
     <div class="right-menu">
-      <svg-icon icon-class="refresh"
-                class="refresh"
-                @click="refresh" />
-      <svg-icon icon-class="back"
-                class="refresh"
-                @click="back" />
-      <el-popover :width="150"
+      <div class="noti-box"
+           v-if="messages.length">
+        {{messages.length}}
+      </div>
+      <el-popover :width="350"
+                  class="notification"
                   title="Notification:">
         <template #reference>
           <svg-icon icon-class="bell"
@@ -24,12 +23,27 @@
         </template>
         <div v-if="messages.length">
           <div v-for="(event,index) in messages"
-               :key="index">
+               :key="event.id"
+               style="margin-bottom:10px">
             <span>{{event.info}}</span>
+            <div style="float:right;cursor:pointer"
+                 @click="removeMessage(index)">×</div>
+          </div>
+          <div @click="removeUnread"
+               style="border-top: 1px solid black;cursor:pointer">
+            clear all
           </div>
         </div>
         <div v-else>No message yet.</div>
       </el-popover>
+
+      <svg-icon icon-class="refresh"
+                class="refresh"
+                @click="refresh" />
+      <svg-icon icon-class="back"
+                class="refresh"
+                @click="back" />
+
       <el-dropdown class="avatar-container right-menu-item hover-effect">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.jpg"
@@ -70,7 +84,8 @@ import { useStore } from "vuex"
 import Breadcrumb from "./Breadcrumb"
 import { useRoute, useRouter } from "vue-router"
 import { reactive } from "@vue/reactivity"
-import { getMessage } from "@/api/user"
+import { getMessage } from "@/api/user/info"
+import { readMessage, readAllMessage } from "@/api/user/operation"
 
 export default {
   name: "Navbar",
@@ -84,15 +99,21 @@ export default {
     })
     const messages = reactive([])
 
-    getMessage(store.getters.token).then((res) => {
+    getMessage().then((res) => {
       res.data.forEach((item) => {
         messages.push(item)
       })
     })
-
-    /* function removeUnread(){
-        一键已读
-    } */
+    function removeUnread() {
+      readAllMessage().then(() => {
+        messages.length = 0
+      })
+    }
+    function removeMessage(index) {
+      readMessage(messages[index].id).then(() => {
+        messages.splice(index, 1)
+      })
+    }
 
     function toggleSideBar() {
       store.dispatch("app/toggleSideBar")
@@ -141,7 +162,10 @@ export default {
     return { toggleSideBar, isCollapse, refresh, logout,
     // loginadmin, logincus,
       login,
-      back, messages }
+      back,
+      messages,
+      removeMessage,
+      removeUnread }
   }
 }
 </script>

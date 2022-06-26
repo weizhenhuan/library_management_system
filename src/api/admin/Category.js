@@ -34,6 +34,7 @@ export function deleteCategory(categoryName) {
   return request({
     url: "/admin/deleteCategory",
     method: "delete",
-    data: qs.stringify({ categoryName })
+    data: qs.stringify({ categoryName }),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
 }

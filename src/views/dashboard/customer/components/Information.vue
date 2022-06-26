@@ -37,7 +37,7 @@
                          :color="book.overdue?'#e22c29':'#409eff'"
                          :stroke-width="24"
                          :text-inside="true"
-                         :format="(percentage) => (percentage>=100 ? '逾期！请按时还书' : `${percentage}%`)"
+                         :format="(percentage) => (percentage>=100 ? `${book.amount}￥ arrears` : `${book.left} days`)"
                          class="progress" />
             <div class="end">{{parseTime(book.end,'{y}-{m}-{d}')}}</div>
           </div>
@@ -89,7 +89,7 @@
           </div>
           <div v-else-if="activity.action==='pay'">
             <span>
-              pay《{{ activity.bookName }}》pine
+              pay《{{ activity.bookName }}》fine
             </span>
           </div>
           <div v-else>
@@ -106,6 +106,7 @@
     </div>
   </el-card>
   <Return v-model:showReturn="bookState.showReturn"
+          v-if="bookState.showReturn"
           :book='bookState.currBook' />
   <Borrow v-model:showBorrow="bookState.showRenew"
           type="renew"
@@ -121,7 +122,7 @@ import { parseTime, formatTime } from "@/utils/index.js"
 import Return from "@/components/Return"
 import Borrow from "@/components/Borrow"
 import Reserve from "@/components/Reserve"
-import { getBorrowing, dynamic, getReserving } from "@/api/user"
+import { getBorrowing, dynamic, getReserving } from "@/api/user/info"
 import { useStore } from "vuex"
 
 export default {
@@ -155,6 +156,7 @@ export default {
       res.data.forEach((item) => {
         item.start = new Date(item.start)
         item.end = new Date(item.end)
+        item.left = Math.round((item.end - Date.now()) / (1000 * 60 * 60 * 24))
         borrowBooks.push(item)
       })
     })

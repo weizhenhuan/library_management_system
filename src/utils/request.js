@@ -37,7 +37,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 0) {
-      if (response.config.url === "/pay") return response
+      if (response.config.url === "/pay" || response.config.url === "/user/payAllFine") return response
       return Promise.reject(new Error(res.message || "Error"))
     } else {
       return res

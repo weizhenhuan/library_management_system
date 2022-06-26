@@ -42,7 +42,7 @@
                        label="Location" />
       <el-table-column label="Status">
         <template #default="scope">
-          {{bStatusMap[scope.row.bStatus+1]}}
+          {{bStatusMap.get(scope.row.bStatus)}}
         </template>
       </el-table-column>
     </el-table>
@@ -52,9 +52,9 @@
 <script>
 import { useStore } from "vuex"
 import { reactive, ref } from "@vue/reactivity"
-import { getBookByID, returnBookByID } from "@/api/book"
+import { getBookByID, returnBookByID, borrowBookByID } from "@/api/book"
+import { getBorrowing } from "@/api/user/info"
 import { ElMessage } from "element-plus"
-import { borrowBookByID } from "@/api/book"
 import { onMounted } from "@vue/runtime-core"
 import { onBeforeRouteLeave, useRoute } from "vue-router"
 
@@ -62,7 +62,7 @@ export default {
   name: "Borrrow",
   setup() {
     const loading = ref(false)
-    const bStatusMap = ["borrowed", "reserved", "available"]
+    const bStatusMap = new Map([[1, "available"], [0, "reserved"], [-1, "borrowed"], [-2, "lost"], [-3, "damaged"]])
     const route = useRoute()
     const store = useStore()
     onBeforeRouteLeave(async(to, from) => {
@@ -70,6 +70,7 @@ export default {
     })
 
     const current_book = reactive([])
+    const limit = ref(-1)
     const studentID = store.getters.token > 900000000 ? ref(store.getters.token) : ref()
     const bookID = ref("")
 
@@ -108,34 +109,60 @@ export default {
     function handleCode() {
       if (uploadInput.value.value.length === 9) {
         loading.value = true
-        if (uploadInput.value.value[0] !== "9") {
+
+        if (uploadInput.value.value[0] === "1") {
           if (!studentID.value) {
             ElMessage.error("please add studentID first")
+          } else if (limit.value <= 0) {
+            ElMessage.error("Book borrowing limit reached")
           } else {
+            for (let i = 0; i < current_book.length; i++) {
+              if (current_book[i].bID === uploadInput.value.valueAsNumber) {
+                ElMessage.error("You have scan this book")
+                loading.value = false
+                return
+              }
+            }
             getBookByID(uploadInput.value.valueAsNumber).then(res => {
               bookID.value = res.data.bID
               current_book.push(res.data)
-              loading.value = false
             }).catch((res) => {
               ElMessage.error(res.message)
+            }).finally(() => {
               loading.value = false
             })
           }
-        } else {
+        } else if (uploadInput.value.value[0] === "9") {
           if (studentID.value) {
             ElMessage.error("login already")
           } else {
             ElMessage.success("add rId success")
             studentID.value = uploadInput.value.valueAsNumber
           }
+
+          if (limit.value === -1) {
+            getBorrowing(studentID.value).then((res) => {
+              limit.value = 5 - res.data.length
+            })
+          }
+
+          loading.value = false
+        } else {
+          ElMessage.error("error id")
           loading.value = false
         }
+
         uploadInput.value.value = ""
       }
     }
     // 配合@blur实现input自动聚焦
     onMounted(() => {
       uploadInput.value.focus()
+      if (studentID.value && studentID.value.length) {
+        getBorrowing(studentID.value).then((res) => {
+          limit.value = 5 - res.data.length
+        })
+      }
     })
 
     return { borrow, current_book,

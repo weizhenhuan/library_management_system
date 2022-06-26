@@ -52,7 +52,7 @@
 </template>
 <script>
 import { ElMessage } from "element-plus"
-import { register, checkUserName } from "../../api/user"
+import { register, checkUserName } from "@/api/user/login"
 
 export default {
   data() {

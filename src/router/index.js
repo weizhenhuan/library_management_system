@@ -44,26 +44,6 @@ const routes = [{
   }]
 },
 {
-  path: "/book",
-  name: "Bookxzcz",
-  component: Layout,
-  redirect: "/book/borrow",
-  meta: { title: "Borrow｜Return", icon: "scan" },
-  children: [{
-    name: "borrow",
-    path: "borrow",
-    component: () => import ("@/views/borrow/index"),
-    meta: { title: "borrow" }
-  },
-  {
-    name: "reture",
-    path: "return",
-    component: () => import ("@/views/borrow/index"),
-    meta: { title: "return" }
-  }
-  ]
-},
-{
   path: "/booklist",
   redirect: "/booklist/index",
   component: Layout,
@@ -187,7 +167,28 @@ export const asyncRoutes = [{
       roles: ["admin"]
     }
   }]
-}]
+},
+{
+  path: "/book",
+  name: "Bookxzcz",
+  component: Layout,
+  redirect: "/book/borrow",
+  meta: { title: "Borrow｜Return", icon: "scan", roles: ["customer", "visitor", "admin"] },
+  children: [{
+    name: "borrow",
+    path: "borrow",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "borrow", icon: "scan", roles: ["customer", "visitor", "admin"] }
+  },
+  {
+    name: "reture",
+    path: "return",
+    component: () => import ("@/views/borrow/index"),
+    meta: { title: "return", roles: ["admin"] }
+  }
+  ]
+}
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

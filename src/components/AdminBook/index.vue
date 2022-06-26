@@ -7,6 +7,7 @@
     <div v-if="type !=='delete'">
       <el-form :inline="true"
                label-width="120px"
+               v-if="type==='add'"
                :model="bookItem">
         <el-form-item label="ISBN"
                       :rules="[{ required: true, message: 'User Name is required' },]">
@@ -22,6 +23,7 @@
       </el-form>
 
       <el-form :model="bookItem"
+               v-if="type==='add'"
                label-width="120px">
         <el-form-item label="Book Name">
           <el-input v-model="bookItem.bName"
@@ -49,20 +51,28 @@
                     type="textarea"
                     disabled />
         </el-form-item>
+      </el-form>
 
-        <el-form-item label="Status">
+      <el-form :inline="true"
+               label-width="120px"
+               :model="bookItem">
+        <el-form-item label="Status"
+                      v-if="type!=='add'">
           <el-select v-model="bookItem.bStatus"
                      placeholder="Status"
                      style="width: 110px">
-            <el-option label="booId"
-                       value="-1" />
-            <el-option label="bookName"
-                       value="1" />
-            <el-option label="ISBN"
-                       value="2" />
+            <el-option label="damaged"
+                       :value=-3 />
+            <el-option label="lost"
+                       :value=-2 />
+            <el-option label="borrowed"
+                       :value=-1 />
+            <el-option label="reserved"
+                       :value=0 />
+            <el-option label="available"
+                       :value=1 />
           </el-select>
         </el-form-item>
-
       </el-form>
 
       <el-form :inline="true"
@@ -119,6 +129,7 @@
 import { reactive, ref, toRef } from "@vue/reactivity"
 import { addBookAdmin, deleteBookAdmin, updataBookAdmin } from "@/api/admin/Book"
 import { getCategory } from "@/api/admin/Category"
+import { getLocationListByName } from "@/api/admin/Location"
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 import axios from "axios"
@@ -145,7 +156,7 @@ export default {
     const bookItem = reactive({
       bPrice: 0,
       bType: "",
-      bBookshelf: "",
+      bBookshelf: [],
       bCount: 0
     })
 
@@ -158,84 +169,49 @@ export default {
 
     const ISBN = ref("")
     const categoryList = reactive([])
-    const locationList = reactive([
-      {
-        value: "F1",
-        label: "F1",
-        children: [
-          {
-            value: "A03",
-            label: "A03"
-          },
-          {
-            value: "B04",
-            label: "B04"
-          }
-        ]
-      },
-      {
-        value: "F2",
-        label: "F2",
-        children: [
-          {
-            value: "C04",
-            label: "C04"
-          },
-          {
-            value: "G12",
-            label: "G12"
-          }
-        ]
-      },
-      {
-        value: "F3",
-        label: "F3",
-        children: [
-          {
-            value: "C04",
-            label: "C04"
-          },
-          {
-            value: "G12",
-            label: "G12"
-          }
-        ]
-      },
-      {
-        value: "F4",
-        label: "F4",
-        children: [
-          {
-            value: "C04",
-            label: "C04"
-          },
-          {
-            value: "G12",
-            label: "G12"
-          }
-        ]
-      }
-    ])
+    const locationList = reactive([])
 
     onMounted(() => {
       if (props.type === "edit") {
-        ISBN.value = props.book.ISBN
         bookItem.bId = props.book.bId
-        bookItem.bAuthor = props.book.bAuthor
-        bookItem.bName = props.book.bName
-        bookItem.ISBN = props.book.ISBN
-        bookItem.bPhoto = props.book.bPhoto
-        bookItem.bPublisher = props.book.bPublisher
-        bookItem.bPublishTime = props.book.bPublishTime
-        bookItem.bInfo = props.book.bInfo
         bookItem.bPrice = props.book.bPrice
-        bookItem.bBookshelf = props.book.bBookshelf
+        bookItem.bBookshelf = props.book.bBookshelf.split("-")
         bookItem.bType = props.book.bType
         bookItem.bStatus = props.book.bStatus
+        // bookItem.bStatus = bStatusMap.get(props.book.bStatus)
       }
       getCategory().then((res) => {
         res.data.categoryList.forEach((item) => {
           categoryList.push(item)
+        })
+      })
+      getLocationListByName().then((res) => {
+        const tmpArr = res.data.locationList.map((item) => {
+          return item.location.split("-")
+        })
+        const map = new Map()
+        let p = 0
+        tmpArr.forEach((item) => {
+          if (map.has(item[0])) {
+            const tmp = {
+              value: item[1],
+              label: item[1]
+            }
+            locationList[map.get(item[0])].children.push(tmp)
+          } else {
+            map.set(item[0], p++)
+            const tmp = {
+              value: item[0],
+              label: item[0],
+              children: [
+                {
+                  value: item[1],
+                  label: item[1]
+                }
+              ]
+            }
+            locationList.push(tmp)
+          }
         })
       })
     })
